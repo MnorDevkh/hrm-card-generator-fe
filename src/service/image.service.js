@@ -16,8 +16,10 @@ export async function getImagesByType(type) {
   return apiFetch(`/upload_image/type/${type}`);
 }
 
-export async function uploadImage(formData) {
-  return apiFetch("/upload_image", {
+export async function uploadImage(formData, type) {
+  const params = new URLSearchParams({ type_: type });
+
+  return apiFetch(`/upload_image/upload/?${params}`, {
     method: "POST",
     body: formData,
   });

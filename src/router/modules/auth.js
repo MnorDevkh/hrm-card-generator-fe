@@ -1,8 +1,8 @@
-import Login from '@/components/auth/Login.vue'
+import Login from "@/components/auth/Login.vue";
 
 const auth = [
-  { path: '/login', component: Login },
-//   { path: '/about', component: AboutView },
-]
+  { path: "/login", component: Login, meta: { layout: "BlankLayout" } },
+  //   { path: '/about', component: AboutView },
+];
 
-export default auth
+export default auth;

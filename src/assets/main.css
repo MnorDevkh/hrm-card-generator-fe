@@ -3,5 +3,10 @@
 
 
 body {
-    font-family: 'Kantumruy', 'KoHo', sans-serif;
-}
+  color: var(--color-text);
+  display: flex;
+  justify-content: center;
+  line-height: 1.6;
+  font-family: 'Kantumruy', 'KoHo', sans-serif;
+  background-color: #f2f8fc
+};

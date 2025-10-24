@@ -4,4 +4,6 @@ const student = [
   { path: '/student', component: StudentList },
 ]
 
+
+
 export default student

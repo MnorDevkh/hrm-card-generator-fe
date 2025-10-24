@@ -24,7 +24,7 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   // List of public pages that don't require authentication
-  const publicPages = ['/login'];
+  const publicPages = ['/login', '/register', '/forgot-password', '/student-detail'];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem('auth_token');
 

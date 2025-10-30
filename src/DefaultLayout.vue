@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[1280px] h-screen flex flex-col">
+  <div class="w-full h-screen flex flex-col">
     <HeaderMenuComponent />
     <RouterView />
   </div>

@@ -1,20 +1,28 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import auth from "./modules/auth";
-import home from "./modules/home";
 import student from "./modules/student";
 import staff from "./modules/staff";
 import lecture from "./modules/lecture";
 import template from "./modules/template";
+import AppLayout from '../router/AppLayout.vue';
+import HomeComponent from '../components/Home/HomeComponent.vue';
 
 
+// D:\aga\hrm\hrm-system-fe\src\router\AppLayout.vue
 
 const routes = [
   ...auth,
-  ...home,
-  ...student,
-  ...staff,
-  ...lecture,
-  ...template,
+  {
+    path: '/',
+    component: AppLayout,
+    children: [
+      { path: '', name: 'Home', component: HomeComponent },
+      ...student,
+      ...staff,
+      ...lecture,
+      ...template,
+    ]
+  }
 ]
 
 const router = createRouter({
@@ -24,7 +32,13 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   // List of public pages that don't require authentication
-  const publicPages = ['/login', '/register', '/forgot-password', '/student-detail'];
+  const publicPages = ['/login', '/register', '/forgot-password'];
+  
+  // Also allow verification and detail pages to be public
+  if (to.name === 'StudentIdentityVerification' || to.name === 'StudentDetail') {
+    return next();
+  }
+
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem('auth_token');
 

@@ -33,3 +33,23 @@ export async function getStudentsByIds(studentIds) {
 export async function getStudentInfo(studentId, identityId) {
   return apiFetch(`/students/${studentId}/${identityId}`);
 }
+
+export async function deleteStudent(studentId) {
+  return apiFetch(`/students/${studentId}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function updateStudent(studentId, data) {
+  return apiFetch(`/students/${studentId}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function createStudent(data) {
+  return apiFetch('/students', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}

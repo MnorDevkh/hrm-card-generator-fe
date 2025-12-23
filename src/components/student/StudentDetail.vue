@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen max-w-7xl mx-auto bg-white dark:bg-gray-900 p-4 sm:p-8  ">
+  <div :class="['max-w-7xl mx-auto bg-white dark:bg-gray-900 p-4 sm:p-8', embedded ? '' : 'min-h-screen']">
     <div v-if="isLoading" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex justify-center items-center">
       <i class="pi pi-spin pi-spinner text-blue-500" style="font-size: 3rem"></i>
     </div>
@@ -81,12 +81,27 @@ const student = ref(null);
 const isLoading = ref(true);
 const error = ref(null);
 
+const props = defineProps({
+  studentId: {
+    type: [String, Number],
+    default: null
+  },
+  identityId: {
+    type: [String, Number],
+    default: null
+  },
+  embedded: {
+    type: Boolean,
+    default: false
+  }
+});
+
 onMounted(async () => {
-  const studentId = route.params.id;
-  const identityId = route.params.identityId;
+  const studentId = props.studentId || route.params.id;
+  const identityId = props.identityId || route.params.identityId;
   
   if (!studentId || !identityId) {
-    error.value = 'Student ID or Identity ID is missing.';
+    if (!props.embedded) error.value = 'Student ID or Identity ID is missing.';
     isLoading.value = false;
     return;
   }

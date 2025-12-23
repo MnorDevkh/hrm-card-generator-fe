@@ -5,6 +5,7 @@ import PrimeVue from 'primevue/config';
 import router from './router';
 import Aura from '@primeuix/themes/aura';
 import {  Ripple, Toast, ToastService } from 'primevue';
+import ConfirmationService from 'primevue/confirmationservice';
 
 
 import 'primeicons/primeicons.css';
@@ -16,6 +17,7 @@ app.use(PrimeVue, {
     }
 });
 app.use(ToastService);
+app.use(ConfirmationService);
 app.component('Toast', Toast);
 app.directive('ripple', Ripple);
 app.mount('#app');

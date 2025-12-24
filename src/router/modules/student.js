@@ -7,12 +7,12 @@ const student = [
   ,
   // You will also need a route for the final student detail page
   {
-    path: '/students/:id',
+    path: '/student-identity-verification/:id',
     name: 'StudentIdentityVerification',
     component: StudentIdentityVerification
   },
    {
-    path: '/students/:id/:identityId',
+    path: '/students-detail/:id/:identityId',
     name: 'StudentDetail',
     component: StudentDetail
   }

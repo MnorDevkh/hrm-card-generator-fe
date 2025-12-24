@@ -127,7 +127,7 @@
 
           <!-- QR Code -->
           <div class="absolute bottom-[29px] right-4 w-[1.5cm] h-[1.5cm] flex items-center justify-center">
-            <QrcodeVue :value="`${environment.url}students/${student.id}`" :size="52" level="M" render-as="svg"
+            <QrcodeVue :value="`${environment.url}student-identity-verification/${student.id}`" :size="52" level="M" render-as="svg"
               class="w-13 h-13" />
           </div>
         </div>
@@ -200,7 +200,7 @@
 
           <!-- QR Code -->
           <div class="absolute bottom-[29px] right-4 w-[1.5cm] h-[1.5cm] flex items-center justify-center">
-            <QrcodeVue :value="`${environment.url}students/${student.id}`" :size="52" level="M" render-as="svg"
+            <QrcodeVue :value="`${environment.url}student-identity-verification/${student.id}`" :size="52" level="M" render-as="svg"
               class="w-13 h-13" />
           </div>
         </div>

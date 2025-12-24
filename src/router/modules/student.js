@@ -9,12 +9,14 @@ const student = [
   {
     path: '/student-identity-verification/:id',
     name: 'StudentIdentityVerification',
-    component: StudentIdentityVerification
+    component: StudentIdentityVerification,
+    meta: { layout: "BlankLayout" },
   },
    {
     path: '/students-detail/:id/:identityId',
     name: 'StudentDetail',
-    component: StudentDetail
+    component: StudentDetail,
+    meta: { layout: "BlankLayout" },
   }
 ]
 

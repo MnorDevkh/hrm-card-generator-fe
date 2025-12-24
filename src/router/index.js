@@ -8,21 +8,12 @@ import AppLayout from '../router/AppLayout.vue';
 import HomeComponent from '../components/Home/HomeComponent.vue';
 
 
-// D:\aga\hrm\hrm-system-fe\src\router\AppLayout.vue
-
 const routes = [
   ...auth,
-  {
-    path: '/',
-    component: AppLayout,
-    children: [
-      { path: '', name: 'Home', component: HomeComponent },
-      ...student,
-      ...staff,
-      ...lecture,
-      ...template,
-    ]
-  }
+  ...student,
+  ...staff,
+  ...lecture,
+  ...template,
 ]
 
 const router = createRouter({

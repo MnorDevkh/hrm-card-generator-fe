@@ -21,7 +21,7 @@
             />
           </div>
           <button type="submit" class="p-button p-component w-full">
-            View Details
+            Submit
           </button>
         </div>
       </form>
@@ -41,7 +41,7 @@ const identityId = ref('');
 
 const submitVerification = () => {
   if (studentId.value && identityId.value) {
-    const detailUrl = `/students/${studentId.value}/${identityId.value}`;
+    const detailUrl = `/students-detail/${studentId.value}/${identityId.value}`;
     router.push(detailUrl);
   }
 };

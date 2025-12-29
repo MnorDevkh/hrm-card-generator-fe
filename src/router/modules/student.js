@@ -10,13 +10,13 @@ const student = [
     path: '/student-identity-verification/:id',
     name: 'StudentIdentityVerification',
     component: StudentIdentityVerification,
-    meta: { layout: "BlankLayout" },
+    meta: { layout: "BlankLayout" , isPublic: true},
   },
    {
     path: '/students-detail/:id/:identityId',
     name: 'StudentDetail',
     component: StudentDetail,
-    meta: { layout: "BlankLayout" },
+    meta: { layout: "BlankLayout", isPublic: true },
   }
 ]
 

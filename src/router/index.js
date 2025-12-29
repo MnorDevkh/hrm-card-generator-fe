@@ -22,11 +22,10 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  // List of public pages that don't require authentication
   const publicPages = ['/login', '/register', '/forgot-password'];
-  
-  // Also allow verification and detail pages to be public
-  if (to.name === 'StudentIdentityVerification' || to.name === 'StudentDetail') {
+  const isPublic = to.matched.some(record => record.meta.isPublic);
+
+  if (isPublic) {
     return next();
   }
 

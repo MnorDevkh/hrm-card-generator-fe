@@ -17,11 +17,17 @@
       <p class="text-xl font-bold text-gray-900 dark:text-white">Lecturer List</p>
       <div class="flex gap-2">
         <Button label="Add New" icon="pi pi-plus" severity="info" @click="openNew" />
+        <Button label="Refresh" icon="pi pi-refresh" severity="secondary" @click="loadLecturers" />
       </div>
     </div>
     
     <Divider />
-    
+     <div class="card flex justify-end flex-wrap gap-4">
+        <Button label="Export Card" @click="exportCard" />
+        <Button label="Excel Import" severity="success" @click="importFromExcel" :loading="isUploading" />
+        <Button label="Add New" severity="info" @click="openNew" />
+        <Button label="Delete" severity="danger" />
+      </div>
     <Card>
       <template #content>
         <DataTable 
@@ -42,6 +48,7 @@
           <Column header="Actions" :exportable="false" style="min-width: 10rem">
             <template #body="slotProps">
               <div class="flex gap-2">
+                <Button icon="pi pi-id-card" severity="help" text rounded aria-label="Generate Card" @click="generateCard(slotProps.data)" />
                 <Button icon="pi pi-eye" severity="info" text rounded aria-label="View" @click="viewLecturer(slotProps.data)" />
                 <Button icon="pi pi-pencil" severity="warning" text rounded aria-label="Edit" @click="editLecturer(slotProps.data)" />
                 <Button icon="pi pi-trash" severity="danger" text rounded aria-label="Delete" @click="confirmDelete($event, slotProps.data)" />
@@ -120,6 +127,10 @@ const editLecturer = (lecture) => {
 const viewLecturer = (lecture) => {
     selectedLecturer.value = lecture;
     viewDialogVisible.value = true;
+};
+
+const generateCard = (lecture) => {
+    toast.add({ severity: 'info', summary: 'Generate Card', detail: 'Generating card for ' + (lecture.name?.english || lecture.name?.khmer), life: 3000 });
 };
 
 const saveLecturer = async (lectureData) => {

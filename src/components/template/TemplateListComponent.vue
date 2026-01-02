@@ -18,7 +18,7 @@
                 <template #subtitle>{{ template.type || 'Card Template' }}</template>
                 <template #content>
                     <p class="m-0">
-                        Use this template to generate certificates for the selected students.
+                        Use this template to generate certificates for the selected {{ type === 'lecturer' ? 'lecturers' : 'students' }}.
                     </p>
                 </template>
                 <template #footer>
@@ -47,6 +47,8 @@ const toast = useToast();
 
 const fileInput = ref(null);
 const isUploading = ref(false);
+
+const type = computed(() => route.query.type || 'student');
 
 const studentIds = computed(() => {
     try {
@@ -98,6 +100,10 @@ const getImageUrl = (filename) => {
 
 const useTemplate = (templateId) => {
     // Navigate to the generate page with the template ID and student IDs
-    router.push({ path: '/generate', query: { templateId, ids: JSON.stringify(studentIds.value) } });
+    if (type.value === 'lecturer') {
+        router.push({ path: '/card-generator/lecturer', query: { templateId, ids: JSON.stringify(studentIds.value), type: 'lecturer' } });
+    } else {
+        router.push({ path: '/generate', query: { templateId, ids: JSON.stringify(studentIds.value) } });
+    }
 };
 </script>

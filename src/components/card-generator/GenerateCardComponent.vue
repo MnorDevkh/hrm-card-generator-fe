@@ -2,7 +2,7 @@
   <div class="container mx-auto my-8">
     <!-- Add Skeleton component for loading states -->
     <Toast />
-    <div class="bg-gray-100 dark:bg-gray-800 p-8 rounded-xl shadow-lg">
+    <div class="bg-gray-100 p-8 rounded-xl shadow-lg">
       <!-- Top Bar -->
       <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
         <div class="flex gap-2">

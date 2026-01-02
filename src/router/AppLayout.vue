@@ -4,7 +4,7 @@
       <!-- Sidebar -->
       <aside class="w-64 bg-white dark:bg-gray-800 shadow-md h-screen sticky top-0">
         <div class="p-6 flex items-center gap-4">
-          <img alt="Logo" src="@/assets/logo.svg" class="w-10 h-10" />
+          <img alt="Logo" src="@/assets/ailogo.png" class="w-10 h-10" />
           <span class="text-xl font-semibold">HRM System</span>
         </div>
         <nav class="mt-4">

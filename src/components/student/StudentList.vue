@@ -4,45 +4,47 @@
     <ConfirmDialog />
     <input type="file" ref="fileInput" @change="onFileSelected" style="display: none"
       accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
-    <div class="card flex justify-between itam-center flex-wrap gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md">
-      <p class="text-xl font-bold text-gray-900 dark:text-white item-center">បញ្ញីរសិស្ស</p>
+    <div class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md">
+      <p class="text-xl font-bold text-gray-900 dark:text-white w-full sm:w-auto text-center sm:text-left">បញ្ញីរសិស្ស</p>
       <Divider />
-      <div class="card flex justify-end flex-wrap gap-4">
-        <Button label="Export Card" @click="exportCard" />
-        <Button label="Excel Import" severity="success" @click="importFromExcel" :loading="isUploading" />
-        <Button label="Add New" severity="info" @click="openNew" />
-        <Button label="Delete" severity="danger" />
+      <div class="card flex flex-col sm:flex-row sm:flex-wrap justify-end gap-4 w-full sm:w-auto">
+        <Button label="Export Card" @click="exportCard" class="w-full sm:w-auto" />
+        <Button label="Excel Import" severity="success" @click="importFromExcel" :loading="isUploading" class="w-full sm:w-auto" />
+        <Button label="Add New" severity="info" @click="openNew" class="w-full sm:w-auto" />
+        <Button label="Delete" severity="danger" class="w-full sm:w-auto" />
       </div>
     </div>
     <Divider />
     <Card>
       <template #content>
-        <DataTable v-model:selection="selectedStudents" :value="students" :paginator="true" :rows="rows" :first="first"
-          :totalRecords="totalRecords" :lazy="true" @page="loadStudents" dataKey="id" tableStyle="min-width: 50rem"
-          :selectAll="selectAll" @select-all-change="onSelectAllChange" @row-unselect="onRowUnselect">
-          <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-          <Column header="No">
-            <template #body="slotProps">
-              {{ first + slotProps.index + 1 }}
-            </template>
-          </Column>
-          <Column field="card_id" header="Card ID"></Column>
-          <Column field="name.english" header="Name (EN)"></Column>
-          <Column field="name.khmer" header="Name (KH)"></Column>
-          <Column field="gender" header="Gender"></Column>
-          <Column field="phone" header="Phone"></Column>
-          <Column field="batch" header="Batch"></Column>
-          <Column header="Photo" :body="photoTemplate"></Column>
-          <Column header="Actions" :exportable="false" style="min-width: 10rem">
-            <template #body="slotProps">
-              <div class="flex gap-2">
-                <Button icon="pi pi-eye" severity="info" text rounded aria-label="View" @click="viewStudent(slotProps.data)" />
-                <Button icon="pi pi-pencil" severity="warning" text rounded aria-label="Edit" @click="editStudent(slotProps.data)" />
-                <Button icon="pi pi-trash" severity="danger" text rounded aria-label="Delete" @click="requireConfirmation($event, slotProps.data)" label="Delete" ></Button>
-              </div>
-            </template>
-          </Column>
-        </DataTable>
+        <div class="overflow-x-auto">
+          <DataTable v-model:selection="selectedStudents" :value="students" :paginator="true" :rows="rows" :first="first"
+            :totalRecords="totalRecords" :lazy="true" @page="loadStudents" dataKey="id" tableStyle="min-width: 80rem"
+            :selectAll="selectAll" @select-all-change="onSelectAllChange" @row-unselect="onRowUnselect">
+            <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+            <Column header="No">
+              <template #body="slotProps">
+                {{ first + slotProps.index + 1 }}
+              </template>
+            </Column>
+            <Column field="card_id" header="Card ID"></Column>
+            <Column field="name.english" header="Name (EN)"></Column>
+            <Column field="name.khmer" header="Name (KH)"></Column>
+            <Column field="gender" header="Gender"></Column>
+            <Column field="phone" header="Phone"></Column>
+            <Column field="batch" header="Batch"></Column>
+            <Column header="Photo" :body="photoTemplate"></Column>
+            <Column header="Actions" :exportable="false" style="min-width: 10rem">
+              <template #body="slotProps">
+                <div class="flex gap-2">
+                  <Button icon="pi pi-eye" severity="info" text rounded aria-label="View" @click="viewStudent(slotProps.data)" />
+                  <Button icon="pi pi-pencil" severity="warning" text rounded aria-label="Edit" @click="editStudent(slotProps.data)" />
+                  <Button icon="pi pi-trash" severity="danger" text rounded aria-label="Delete" @click="requireConfirmation($event, slotProps.data)" label="Delete" ></Button>
+                </div>
+              </template>
+            </Column>
+          </DataTable>
+        </div>
       </template>
     </Card>
 
@@ -160,8 +162,6 @@ const onFileSelected = async (event) => {
 
 const exportCard = () => {
   const ids = selectedStudents.value.map(s => s.id);
-  console.log(ids);
-
   router.push({ path: '/template', query: { ids: JSON.stringify(ids) } });
 };
 

@@ -35,7 +35,7 @@ const handleLogin = async () => {
   <div class="h-screen w-[1080px] flex items-center justify-center dark:bg-gray-100">
     <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
       <div class="text-center mb-4">
-        <img src="@/assets/logo.svg" alt="Logo" class="mb-3" style="width: 60px; height: 60px;">
+        <img src="@/assets/ailogo.png" alt="Logo" class="mb-3" style="width: 60px; height: 60px;">
         <div class="text-3xl font-semibold text-gray-900 dark:text-white mb-2">Welcome Back</div>
         <span class="text-gray-600 dark:text-gray-400 font-medium">Sign in to continue</span>
       </div>

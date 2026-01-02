@@ -16,48 +16,50 @@
         </ConfirmPopup>
 
         <div
-            class="card flex justify-between items-center flex-wrap gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md">
-            <p class="text-xl font-bold text-gray-900 dark:text-white">Lecturer List</p>
-            <div class="flex gap-2">
-                <Button label="Add New" icon="pi pi-plus" severity="info" @click="openNew" />
-                <Button label="Refresh" icon="pi pi-refresh" severity="secondary" @click="loadLecturers" />
+            class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md">
+            <p class="text-xl font-bold text-gray-900 dark:text-white w-full sm:w-auto text-center sm:text-left">Lecturer List</p>
+            <div class="flex gap-2 w-full sm:w-auto justify-center sm:justify-end">
+                <Button label="Add New" icon="pi pi-plus" severity="info" @click="openNew" class="w-full sm:w-auto" />
+                <Button label="Refresh" icon="pi pi-refresh" severity="secondary" @click="loadLecturers" class="w-full sm:w-auto" />
             </div>
         </div>
 
         <Divider />
-        <div class="card flex justify-end flex-wrap gap-4">
-            <Button label="Export Card" @click="exportCard" />
-            <Button label="Excel Import" severity="success" @click="importFromExcel" :loading="isUploading" />
-            <Button label="Add New" severity="info" @click="openNew" />
-            <Button label="Delete" severity="danger" />
+        <div class="card flex flex-col sm:flex-row sm:flex-wrap justify-end gap-4">
+            <Button label="Export Card" @click="exportCard" class="w-full sm:w-auto" />
+            <Button label="Excel Import" severity="success" @click="importFromExcel" :loading="isUploading" class="w-full sm:w-auto" />
+            <Button label="Add New" severity="info" @click="openNew" class="w-full sm:w-auto" />
+            <Button label="Delete" severity="danger" class="w-full sm:w-auto" />
         </div>
         <Card>
             <template #content>
-                <DataTable v-model:selection="selectedLecturers" :value="lecturers" :paginator="true" :rows="10" dataKey="id" :loading="loading" :selectAll="selectAll" @select-all-change="onSelectAllChange"
-                    tableStyle="min-width: 50rem">
-                    <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-                    <Column field="identity_id" header="ID" sortable></Column>
-                    <Column field="name.khmer" header="Name (KH)" sortable></Column>
-                    <Column field="name.english" header="Name (EN)" sortable></Column>
-                    <Column field="gender" header="Gender" sortable></Column>
-                    <Column field="phone" header="Phone"></Column>
-                    <Column field="email" header="Email"></Column>
-                    <Column field="faculty" header="Faculty" sortable></Column>
-                    <Column header="Actions" :exportable="false" style="min-width: 10rem">
-                        <template #body="slotProps">
-                            <div class="flex gap-2">
-                                <Button icon="pi pi-id-card" severity="help" text rounded aria-label="Generate Card"
-                                    @click="generateCard(slotProps.data)" />
-                                <Button icon="pi pi-eye" severity="info" text rounded aria-label="View"
-                                    @click="viewLecturer(slotProps.data)" />
-                                <Button icon="pi pi-pencil" severity="warning" text rounded aria-label="Edit"
-                                    @click="editLecturer(slotProps.data)" />
-                                <Button icon="pi pi-trash" severity="danger" text rounded aria-label="Delete"
-                                    @click="confirmDelete($event, slotProps.data)" />
-                            </div>
-                        </template>
-                    </Column>
-                </DataTable>
+                <div class="overflow-x-auto">
+                    <DataTable v-model:selection="selectedLecturers" :value="lecturers" :paginator="true" :rows="10" dataKey="id" :loading="loading" :selectAll="selectAll" @select-all-change="onSelectAllChange"
+                        tableStyle="min-width: 80rem">
+                        <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
+                        <Column field="identity_id" header="ID" sortable></Column>
+                        <Column field="name.khmer" header="Name (KH)" sortable></Column>
+                        <Column field="name.english" header="Name (EN)" sortable></Column>
+                        <Column field="gender" header="Gender" sortable></Column>
+                        <Column field="phone" header="Phone"></Column>
+                        <Column field="email" header="Email"></Column>
+                        <Column field="faculty" header="Faculty" sortable></Column>
+                        <Column header="Actions" :exportable="false" style="min-width: 10rem">
+                            <template #body="slotProps">
+                                <div class="flex gap-2">
+                                    <Button icon="pi pi-id-card" severity="help" text rounded aria-label="Generate Card"
+                                        @click="generateCard(slotProps.data)" />
+                                    <Button icon="pi pi-eye" severity="info" text rounded aria-label="View"
+                                        @click="viewLecturer(slotProps.data)" />
+                                    <Button icon="pi pi-pencil" severity="warning" text rounded aria-label="Edit"
+                                        @click="editLecturer(slotProps.data)" />
+                                    <Button icon="pi pi-trash" severity="danger" text rounded aria-label="Delete"
+                                        @click="confirmDelete($event, slotProps.data)" />
+                                </div>
+                            </template>
+                        </Column>
+                    </DataTable>
+                </div>
             </template>
         </Card>
 

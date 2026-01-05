@@ -98,24 +98,24 @@ const props = defineProps({
 
 onMounted(async () => {
   const studentId = props.studentId || route.params.id;
-  const identityId = props.identityId || route.params.identityId;
+  let identityId = props.identityId || route.params.identityId;
+  let cardId = route.params.cardId || route.params.card_id;
   
-  if (!studentId || !identityId) {
-    if (!props.embedded) error.value = 'Student ID or Identity ID is missing.';
+  if (identityId === 'null') identityId = null;
+
+  if (!studentId || (!identityId && !cardId)) {
+    if (!props.embedded) error.value = 'Student ID or Identity/Card ID is missing.';
     isLoading.value = false;
     return;
   }
 
   try {
     isLoading.value = true;
-    const response = await getStudentInfo(studentId, identityId);
-    if (!response) {
-      throw new Error('Student not found or identity ID is incorrect.');
-    }
+    const response = await getStudentInfo(studentId, identityId, cardId);
     student.value = response;
   } catch (err) {
     error.value = err.response?.data?.message || err.message || 'Failed to fetch student details.';
-    console.error(err);
+    console.error(response.detail);
   } finally {
     isLoading.value = false;
   }

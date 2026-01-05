@@ -13,7 +13,7 @@ const student = [
     meta: { layout: "BlankLayout" , isPublic: true},
   },
    {
-    path: '/students-detail/:id/:identityId',
+    path: '/students-detail/:id/:identityId/:cardId',
     name: 'StudentDetail',
     component: StudentDetail,
     meta: { layout: "BlankLayout", isPublic: true },

@@ -292,7 +292,7 @@ function parseDateString(value) {
 function formatDate(dateStr) {
   const d = parseDateString(dateStr);
   if (!d) return '-';
-  return d.toLocaleDateString('en-GB');
+  return d.toLocaleDateString('en-GB').replace(/\//g, '-');
 }
 
 

@@ -90,6 +90,10 @@ const props = defineProps({
     type: [String, Number],
     default: null
   },
+  cardId: {
+    type: [String, Number],
+    default: null
+  },
   embedded: {
     type: Boolean,
     default: false
@@ -99,7 +103,7 @@ const props = defineProps({
 onMounted(async () => {
   const studentId = props.studentId || route.params.id;
   let identityId = props.identityId || route.params.identityId;
-  let cardId = route.params.cardId || route.params.card_id;
+  let cardId = props.cardId || route.params.cardId;
   
   if (identityId === 'null') identityId = null;
 
@@ -111,7 +115,7 @@ onMounted(async () => {
 
   try {
     isLoading.value = true;
-    const response = await getStudentInfo(studentId, identityId, cardId);
+    const response = await getStudentInfo(studentId, identityId,cardId);
     student.value = response;
   } catch (err) {
     error.value = err.response?.data?.message || err.message || 'Failed to fetch student details.';

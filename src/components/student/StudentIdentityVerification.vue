@@ -92,7 +92,7 @@ const submitVerification = () => {
   if (studentId.value && (cId || nId)) {
     let detailUrl;
     if (cId) {
-      detailUrl = `/students-detail/${studentId.value}/null/${cId}`;
+      detailUrl = `/students-detail/${studentId.value}/${cId}/${nId}`;
     } else {
       detailUrl = `/students-detail/${studentId.value}/${nId}`;
     }

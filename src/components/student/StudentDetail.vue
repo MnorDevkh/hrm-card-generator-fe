@@ -29,6 +29,7 @@
           <div class="mt-2 flex items-center justify-center sm:justify-start gap-4 text-gray-500 dark:text-gray-400">
             <span class="flex items-center gap-2"><i class="pi pi-id-card"></i> {{ student.card_id }}</span>
             <span class="flex items-center gap-2"><i class="pi pi-bookmark"></i> Batch: {{ student.batch }}</span>
+            <span class="flex items-center gap-2"><i class="pi pi-tag"></i> ID: {{ student.identity_id }}</span>
           </div>
         </div>
       </div>
@@ -36,6 +37,8 @@
       <!-- Details Grid: responsive 1 / 2 / 3 columns -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <InfoCard title="Personal Information">
+          <InfoItem icon="pi-hashtag" label="System ID" :value="student.id" :full-width="true" />
+          <InfoItem icon="pi-id-card" label="National Identity" :value="student.identity_id" />
           <InfoItem icon="pi-user" label="Gender" :value="student.gender" />
           <InfoItem icon="pi-calendar" label="Date of Birth" :value="formatDate(student.birth_date)" />
           <InfoItem icon="pi-phone" label="Phone" :value="student.phone" />
@@ -54,6 +57,7 @@
           <InfoItem icon="pi-book" label="Major" :value="student.major" />
           <InfoItem icon="pi-clock" label="Study Shift" :value="student.study_shift" />
           <InfoItem icon="pi-sitemap" label="Batch" :value="student.batch" />
+          <InfoItem icon="pi-verified" label="Education Level" :value="student.education_level" />
         </InfoCard>
 
         <InfoCard title="High School Background">
@@ -61,6 +65,16 @@
           <InfoItem icon="pi-calendar-plus" label="BacII Year" :value="student.bacII_year" />
           <InfoItem icon="pi-file" label="BacII Code" :value="student.bacII_code" />
           <InfoItem icon="pi-check-circle" label="BacII Result" :value="student.bacII_result" />
+        </InfoCard>
+
+        <InfoCard title="Scholarship Information">
+          <InfoItem icon="pi-star" label="Type" :value="student.scholarship_type" />
+          <InfoItem icon="pi-ticket" label="Card ID" :value="student.scholarship_card_id" />
+          <InfoItem icon="pi-user-minus" label="Bye" :value="student.scholarship_bye || '-'" />
+        </InfoCard>
+
+        <InfoCard title="Other Information">
+          <InfoItem icon="pi-align-left" label="Notes" :value="student.notes || '-'" :full-width="true" />
         </InfoCard>
       </div>
     </div>
@@ -115,7 +129,7 @@ onMounted(async () => {
 
   try {
     isLoading.value = true;
-    const response = await getStudentInfo(studentId, identityId,cardId);
+    const response = await getStudentInfo(studentId, cardId, identityId);
     student.value = response;
   } catch (err) {
     error.value = err.response?.data?.message || err.message || 'Failed to fetch student details.';

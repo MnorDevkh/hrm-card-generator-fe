@@ -3,8 +3,7 @@ import StudentIdentityVerification from '@/components/student/StudentIdentityVer
 import StudentDetail from '@/components/student/StudentDetail.vue'
 
 const student = [
-  { path: '/student', component: StudentList }
-  ,
+  { path: '/student', component: StudentList },
   // You will also need a route for the final student detail page
   {
     path: '/student-identity-verification/:id',
@@ -13,13 +12,11 @@ const student = [
     meta: { layout: "BlankLayout" , isPublic: true},
   },
    {
-    path: '/students-detail/:id/:identityId/:cardId',
+    path: '/students-detail/:id/:cardId/:identityId',
     name: 'StudentDetail',
     component: StudentDetail,
     meta: { layout: "BlankLayout", isPublic: true },
   }
 ]
-
-
 
 export default student

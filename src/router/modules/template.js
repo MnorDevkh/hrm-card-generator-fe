@@ -10,6 +10,11 @@ const template = [
         name: 'lecturer-card-generator',
         component: LecturerCardGenerator
   }
+  ,{
+    path : '/template/student-photos',
+    name : 'student-photo-list',
+    component : () => import('@/components/template/StudentPhotoListComponent.vue')
+  }
 ]
 
 export default template

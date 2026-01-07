@@ -39,7 +39,8 @@ const menuItems = ref([
   { label: 'Students', icon: 'pi pi-users', to: '/student' },
   { label: 'Staff', icon: 'pi pi-id-card', to: '/staff' }, // Assuming you have these routes
   { label: 'Lecturers', icon: 'pi pi-briefcase', to: '/lecture' }, // Assuming you have these routes
-  { label: 'Card Templates', icon: 'pi pi-palette', to: '/template' }
+  { label: 'Card Templates', icon: 'pi pi-palette', to: '/template' },
+  { label: 'Student Photos', icon: 'pi pi-image', to: '/template/student-photos' } // New menu item
 ]);
 </script>
 

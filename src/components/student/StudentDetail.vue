@@ -1,7 +1,7 @@
 <template>
   <ConfigProvider :theme="{ token: { fontFamily: 'inherit' } }">
     <div
-      :class="['w-full bg-gray-50 dark:bg-gray-900 px-3 py-6 sm:p-6 lg:p-8', embedded ? 'max-w-7xl mx-auto' : 'min-h-screen flex flex-col justify-center items-center']">
+      :class="['w-full bg-gray-50 dark:bg-gray-900 px-2 py-4 sm:p-6 lg:p-8', embedded ? 'max-w-3xl mx-auto' : 'min-h-screen flex items-center justify-center']">
       <div class="w-full max-w-3xl">
         <div v-if="isLoading"
           class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex justify-center items-center">
@@ -58,7 +58,7 @@
                 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
                 <UserOutlined /> Personal Information
               </h3>
-              <Descriptions bordered :column="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" size="middle">
+              <Descriptions bordered :column="1" size="middle">
                 <Descriptions.Item label="Name (Khmer)">{{ student.name.khmer }}</Descriptions.Item>
                 <Descriptions.Item label="Name (English)">{{ student.name.english }}</Descriptions.Item>
                 <Descriptions.Item label="Card ID">{{ student.card_id }}</Descriptions.Item>
@@ -68,8 +68,8 @@
                 <Descriptions.Item label="Date of Birth">{{ formatDate(student.birth_date) }}</Descriptions.Item>
                 <Descriptions.Item label="Phone">{{ student.phone }}</Descriptions.Item>
                 <Descriptions.Item label="Email">{{ student.email || '-' }}</Descriptions.Item>
-                <Descriptions.Item label="Birth Place" :span="2">{{ formatAddress(student.birth_place) }}</Descriptions.Item>
-                <Descriptions.Item label="Current Address" :span="2">{{ formatAddress(student.current_address) }}
+                <Descriptions.Item label="Birth Place">{{ formatAddress(student.birth_place) }}</Descriptions.Item>
+                <Descriptions.Item label="Current Address">{{ formatAddress(student.current_address) }}
                 </Descriptions.Item>
               </Descriptions>
             </div>
@@ -80,7 +80,7 @@
                 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
                 <BookOutlined /> Academic Information
               </h3>
-              <Descriptions bordered :column="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" size="middle">
+              <Descriptions bordered :column="1" size="middle">
                 <Descriptions.Item label="Faculty">{{ student.faculty }}</Descriptions.Item>
                 <Descriptions.Item label="Major">{{ student.major }}</Descriptions.Item>
                 <Descriptions.Item label="Study Shift">{{ student.study_shift }}</Descriptions.Item>

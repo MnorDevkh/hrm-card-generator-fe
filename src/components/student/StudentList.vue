@@ -63,7 +63,7 @@
     </Card>
 
     <!-- View Student Dialog -->
-    <Modal v-model:open="viewDialogVisible" title="Student Details" width="70%" :footer="null" destroyOnClose>
+    <Modal v-model:open="viewDialogVisible" title="Student Details"  :footer="null" destroyOnClose>
       <StudentDetail v-if="selectedStudent" :studentId="selectedStudent.id" :verificationId="selectedStudent.card_id || selectedStudent.identity_id" :embedded="true" />
     </Modal>
 

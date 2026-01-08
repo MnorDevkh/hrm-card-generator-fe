@@ -27,8 +27,5 @@ const layoutComponent = computed(() => {
 </template>
 
 <style scoped>
-.app-container {
-  width: 1800px;
-  min-height: 100vh;
-}
+
 </style>

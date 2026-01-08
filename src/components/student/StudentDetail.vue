@@ -13,19 +13,17 @@
 
     <div v-else-if="student" class="bg-blue-50 dark:bg-gray-800 rounded-xl shadow-lg p-6 ">
       <!-- Student Header -->
-        <div class="bg-green-100 text-center dark:bg-green-900 text-green-700 dark:text-green-300 px-4 py-2 rounded-md flex items-center justify-center gap-2 border border-green-200 dark:border-green-700">
+
+      <div class="mb-8 flex flex-col sm:flex-row items-center gap-6">
+        <div
+          class="bg-green-100 text-center dark:bg-green-900 text-green-700 dark:text-green-300 px-4 py-2 rounded-md flex items-center justify-center gap-2 border border-green-200 dark:border-green-700">
           <i class="pi pi-check-circle"></i>
           <span class="font-medium">បានផ្ទៀងផ្ទាត់ ទិន្នន័យត្រឹមត្រូវ</span>
         </div>
-      <div class="mb-8 flex flex-col sm:flex-row items-center gap-6">
-       
-        <img
-          v-if="student.photo"
-          :src="getPhotoUrl(student.photo)"
-          alt="Student Photo"
-          class="w-32 h-40 object-cover rounded-lg shadow-md border-4 border-gray-200 dark:border-gray-700"
-        />
-        <div v-else class="w-32 h-40 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center shadow-md">
+        <img v-if="student.photo" :src="getPhotoUrl(student.photo)" alt="Student Photo"
+          class="w-32 h-40 object-cover rounded-lg shadow-md border-4 border-gray-200 dark:border-gray-700" />
+        <div v-else
+          class="w-32 h-40 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center shadow-md">
           <i class="pi pi-user text-6xl text-gray-400"></i>
         </div>
         <div class="text-center sm:text-left">
@@ -48,8 +46,10 @@
           <InfoItem icon="pi-calendar" label="Date of Birth" :value="formatDate(student.birth_date)" />
           <InfoItem icon="pi-phone" label="Phone" :value="student.phone" />
           <InfoItem icon="pi-envelope" label="Email" :value="student.email || '-'" :full-width="true" />
-          <InfoItem icon="pi-map-marker" label="Birth Place" :value="formatAddress(student.birth_place)" :full-width="true" />
-          <InfoItem icon="pi-home" label="Current Address" :value="formatAddress(student.current_address)" :full-width="true" />
+          <InfoItem icon="pi-map-marker" label="Birth Place" :value="formatAddress(student.birth_place)"
+            :full-width="true" />
+          <InfoItem icon="pi-home" label="Current Address" :value="formatAddress(student.current_address)"
+            :full-width="true" />
         </InfoCard>
 
         <InfoCard title="Guardian Information">
@@ -155,22 +155,60 @@ const formatAddress = (addr) => {
 
 <style scoped>
 /* make overall page wider on large screens */
-.student-photo { width: 7.5rem; height: 9.5rem; } /* default slightly bigger */
-.student-meta .student-name-en { line-height: 1; }
-.student-meta .student-name-kh { margin-top: 0.15rem; }
-.student-meta { min-width: 0; } /* enable truncation */
+.student-photo {
+  width: 7.5rem;
+  height: 9.5rem;
+}
+
+/* default slightly bigger */
+.student-meta .student-name-en {
+  line-height: 1;
+}
+
+.student-meta .student-name-kh {
+  margin-top: 0.15rem;
+}
+
+.student-meta {
+  min-width: 0;
+}
+
+/* enable truncation */
 
 @media (min-width: 640px) {
-  .student-photo { width: 10rem; height: 12rem; }
-  .student-name-en { font-size: 2.25rem; }
+  .student-photo {
+    width: 10rem;
+    height: 12rem;
+  }
+
+  .student-name-en {
+    font-size: 2.25rem;
+  }
 }
+
 @media (min-width: 1024px) {
-  .student-photo { width: 12rem; height: 15rem; }
-  .student-name-en { font-size: 2.75rem; }
-  .student-name-kh { font-size: 1.5rem; }
+  .student-photo {
+    width: 12rem;
+    height: 15rem;
+  }
+
+  .student-name-en {
+    font-size: 2.75rem;
+  }
+
+  .student-name-kh {
+    font-size: 1.5rem;
+  }
 }
+
 @media (min-width: 1280px) {
-  .student-photo { width: 14rem; height: 17rem; }
-  .student-name-en { font-size: 3rem; }
+  .student-photo {
+    width: 14rem;
+    height: 17rem;
+  }
+
+  .student-name-en {
+    font-size: 3rem;
+  }
 }
 </style>

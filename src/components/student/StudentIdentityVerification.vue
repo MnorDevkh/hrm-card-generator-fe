@@ -5,51 +5,28 @@
       <div class="p-8">
         <div class="text-center mb-8">
           <i class="pi pi-id-card text-4xl text-blue-600 mb-3"></i>
-          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Student Verification</h2>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">ផ្ទៀងផ្ទាត់ អត្ថសញ្ញាណសិស្ស</h2>
           <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
-            Enter your Card ID or National Identity to verify.
+            សូមបំពេញលេខកូដសម្គាល់កាត /n
+ឬលេខអត្តសញ្ញាណប័ណ្ណសញ្ជាតិខ្មែរ
           </p>
         </div>
 
         <form @submit.prevent="submitVerification" class="space-y-6">
           
-          <!-- Card ID Input -->
-          <div>
-            <label for="card_id" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-              Card Identity
+          <!-- Verification ID Input -->
+          <div class="p-5">
+            <label for="verification_id" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+              Card ID / National Identity
             </label>
             <div class="relative">
-              <i class="pi pi-credit-card absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+              <i class="pi pi-id-card absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
               <input
                 type="text"
-                id="card_id"
-                v-model="cardId"
+                id="verification_id"
+                v-model="verificationId"
                 class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-all outline-none"
-                placeholder="Enter Card ID"
-              />
-            </div>
-          </div>
-
-          <!-- AND Divider -->
-          <div class="relative flex items-center py-2">
-            <div class="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
-            <!-- <span class="flex-shrink-0 mx-4 text-gray-400 text-sm font-medium">AND</span> -->
-            <div class="flex-grow border-t border-gray-300 dark:border-gray-600"></div>
-          </div>
-
-          <!-- National Identity Input -->
-          <div>
-            <label for="identity_id" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-              National Identity
-            </label>
-            <div class="relative">
-              <i class="pi pi-user absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-              <input
-                type="text"
-                id="identity_id"
-                v-model="identityId"
-                class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-all outline-none"
-                placeholder="Enter National ID"
+                placeholder="Enter Card ID or National ID"
               />
             </div>
           </div>
@@ -82,23 +59,15 @@ const router = useRouter();
 const toast = useToast();
 
 const studentId = ref(route.params.id);
-const identityId = ref('');
-const cardId = ref('');
+const verificationId = ref('');
 
 const submitVerification = () => {
-  const cId = cardId.value.trim();
-  const nId = identityId.value.trim();
+  const vId = verificationId.value.trim();
 
-  if (studentId.value && (cId || nId)) {
-    let detailUrl;
-    if (cId) {
-      detailUrl = `/students-detail/${studentId.value}/${cId}/${nId}`;
-    } else {
-      detailUrl = `/students-detail/${studentId.value}/${nId}`;
-    }
-    router.push(detailUrl);
+  if (studentId.value && vId) {
+    router.push({ path: `/students-detail/${studentId.value}`, query: { verificationId: vId } });
   } else {
-    toast.add({ severity: 'warn', summary: 'Input Required', detail: 'Please enter either Card ID or National Identity', life: 3000 });
+    toast.add({ severity: 'warn', summary: 'Input Required', detail: 'Please enter your Card ID or National Identity', life: 3000 });
   }
 };
 </script>

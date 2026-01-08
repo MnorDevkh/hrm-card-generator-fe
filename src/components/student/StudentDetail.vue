@@ -100,11 +100,7 @@ const props = defineProps({
     type: [String, Number],
     default: null
   },
-  identityId: {
-    type: [String, Number],
-    default: null
-  },
-  cardId: {
+  verificationId: {
     type: [String, Number],
     default: null
   },
@@ -116,24 +112,23 @@ const props = defineProps({
 
 onMounted(async () => {
   const studentId = props.studentId || route.params.id;
-  let identityId = props.identityId || route.params.identityId;
-  let cardId = props.cardId || route.params.cardId;
-  
-  if (identityId === 'null') identityId = null;
+  let verificationId = props.verificationId || route.params.verificationId || route.query.verificationId;
 
-  if (!studentId || (!identityId && !cardId)) {
-    if (!props.embedded) error.value = 'Student ID or Identity/Card ID is missing.';
+  if (verificationId === 'null') verificationId = null;
+
+  if (!studentId || !verificationId) {
+    if (!props.embedded) error.value = 'Student ID or Verification ID is missing.';
     isLoading.value = false;
     return;
   }
 
   try {
     isLoading.value = true;
-    const response = await getStudentInfo(studentId, cardId, identityId);
+    const response = await getStudentInfo(studentId, verificationId);
     student.value = response;
   } catch (err) {
     error.value = err.response?.data?.message || err.message || 'Failed to fetch student details.';
-    console.error(response.detail);
+    console.error(err);
   } finally {
     isLoading.value = false;
   }

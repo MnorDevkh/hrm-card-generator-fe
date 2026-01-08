@@ -30,8 +30,8 @@ export async function getStudentsByIds(studentIds) {
  * @param {string} identityId
  * @returns {Promise<Student>}
  */
-export async function getStudentInfo(studentId, cardId, identityId) {
-  return apiFetch(`/students/${studentId}/${cardId}/${identityId}`);
+export async function getStudentInfo(studentId, id) {
+  return apiFetch(`/students/${studentId}/${id}`);
 }
 
 export async function deleteStudent(studentId) {

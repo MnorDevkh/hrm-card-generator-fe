@@ -1,8 +1,8 @@
-import Home from '../../components/Home/HomeComponent.vue'
+import Dashboard from '../Dashboard.vue';
 
 const home = [
-  { path: '/', component: Home },
-//   { path: '/about', component: AboutView },
-]
+  { path: "", component: Dashboard },
+  //   { path: '/about', component: AboutView },
+];
 
-export default home
+export default home;

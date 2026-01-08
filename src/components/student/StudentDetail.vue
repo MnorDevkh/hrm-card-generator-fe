@@ -13,7 +13,12 @@
 
     <div v-else-if="student" class="bg-blue-50 dark:bg-gray-800 rounded-xl shadow-lg p-6 ">
       <!-- Student Header -->
+        <div class="bg-green-100 text-center dark:bg-green-900 text-green-700 dark:text-green-300 px-4 py-2 rounded-md flex items-center justify-center gap-2 border border-green-200 dark:border-green-700">
+          <i class="pi pi-check-circle"></i>
+          <span class="font-medium">បានផ្ទៀងផ្ទាត់ ទិន្នន័យត្រឹមត្រូវ</span>
+        </div>
       <div class="mb-8 flex flex-col sm:flex-row items-center gap-6">
+       
         <img
           v-if="student.photo"
           :src="getPhotoUrl(student.photo)"

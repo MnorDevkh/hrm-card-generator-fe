@@ -4,6 +4,7 @@ import student from "./modules/student";
 import staff from "./modules/staff";
 import lecture from "./modules/lecture";
 import template from "./modules/template";
+import home from "./modules/home";
 import AppLayout from '../router/AppLayout.vue';
 import HomeComponent from '../components/Home/HomeComponent.vue';
 
@@ -14,6 +15,7 @@ const routes = [
   ...staff,
   ...lecture,
   ...template,
+  ...home,
 ]
 
 const router = createRouter({

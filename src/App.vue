@@ -21,5 +21,14 @@ const layoutComponent = computed(() => {
 </script>
 
 <template>
-  <component :is="layoutComponent" />
+  <div class="app-container">
+    <component :is="layoutComponent" />
+  </div>
 </template>
+
+<style scoped>
+.app-container {
+  width: 1800px;
+  min-height: 100vh;
+}
+</style>

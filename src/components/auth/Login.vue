@@ -32,7 +32,7 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="h-screen w-[1080px] flex items-center justify-center dark:bg-gray-100">
+  <div class="h-screen flex items-center justify-center dark:bg-gray-100">
     <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
       <div class="text-center mb-4">
         <img src="@/assets/ailogo.png" alt="Logo" class="mb-3" style="width: 60px; height: 60px;">

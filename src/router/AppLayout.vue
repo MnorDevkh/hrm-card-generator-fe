@@ -33,6 +33,7 @@
 
 <script setup>
 import { ref } from 'vue';
+import Dashboard from './Dashboard.vue';
 
 const menuItems = ref([
   { label: 'Dashboard', icon: 'pi pi-home', to: '/' },

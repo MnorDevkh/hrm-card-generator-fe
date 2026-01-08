@@ -1,137 +1,157 @@
 <template>
+  <ConfigProvider :theme="{ token: { fontFamily: 'inherit' } }">
   <div>
-    <Toast />
-    <ConfirmDialog />
     <input type="file" ref="fileInput" @change="onFileSelected" style="display: none"
       accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
     <div class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md">
       <p class="text-xl font-bold text-gray-900 dark:text-white w-full sm:w-auto text-center sm:text-left">បញ្ញីរសិស្ស</p>
-      <Divider />
+      <Divider type="vertical" class="hidden sm:block h-8" />
       <div class="card flex flex-col sm:flex-row sm:flex-wrap justify-end gap-4 w-full sm:w-auto">
-        <Button label="Export Card" @click="exportCard" class="w-full sm:w-auto" />
-        <Button label="Excel Import" severity="success" @click="importFromExcel" :loading="isUploading" class="w-full sm:w-auto" />
-        <Button label="Add New" severity="info" @click="openNew" class="w-full sm:w-auto" />
-        <Button label="Delete" severity="danger" class="w-full sm:w-auto" />
+        <Button @click="exportCard" class="w-full sm:w-auto">
+          <template #icon><ExportOutlined /></template>
+          Export Card
+        </Button>
+        <Button type="primary" ghost @click="importFromExcel" :loading="isUploading" class="w-full sm:w-auto">
+          <template #icon><FileExcelOutlined /></template>
+          Excel Import
+        </Button>
+        <Button type="primary" @click="openNew" class="w-full sm:w-auto">
+          <template #icon><PlusOutlined /></template>
+          Add New
+        </Button>
+        <Button danger type="primary" class="w-full sm:w-auto" :disabled="!selectedRowKeys.length">
+          <template #icon><DeleteOutlined /></template>
+          Delete
+        </Button>
       </div>
     </div>
     <Divider />
-    <Card>
-      <template #content>
-        <div class="overflow-x-auto">
-          <DataTable v-model:selection="selectedStudents" :value="students" :paginator="true" :rows="rows" :first="first"
-            :totalRecords="totalRecords" :lazy="true" @page="loadStudents" dataKey="id" tableStyle="min-width: 80rem"
-            :selectAll="selectAll" @select-all-change="onSelectAllChange" @row-unselect="onRowUnselect">
-            <Column selectionMode="multiple" headerStyle="width: 3rem"></Column>
-            <Column header="No">
-              <template #body="slotProps">
-                {{ first + slotProps.index + 1 }}
-              </template>
-            </Column>
-            <Column field="card_id" header="Card ID"></Column>
-            <Column field="name.english" header="Name (EN)"></Column>
-            <Column field="name.khmer" header="Name (KH)"></Column>
-            <Column field="gender" header="Gender"></Column>
-            <Column field="phone" header="Phone"></Column>
-            <Column field="batch" header="Batch"></Column>
-            <Column header="Photo" :body="photoTemplate"></Column>
-            <Column header="Actions" :exportable="false" style="min-width: 10rem">
-              <template #body="slotProps">
-                <div class="flex gap-2">
-                  <Button icon="pi pi-eye" severity="info" text rounded aria-label="View" @click="viewStudent(slotProps.data)" />
-                  <Button icon="pi pi-pencil" severity="warning" text rounded aria-label="Edit" @click="editStudent(slotProps.data)" />
-                  <Button icon="pi pi-trash" severity="danger" text rounded aria-label="Delete" @click="requireConfirmation($event, slotProps.data)" label="Delete" ></Button>
-                </div>
-              </template>
-            </Column>
-          </DataTable>
-        </div>
-      </template>
+    <Card :bordered="false" class="shadow-sm">
+      <Table
+        :dataSource="students"
+        :columns="columns"
+        :pagination="pagination"
+        :row-selection="rowSelection"
+        :loading="loading"
+        @change="handleTableChange"
+        rowKey="id"
+        :scroll="{ x: 1200 }"
+      >
+        <template #bodyCell="{ column, record, index }">
+          <template v-if="column.key === 'index'">
+            {{ (pagination.current - 1) * pagination.pageSize + index + 1 }}
+          </template>
+          <template v-else-if="column.key === 'photo'">
+            <img v-if="record.photo" :src="`${environment.apiBaseUrl}upload_image/image/${record.photo}`" alt="photo" class="w-10 h-10 rounded-full object-cover" />
+            <span v-else class="text-gray-400">No Photo</span>
+          </template>
+          <template v-else-if="column.key === 'actions'">
+            <div class="flex gap-2">
+              <Button type="text" shape="circle" @click="viewStudent(record)">
+                <template #icon><EyeOutlined class="text-blue-500" /></template>
+              </Button>
+              <Button type="text" shape="circle" @click="editStudent(record)">
+                <template #icon><EditOutlined class="text-orange-500" /></template>
+              </Button>
+              <Button type="text" danger shape="circle" @click="requireConfirmation(record)">
+                <template #icon><DeleteOutlined /></template>
+              </Button>
+            </div>
+          </template>
+        </template>
+      </Table>
     </Card>
 
     <!-- View Student Dialog -->
-    <Dialog v-model:visible="viewDialogVisible" modal header="Student Details" :style="{ width: '70vw' }" :breakpoints="{ '960px': '75vw', '641px': '100vw' }">
+    <Modal v-model:open="viewDialogVisible" title="Student Details" width="70%" :footer="null" destroyOnClose>
       <StudentDetail v-if="selectedStudent" :studentId="selectedStudent.id" :verificationId="selectedStudent.card_id || selectedStudent.identity_id" :embedded="true" />
-    </Dialog>
+    </Modal>
 
     <!-- Edit Student Dialog -->
-    <Dialog v-model:visible="editDialogVisible" modal :header="selectedStudent && selectedStudent.id ? 'Edit Student' : 'New Student'" :style="{ width: '80vw' }" :breakpoints="{ '960px': '90vw', '641px': '100vw' }">
+    <Modal v-model:open="editDialogVisible" :title="selectedStudent && selectedStudent.id ? 'Edit Student' : 'New Student'" width="80%" :footer="null" destroyOnClose>
       <StudentForm 
         v-if="editDialogVisible" 
         :student="selectedStudent" 
         @save="saveStudent" 
         @cancel="editDialogVisible = false" 
       />
-    </Dialog>
-    <ConfirmPopup group="headless">
-        <template #container="{ message, acceptCallback, rejectCallback }">
-            <div class="rounded p-4">
-                <span>{{ message.message }}</span>
-                <div class="flex items-center gap-2 mt-4">
-                    <Button label="Delete" severity="danger" @click="acceptCallback" size="small"></Button>
-                    <Button label="Cancel" variant="outlined" @click="rejectCallback" severity="secondary" size="small" text></Button>
-                </div>
-            </div>
-        </template>
-    </ConfirmPopup>
+    </Modal>
   </div>
+  </ConfigProvider>
 
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import ConfirmPopup from 'primevue/confirmpopup';
-import Toast from 'primevue/toast';
+import { ref, onMounted, createVNode } from 'vue';
+import { Table, Button, Card, Divider, Modal, message, ConfigProvider } from 'ant-design-vue';
+import { 
+  EyeOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, 
+  UploadOutlined, PlusOutlined, FileExcelOutlined, ExportOutlined 
+} from '@ant-design/icons-vue';
 import { getStudents, uploadExcel, deleteStudent, updateStudent, createStudent } from '../../service/student.service.js';
-import { Button, Card, Divider } from 'primevue';
+import { environment } from '../../environments/environment';
 import { useRouter } from 'vue-router';
-import Dialog from 'primevue/dialog';
-import ConfirmDialog from 'primevue/confirmdialog';
-import { useConfirm } from 'primevue/useconfirm';
-import { useToast } from 'primevue/usetoast';
 import StudentDetail from './StudentDetail.vue';
 import StudentForm from './StudentForm.vue';
 
 const students = ref([]);
-const selectedStudents = ref([]);
+const selectedRowKeys = ref([]);
+const selectedRows = ref([]);
 const isUploading = ref(false);
 const fileInput = ref(null);
-const totalRecords = ref(0);
-const rows = ref(10);
-const first = ref(0);
-const selectAll = ref(false);
+const loading = ref(false);
 const router = useRouter();
-const confirm = useConfirm();
-const toast = useToast();
 
 const viewDialogVisible = ref(false);
 const editDialogVisible = ref(false);
 const selectedStudent = ref(null);
 
-const photoTemplate = (row) => {
-  if (row.photo) {
-    return `<img src="/uploads/${row.photo}" alt="photo" style="width:40px;height:40px;border-radius:50%;">`;
-  }
-  return `<span style="color:#bbb;">No Photo</span>`;
+const pagination = ref({
+  current: 1,
+  pageSize: 10,
+  total: 0,
+  showSizeChanger: true,
+});
+
+const columns = [
+  { title: 'No', key: 'index', width: 60 },
+  { title: 'Card ID', dataIndex: 'card_id', key: 'card_id' },
+  { title: 'Name (EN)', dataIndex: ['name', 'english'], key: 'name_en' },
+  { title: 'Name (KH)', dataIndex: ['name', 'khmer'], key: 'name_kh' },
+  { title: 'Gender', dataIndex: 'gender', key: 'gender' },
+  { title: 'Phone', dataIndex: 'phone', key: 'phone' },
+  { title: 'Batch', dataIndex: 'batch', key: 'batch' },
+  { title: 'Photo', key: 'photo' },
+  { title: 'Actions', key: 'actions', fixed: 'right', width: 150 },
+];
+
+const rowSelection = {
+  onChange: (keys, rows) => {
+    selectedRowKeys.value = keys;
+    selectedRows.value = rows;
+  },
 };
 
+const handleTableChange = (pag) => {
+  pagination.value.current = pag.current;
+  pagination.value.pageSize = pag.pageSize;
+  loadStudents();
+};
 
-const loadStudents = async (event = { first: 0, rows: 20 }) => {
-  const response = await getStudents(event.first, event.rows);
-  students.value = response.students;
-  totalRecords.value = response.total;
-  first.value = event.first;
-  rows.value = event.rows;
-
-  if (selectAll.value) {
-    const newSelection = [...selectedStudents.value];
-    students.value.forEach(student => {
-      if (!newSelection.some(s => s.id === student.id)) {
-        newSelection.push(student);
-      }
-    });
-    selectedStudents.value = newSelection;
+const loadStudents = async () => {
+  loading.value = true;
+  const offset = (pagination.value.current - 1) * pagination.value.pageSize;
+  const limit = pagination.value.pageSize;
+  
+  try {
+    const response = await getStudents(offset, limit);
+    students.value = response.students;
+    pagination.value.total = response.total;
+  } catch (error) {
+    console.error('Failed to load students', error);
+    message.error('Failed to load students');
+  } finally {
+    loading.value = false;
   }
 };
 
@@ -149,11 +169,11 @@ const onFileSelected = async (event) => {
 
   try {
     await uploadExcel(formData);
-    // toast.add({ severity: 'success', summary: 'Success', detail: 'Students imported successfully', life: 3000 });
+    message.success('Students imported successfully');
     loadStudents(); // Refresh the list
   } catch (error) {
     console.error('Error uploading Excel file:', error);
-    // toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to import students', life: 3000 });
+    message.error('Failed to import students');
   } finally {
     isUploading.value = false;
     event.target.value = ''; // Reset file input
@@ -161,7 +181,7 @@ const onFileSelected = async (event) => {
 };
 
 const exportCard = () => {
-  const ids = selectedStudents.value.map(s => s.id);
+  const ids = selectedRows.value.map(s => s.id);
   router.push({ path: '/template', query: { ids: JSON.stringify(ids) } });
 };
 
@@ -184,54 +204,35 @@ const saveStudent = async (studentData) => {
   try {
     if (studentData.id) {
       await updateStudent(studentData.id, studentData);
-      toast.add({ severity: 'success', summary: 'Successful', detail: 'Student Updated', life: 3000 });
+      message.success('Student Updated');
     } else {
       await createStudent(studentData);
-      toast.add({ severity: 'success', summary: 'Successful', detail: 'Student Created', life: 3000 });
+      message.success('Student Created');
     }
     editDialogVisible.value = false;
     loadStudents();
   } catch (error) {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to save student', life: 3000 });
+    message.error('Failed to save student');
   }
 };
 
-const onSelectAllChange = (event) => {
-  selectAll.value = event.checked;
-
-  if (selectAll.value) {
-    const newSelection = [...selectedStudents.value];
-    students.value.forEach(student => {
-      if (!newSelection.some(s => s.id === student.id)) {
-        newSelection.push(student);
-      }
-    });
-    selectedStudents.value = newSelection;
-  } else {
-    selectedStudents.value = [];
-  }
-};
-
-const onRowUnselect = () => {
-  selectAll.value = false;
-};
-
-const requireConfirmation = (event, student) => {
-    confirm.require({
-        target: event.currentTarget,
-        group: 'headless',
-        message: `Are you sure you want to delete ${student.name.english}?`,
-        accept: async () => {
+const requireConfirmation = (student) => {
+    Modal.confirm({
+        title: `Are you sure you want to delete ${student.name.english}?`,
+        icon: createVNode(ExclamationCircleOutlined),
+        content: 'This action cannot be undone.',
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
+        async onOk() {
             try {
                 await deleteStudent(student.id);
-                toast.add({severity:'success', summary:'Confirmed', detail:'Student deleted', life: 3000});
+                message.success('Student deleted');
                 loadStudents();
             } catch (error) {
-                toast.add({severity:'error', summary:'Error', detail:'Failed to delete student', life: 3000});
+                message.error('Failed to delete student');
             }
         },
-        reject: () => {
-        }
     });
 }
 onMounted(async () => {

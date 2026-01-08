@@ -1,99 +1,134 @@
 <template>
-  <div :class="['max-w-7xl mx-auto bg-white dark:bg-gray-900 p-4 sm:p-8', embedded ? '' : 'min-h-screen']">
-    <div v-if="isLoading" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex justify-center items-center">
-      <i class="pi pi-spin pi-spinner text-blue-500" style="font-size: 3rem"></i>
-    </div>
-
-    <div v-else-if="error" class=" mx-auto">
-      <div class="p-message p-message-error">
-        <i class="pi pi-exclamation-triangle mr-2"></i>
-        <span>{{ error }}</span>
-      </div>
-    </div>
-
-    <div v-else-if="student" class="bg-blue-50 dark:bg-gray-800 rounded-xl shadow-lg p-6 ">
-      <!-- Student Header -->
-
-      <div class="mb-8 flex flex-col sm:flex-row items-center gap-6">
-        <div
-          class="bg-green-100 text-center dark:bg-green-900 text-green-700 dark:text-green-300 px-4 py-2 rounded-md flex items-center justify-center gap-2 border border-green-200 dark:border-green-700">
-          <i class="pi pi-check-circle"></i>
-          <span class="font-medium">បានផ្ទៀងផ្ទាត់ ទិន្នន័យត្រឹមត្រូវ</span>
+  <ConfigProvider :theme="{ token: { fontFamily: 'inherit' } }">
+    <div
+      :class="['w-full bg-gray-50 dark:bg-gray-900 px-3 py-6 sm:p-6 lg:p-8', embedded ? 'max-w-7xl mx-auto' : 'min-h-screen flex flex-col justify-center items-center']">
+      <div class="w-full max-w-3xl">
+        <div v-if="isLoading"
+          class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex justify-center items-center">
+          <Spin size="large" />
         </div>
-        <img v-if="student.photo" :src="getPhotoUrl(student.photo)" alt="Student Photo"
-          class="w-32 h-40 object-cover rounded-lg shadow-md border-4 border-gray-200 dark:border-gray-700" />
-        <div v-else
-          class="w-32 h-40 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center shadow-md">
-          <i class="pi pi-user text-6xl text-gray-400"></i>
+
+        <div v-else-if="error" class=" mx-auto">
+          <Alert type="error" show-icon :message="error" />
         </div>
-        <div class="text-center sm:text-left">
-          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ student.name.english }}</h1>
-          <p class="text-2xl text-gray-600 dark:text-gray-300">{{ student.name.khmer }}</p>
-          <div class="mt-2 flex items-center justify-center sm:justify-start gap-4 text-gray-500 dark:text-gray-400">
-            <span class="flex items-center gap-2"><i class="pi pi-id-card"></i> {{ student.card_id }}</span>
-            <span class="flex items-center gap-2"><i class="pi pi-bookmark"></i> Batch: {{ student.batch }}</span>
-            <span class="flex items-center gap-2"><i class="pi pi-tag"></i> ID: {{ student.identity_id }}</span>
+
+        <div v-else-if="student">
+          <div class="flex flex-col gap-3 sm:gap-4 lg:gap-6">
+            <div class="text-center mb-1 sm:mb-2">
+              <div
+                class="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-green-100 dark:bg-green-900/30 mb-2 sm:mb-4">
+                <CheckCircleOutlined class="text-2xl sm:text-3xl text-green-600 dark:text-green-400" />
+              </div>
+              <p
+                class="text-base sm:text-lg lg:text-xl font-bold text-gray-900 dark:text-white mb-1 sm:mb-2 font-khmer">
+                ឯកសារមានសុពលភាព</p>
+              <p class="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-300 mb-1 font-khmer">ចេញដោយ
+                វិទ្យាស្ថានអាហ្គា</p>
+              <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-khmer px-2">
+                សូមពិនិត្យឯកសាររបស់លោកអ្នកជាមួយទិន្ន័យខាងក្រោម ដើម្បីផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ</p>
+            </div>
+            <div
+              class="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-3 sm:p-4 lg:p-6 mb-3 sm:mb-4 lg:mb-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 lg:gap-6">
+              <div class="flex-shrink-0">
+                <Image v-if="student.photo" :src="getPhotoUrl(student.photo)" :width="100"
+                  class="sm:w-[120px] rounded-lg object-cover shadow-sm" />
+                <div v-else
+                  class="w-[100px] h-[130px] sm:w-[120px] sm:h-[160px] bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center shadow-sm border border-gray-200 dark:border-gray-600">
+                  <UserOutlined class="text-3xl sm:text-4xl text-gray-400" />
+                </div>
+              </div>
+              <div class="text-center sm:text-left flex-1 min-w-0">
+                <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-1 truncate">{{
+                  student.name.english }}</h1>
+                <h2 class="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 font-khmer mb-2 sm:mb-3">{{
+                  student.name.khmer }}</h2>
+                <div class="flex flex-wrap gap-1 sm:gap-2 justify-center sm:justify-start">
+                  <span
+                    class="px-2 sm:px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs sm:text-sm font-medium border border-blue-100">ID:
+                    {{ student.card_id }}</span>
+                  <span
+                    class="px-2 sm:px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-xs sm:text-sm font-medium border border-purple-100">Batch:
+                    {{ student.batch }}</span>
+                </div>
+              </div>
+            </div>
+            <div
+              class="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-3 sm:p-4 lg:p-6">
+              <h3
+                class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
+                <UserOutlined /> Personal Information
+              </h3>
+              <Descriptions bordered :column="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" size="middle">
+                <Descriptions.Item label="Name (Khmer)">{{ student.name.khmer }}</Descriptions.Item>
+                <Descriptions.Item label="Name (English)">{{ student.name.english }}</Descriptions.Item>
+                <Descriptions.Item label="Card ID">{{ student.card_id }}</Descriptions.Item>
+                <Descriptions.Item label="System ID">{{ student.id }}</Descriptions.Item>
+                <Descriptions.Item label="National Identity">{{ student.identity_id }}</Descriptions.Item>
+                <Descriptions.Item label="Gender">{{ student.gender }}</Descriptions.Item>
+                <Descriptions.Item label="Date of Birth">{{ formatDate(student.birth_date) }}</Descriptions.Item>
+                <Descriptions.Item label="Phone">{{ student.phone }}</Descriptions.Item>
+                <Descriptions.Item label="Email">{{ student.email || '-' }}</Descriptions.Item>
+                <Descriptions.Item label="Birth Place" :span="2">{{ formatAddress(student.birth_place) }}</Descriptions.Item>
+                <Descriptions.Item label="Current Address" :span="2">{{ formatAddress(student.current_address) }}
+                </Descriptions.Item>
+              </Descriptions>
+            </div>
+
+            <div
+              class="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-3 sm:p-4 lg:p-6">
+              <h3
+                class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
+                <BookOutlined /> Academic Information
+              </h3>
+              <Descriptions bordered :column="{ xxl: 2, xl: 2, lg: 2, md: 1, sm: 1, xs: 1 }" size="middle">
+                <Descriptions.Item label="Faculty">{{ student.faculty }}</Descriptions.Item>
+                <Descriptions.Item label="Major">{{ student.major }}</Descriptions.Item>
+                <Descriptions.Item label="Study Shift">{{ student.study_shift }}</Descriptions.Item>
+                <Descriptions.Item label="Batch">{{ student.batch }}</Descriptions.Item>
+                <Descriptions.Item label="Education Level">{{ student.education_level }}</Descriptions.Item>
+                <Descriptions.Item label="High School">{{ student.high_school }}</Descriptions.Item>
+                <Descriptions.Item label="BacII Year">{{ student.bacII_year }}</Descriptions.Item>
+              </Descriptions>
+            </div>
+
+            <div
+              class="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-3 sm:p-4 lg:p-6">
+              <h3
+                class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
+                <TeamOutlined /> Guardian Information
+              </h3>
+              <Descriptions bordered :column="1" size="middle">
+                <Descriptions.Item label="Guardian Name">{{ student.guardian?.name || '-' }}</Descriptions.Item>
+                <Descriptions.Item label="Guardian Phone">{{ student.guardian?.phone || '-' }}</Descriptions.Item>
+              </Descriptions>
+            </div>
+
+            <div
+              class="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-3 sm:p-4 lg:p-6">
+              <h3
+                class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
+                <StarOutlined /> Scholarship Information
+              </h3>
+              <Descriptions bordered :column="1" size="middle">
+                <Descriptions.Item label="Type">{{ student.scholarship_type || '-' }}</Descriptions.Item>
+                <Descriptions.Item label="Card ID">{{ student.scholarship_card_id || '-' }}</Descriptions.Item>
+                <Descriptions.Item label="Provided By">{{ student.scholarship_bye || '-' }}</Descriptions.Item>
+              </Descriptions>
+            </div>
           </div>
         </div>
       </div>
-
-      <!-- Details Grid: responsive 1 / 2 / 3 columns -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <InfoCard title="Personal Information">
-          <InfoItem icon="pi-hashtag" label="System ID" :value="student.id" :full-width="true" />
-          <InfoItem icon="pi-id-card" label="National Identity" :value="student.identity_id" />
-          <InfoItem icon="pi-user" label="Gender" :value="student.gender" />
-          <InfoItem icon="pi-calendar" label="Date of Birth" :value="formatDate(student.birth_date)" />
-          <InfoItem icon="pi-phone" label="Phone" :value="student.phone" />
-          <InfoItem icon="pi-envelope" label="Email" :value="student.email || '-'" :full-width="true" />
-          <InfoItem icon="pi-map-marker" label="Birth Place" :value="formatAddress(student.birth_place)"
-            :full-width="true" />
-          <InfoItem icon="pi-home" label="Current Address" :value="formatAddress(student.current_address)"
-            :full-width="true" />
-        </InfoCard>
-
-        <InfoCard title="Guardian Information">
-          <InfoItem icon="pi-users" label="Guardian Name" :value="student.guardian.name" />
-          <InfoItem icon="pi-mobile" label="Guardian Phone" :value="student.guardian.phone" />
-        </InfoCard>
-
-        <InfoCard title="Academic Information">
-          <InfoItem icon="pi-building" label="Faculty" :value="student.faculty" />
-          <InfoItem icon="pi-book" label="Major" :value="student.major" />
-          <InfoItem icon="pi-clock" label="Study Shift" :value="student.study_shift" />
-          <InfoItem icon="pi-sitemap" label="Batch" :value="student.batch" />
-          <InfoItem icon="pi-verified" label="Education Level" :value="student.education_level" />
-        </InfoCard>
-
-        <InfoCard title="High School Background">
-          <InfoItem icon="pi-flag" label="High School" :value="student.high_school" />
-          <InfoItem icon="pi-calendar-plus" label="BacII Year" :value="student.bacII_year" />
-          <InfoItem icon="pi-file" label="BacII Code" :value="student.bacII_code" />
-          <InfoItem icon="pi-check-circle" label="BacII Result" :value="student.bacII_result" />
-        </InfoCard>
-
-        <InfoCard title="Scholarship Information">
-          <InfoItem icon="pi-star" label="Type" :value="student.scholarship_type" />
-          <InfoItem icon="pi-ticket" label="Card ID" :value="student.scholarship_card_id" />
-          <InfoItem icon="pi-user-minus" label="Bye" :value="student.scholarship_bye || '-'" />
-        </InfoCard>
-
-        <InfoCard title="Other Information">
-          <InfoItem icon="pi-align-left" label="Notes" :value="student.notes || '-'" :full-width="true" />
-        </InfoCard>
-      </div>
     </div>
-  </div>
+  </ConfigProvider>
 </template>
 
 <script setup>
-import { ref, onMounted, defineAsyncComponent } from 'vue';
+import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { Spin, Alert, Card, Descriptions, Image, ConfigProvider } from 'ant-design-vue';
+import { UserOutlined, BookOutlined, TeamOutlined, StarOutlined, CheckCircleOutlined } from '@ant-design/icons-vue';
 import { getStudentInfo } from '../../service/student.service';
 import { environment } from '../../environments/environment';
-
-const InfoCard = defineAsyncComponent(() => import('./InfoCard.vue'));
-const InfoItem = defineAsyncComponent(() => import('./InfoItem.vue'));
 
 const route = useRoute();
 const student = ref(null);
@@ -146,6 +181,20 @@ const formatDate = (dateString) => {
   return new Date(dateString.split(' ')[0]).toLocaleDateString('en-GB');
 };
 
+const formatDateEN = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString.split(' ')[0]);
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+};
+
+const formatDateKH = (dateString) => {
+  if (!dateString) return '-';
+  const date = new Date(dateString.split(' ')[0]);
+  const khmerMonths = ['ខែមករា', 'ខែកុម្ភៈ', 'ខែមីនា', 'ខែមេសា', 'ខែឧសភា', 'ខែមិថុនា', 'ខែកក្កដា', 'ខែសីហា', 'ខែកញ្ញា', 'ខែតុលា', 'ខែវិច្ឆិកា', 'ខែធ្នូ'];
+  return `${date.getDate()} ${khmerMonths[date.getMonth()]} ${date.getFullYear()}`;
+};
+
 const formatAddress = (addr) => {
   if (!addr) return '-';
   const parts = [addr.village, addr.commune, addr.district, addr.province];
@@ -153,62 +202,4 @@ const formatAddress = (addr) => {
 };
 </script>
 
-<style scoped>
-/* make overall page wider on large screens */
-.student-photo {
-  width: 7.5rem;
-  height: 9.5rem;
-}
-
-/* default slightly bigger */
-.student-meta .student-name-en {
-  line-height: 1;
-}
-
-.student-meta .student-name-kh {
-  margin-top: 0.15rem;
-}
-
-.student-meta {
-  min-width: 0;
-}
-
-/* enable truncation */
-
-@media (min-width: 640px) {
-  .student-photo {
-    width: 10rem;
-    height: 12rem;
-  }
-
-  .student-name-en {
-    font-size: 2.25rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .student-photo {
-    width: 12rem;
-    height: 15rem;
-  }
-
-  .student-name-en {
-    font-size: 2.75rem;
-  }
-
-  .student-name-kh {
-    font-size: 1.5rem;
-  }
-}
-
-@media (min-width: 1280px) {
-  .student-photo {
-    width: 14rem;
-    height: 17rem;
-  }
-
-  .student-name-en {
-    font-size: 3rem;
-  }
-}
-</style>
+<style scoped></style>

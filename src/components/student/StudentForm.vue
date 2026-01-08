@@ -1,5 +1,6 @@
 <template>
-  <div class="p-fluid">
+  <ConfigProvider :theme="{ token: { fontFamily: 'inherit' } }">
+  <div class="form-container">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <!-- Basic Info -->
       <div class="col-span-1 md:col-span-2">
@@ -8,90 +9,93 @@
       
       <div class="flex flex-col gap-2">
         <label>Card ID</label>
-        <InputText v-model="form.card_id" />
+        <Input v-model:value="form.card_id" />
       </div>
       <div class="flex flex-col gap-2">
         <label>Identity ID</label>
-        <InputText v-model="form.identity_id" />
+        <Input v-model:value="form.identity_id" />
       </div>
       <div class="flex flex-col gap-2">
         <label>Name (English)</label>
-        <InputText v-model="form.name.english" />
+        <Input v-model:value="form.name.english" />
       </div>
       <div class="flex flex-col gap-2">
         <label>Name (Khmer)</label>
-        <InputText v-model="form.name.khmer" />
+        <Input v-model:value="form.name.khmer" />
       </div>
       <div class="flex flex-col gap-2">
         <label>Gender</label>
-        <Dropdown v-model="form.gender" :options="['Male', 'Female']" placeholder="Select Gender" />
+        <Select v-model:value="form.gender" placeholder="Select Gender">
+          <SelectOption value="Male">Male</SelectOption>
+          <SelectOption value="Female">Female</SelectOption>
+        </Select>
       </div>
       <div class="flex flex-col gap-2">
         <label>Date of Birth</label>
-        <Calendar v-model="form.birth_date" dateFormat="yy-mm-dd" showIcon />
+        <DatePicker v-model:value="form.birth_date" valueFormat="YYYY-MM-DD" class="w-full" />
       </div>
       <div class="flex flex-col gap-2">
         <label>Phone</label>
-        <InputText v-model="form.phone" />
+        <Input v-model:value="form.phone" />
       </div>
       <div class="flex flex-col gap-2">
         <label>Email</label>
-        <InputText v-model="form.email" />
+        <Input v-model:value="form.email" />
       </div>
       <div class="flex flex-col gap-2">
         <label>Batch</label>
-        <InputText v-model="form.batch" />
+        <Input v-model:value="form.batch" />
       </div>
 
       <!-- Birth Place -->
       <div class="col-span-1 md:col-span-2 mt-4">
         <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Birth Place</h3>
       </div>
-      <div class="flex flex-col gap-2"><label>Province</label><InputText v-model="form.birth_place.province" /></div>
-      <div class="flex flex-col gap-2"><label>District</label><InputText v-model="form.birth_place.district" /></div>
-      <div class="flex flex-col gap-2"><label>Commune</label><InputText v-model="form.birth_place.commune" /></div>
-      <div class="flex flex-col gap-2"><label>Village</label><InputText v-model="form.birth_place.village" /></div>
+      <div class="flex flex-col gap-2"><label>Province</label><Input v-model:value="form.birth_place.province" /></div>
+      <div class="flex flex-col gap-2"><label>District</label><Input v-model:value="form.birth_place.district" /></div>
+      <div class="flex flex-col gap-2"><label>Commune</label><Input v-model:value="form.birth_place.commune" /></div>
+      <div class="flex flex-col gap-2"><label>Village</label><Input v-model:value="form.birth_place.village" /></div>
 
       <!-- Current Address -->
       <div class="col-span-1 md:col-span-2 mt-4">
         <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Current Address</h3>
       </div>
-      <div class="flex flex-col gap-2"><label>Province</label><InputText v-model="form.current_address.province" /></div>
-      <div class="flex flex-col gap-2"><label>District</label><InputText v-model="form.current_address.district" /></div>
-      <div class="flex flex-col gap-2"><label>Commune</label><InputText v-model="form.current_address.commune" /></div>
-      <div class="flex flex-col gap-2"><label>Village</label><InputText v-model="form.current_address.village" /></div>
+      <div class="flex flex-col gap-2"><label>Province</label><Input v-model:value="form.current_address.province" /></div>
+      <div class="flex flex-col gap-2"><label>District</label><Input v-model:value="form.current_address.district" /></div>
+      <div class="flex flex-col gap-2"><label>Commune</label><Input v-model:value="form.current_address.commune" /></div>
+      <div class="flex flex-col gap-2"><label>Village</label><Input v-model:value="form.current_address.village" /></div>
 
       <!-- Guardian -->
       <div class="col-span-1 md:col-span-2 mt-4">
         <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Guardian</h3>
       </div>
-      <div class="flex flex-col gap-2"><label>Guardian Name</label><InputText v-model="form.guardian.name" /></div>
-      <div class="flex flex-col gap-2"><label>Guardian Phone</label><InputText v-model="form.guardian.phone" /></div>
+      <div class="flex flex-col gap-2"><label>Guardian Name</label><Input v-model:value="form.guardian.name" /></div>
+      <div class="flex flex-col gap-2"><label>Guardian Phone</label><Input v-model:value="form.guardian.phone" /></div>
 
       <!-- Education -->
       <div class="col-span-1 md:col-span-2 mt-4">
         <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Education Background</h3>
       </div>
-      <div class="flex flex-col gap-2"><label>High School</label><InputText v-model="form.high_school" /></div>
-      <div class="flex flex-col gap-2"><label>BacII Year</label><InputText v-model="form.bacII_year" /></div>
-      <div class="flex flex-col gap-2"><label>BacII Code</label><InputText v-model="form.bacII_code" /></div>
-      <div class="flex flex-col gap-2"><label>BacII Result</label><InputText v-model="form.bacII_result" /></div>
+      <div class="flex flex-col gap-2"><label>High School</label><Input v-model:value="form.high_school" /></div>
+      <div class="flex flex-col gap-2"><label>BacII Year</label><Input v-model:value="form.bacII_year" /></div>
+      <div class="flex flex-col gap-2"><label>BacII Code</label><Input v-model:value="form.bacII_code" /></div>
+      <div class="flex flex-col gap-2"><label>BacII Result</label><Input v-model:value="form.bacII_result" /></div>
 
       <!-- University -->
       <div class="col-span-1 md:col-span-2 mt-4">
         <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">University Info</h3>
       </div>
-      <div class="flex flex-col gap-2"><label>Faculty</label><InputText v-model="form.faculty" /></div>
-      <div class="flex flex-col gap-2"><label>Major</label><InputText v-model="form.major" /></div>
-      <div class="flex flex-col gap-2"><label>Study Shift</label><InputText v-model="form.study_shift" /></div>
+      <div class="flex flex-col gap-2"><label>Faculty</label><Input v-model:value="form.faculty" /></div>
+      <div class="flex flex-col gap-2"><label>Major</label><Input v-model:value="form.major" /></div>
+      <div class="flex flex-col gap-2"><label>Study Shift</label><Input v-model:value="form.study_shift" /></div>
 
       <!-- Scholarship -->
       <div class="col-span-1 md:col-span-2 mt-4">
         <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Scholarship</h3>
       </div>
-      <div class="flex flex-col gap-2"><label>Type</label><InputText v-model="form.scholarship_type" /></div>
-      <div class="flex flex-col gap-2"><label>Card ID</label><InputText v-model="form.scholarship_card_id" /></div>
-      <div class="flex flex-col gap-2"><label>Scholarship By</label><InputText v-model="form.scholarship_bye" /></div>
+      <div class="flex flex-col gap-2"><label>Type</label><Input v-model:value="form.scholarship_type" /></div>
+      <div class="flex flex-col gap-2"><label>Card ID</label><Input v-model:value="form.scholarship_card_id" /></div>
+      <div class="flex flex-col gap-2"><label>Scholarship By</label><Input v-model:value="form.scholarship_bye" /></div>
 
       <!-- Other -->
       <div class="col-span-1 md:col-span-2 mt-4">
@@ -99,24 +103,28 @@
       </div>
       <div class="col-span-1 md:col-span-2 flex flex-col gap-2">
         <label>Notes</label>
-        <Textarea v-model="form.notes" rows="3" />
+        <Textarea v-model:value="form.notes" :rows="3" />
       </div>
     </div>
 
     <div class="flex justify-end gap-2 mt-6 pt-4 border-t">
-      <Button label="Cancel" icon="pi pi-times" severity="secondary" text @click="$emit('cancel')" />
-      <Button label="Save" icon="pi pi-check" @click="save" />
+      <Button @click="$emit('cancel')">
+        <template #icon><CloseOutlined /></template>
+        Cancel
+      </Button>
+      <Button type="primary" @click="save">
+        <template #icon><CheckOutlined /></template>
+        Save
+      </Button>
     </div>
   </div>
+  </ConfigProvider>
 </template>
 
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import InputText from 'primevue/inputtext';
-import Textarea from 'primevue/textarea';
-import Dropdown from 'primevue/dropdown';
-import Calendar from 'primevue/calendar';
-import Button from 'primevue/button';
+import { Input, Textarea, Select, SelectOption, DatePicker, Button, ConfigProvider } from 'ant-design-vue';
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons-vue';
 
 const props = defineProps({
   student: {
@@ -168,10 +176,7 @@ const initForm = () => {
       guardian: { ...form.value.guardian, ...(props.student.guardian || {}) }
     };
     
-    // Handle date conversion if string
-    if (form.value.birth_date && typeof form.value.birth_date === 'string') {
-      form.value.birth_date = new Date(form.value.birth_date);
-    }
+    // Ant Design DatePicker with valueFormat handles strings directly
   }
 };
 

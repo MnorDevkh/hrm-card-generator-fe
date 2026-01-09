@@ -11,7 +11,7 @@
               <p class="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-300 mb-1 font-khmer">ចេញដោយ
                 វិទ្យាស្ថានអាហ្គា</p>
               <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-khmer px-2">
-                សូមពិនិត្យឯកសាររបស់លោកអ្នកជាមួយទិន្ន័យខាងក្រោម ដើម្បីផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ</p>
+                សូមពិនិត្យឯកសាររបស់លោកអ្នកជាមួយទិន្ន័យខាងក្រោម <br> ដើម្បីផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ</p>
             </div>
         <StudentDetail :studentId="studentId" :verificationId="verificationId" :embedded="embedded" />
     </div>

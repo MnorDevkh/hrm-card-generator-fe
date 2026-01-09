@@ -1,39 +1,48 @@
 <template>
   <div class="container mx-auto my-8">
     <!-- Add Skeleton component for loading states -->
-    <Toast />
     <div class="bg-gray-100 p-8 rounded-xl shadow-lg">
       <!-- Top Bar -->
       <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
         <div class="flex gap-2">
-          <button @click="exportCards" :disabled="isExporting" class="p-button p-button-danger flex items-center gap-2">
-            <i class="pi pi-file-pdf"></i>
-            <span>{{ isExporting ? 'Exporting...' : 'Export Grid' }}</span>
-          </button>
-          <button @click="exportCardsAsPages" :disabled="isExportingPages"
-            class="p-button p-button-warning flex items-center gap-2">
-            <i class="pi pi-copy"></i>
-            <span>{{ isExportingPages ? 'Exporting...' : 'Export Pages' }}</span>
-          </button>
+          <Button type="primary" danger @click="exportCards" :loading="isExporting">
+            <template #icon><FilePdfOutlined /></template>
+            Export Grid
+          </Button>
+          <Button type="primary" ghost @click="exportCardsAsPages" :loading="isExportingPages">
+            <template #icon><CopyOutlined /></template>
+            Export Pages
+          </Button>
         </div>
 
         <div class="flex flex-wrap gap-4 items-center">
           <div class="flex flex-col">
             <label for="issueDate" class="font-bold block mb-2 text-sm">Issue</label>
-            <input type="date" id="issueDate" v-model="issueDate" class="p-inputtext p-component" />
+            <DatePicker v-model:value="issueDate" valueFormat="YYYY-MM-DD" class="w-40" />
           </div>
           <div class="flex flex-col">
             <label for="expiryDate" class="font-bold block mb-2 text-sm">Expiry</label>
-            <input type="date" id="expiryDate" v-model="expiryDate" class="p-inputtext p-component" />
+            <DatePicker v-model:value="expiryDate" valueFormat="YYYY-MM-DD" class="w-40" />
           </div>
           <div class="flex flex-col">
             <label for="year" class="font-bold block mb-2 text-sm">Year</label>
-            <input type="text" id="year" v-model="year" class="p-inputtext p-component" />
+            <Input v-model:value="year" class="w-24" />
           </div>
         </div>
       </div>
 
       <Divider />
+
+      <!-- Export Progress Modal -->
+      <Modal v-model:open="isExportingPages" :footer="null" :closable="false" :maskClosable="false" title="Exporting Pages" centered>
+        <div class="flex flex-col items-center justify-center p-6 gap-4">
+          <Progress type="circle" :percent="exportProgress" />
+          <div class="text-center">
+            <p class="font-semibold text-lg">Processing...</p>
+            <p class="text-gray-500">Card {{ currentCardIndex }} of {{ totalCards }}</p>
+          </div>
+        </div>
+      </Modal>
 
       <!-- Skeleton Loader -->
       <div v-if="isLoading" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
@@ -41,15 +50,15 @@
           class="id-card relative rounded-xl shadow-lg bg-white border border-gray-200 overflow-hidden p-4"
           :style="{ width: '216px', height: '342px' }">
           <div class="absolute inset-0 flex flex-col items-center pt-[90px] text-center gap-2">
-            <Skeleton shape="rectangle" width="65px" height="80px" />
-            <Skeleton width="50%" height="12px" />
-            <Skeleton width="80%" height="16px" class="mt-4" />
-            <Skeleton width="70%" height="14px" />
-            <div class="mt-2 w-[170px] space-y-2">
-              <Skeleton width="100%" height="10px" v-for="j in 5" :key="j" />
+            <Skeleton.Button active :style="{ width: '65px', height: '80px' }" />
+            <Skeleton.Button active :style="{ width: '50%', height: '12px' }" />
+            <Skeleton.Button active :style="{ width: '80%', height: '16px', marginTop: '16px' }" />
+            <Skeleton.Button active :style="{ width: '70%', height: '14px' }" />
+            <div class="mt-2 w-[170px] space-y-2 flex flex-col items-center">
+              <Skeleton.Button active :style="{ width: '100%', height: '10px' }" v-for="j in 5" :key="j" />
             </div>
             <div class="absolute bottom-[26px] right-4">
-              <Skeleton shape="rectangle" width="52px" height="52px" />
+              <Skeleton.Button active :style="{ width: '52px', height: '52px' }" />
             </div>
           </div>
         </div>
@@ -82,7 +91,7 @@
               class="photo-container w-[65px] h-[80px] border border-gray-300 rounded flex items-center justify-center overflow-hidden shadow">
               <img v-if="student.photo" :src="getPhotoUrl(student.photo)" alt="Student Photo"
                 class="w-full h-full object-cover" />
-              <span v-else class="pi pi-user text-3xl text-gray-300"></span>
+              <UserOutlined v-else class="text-3xl text-gray-300" />
             </div>
 
             <!-- Card ID - fixed spacing -->
@@ -155,7 +164,7 @@
               class="photo-container w-[65px] h-[80px] border border-gray-300 rounded flex items-center justify-center overflow-hidden shadow">
               <img v-if="student.photo" :src="getPhotoUrl(student.photo)" alt="Student Photo"
                 class="w-full h-full object-cover" />
-              <span v-else class="pi pi-user text-3xl text-gray-300"></span>
+              <UserOutlined v-else class="text-3xl text-gray-300" />
             </div>
 
             <!-- Card ID - fixed spacing -->
@@ -221,15 +230,13 @@ import { environment } from '../../environments/environment';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import QrcodeVue from 'qrcode.vue';
-import Divider from 'primevue/divider';
-import { useToast } from 'primevue/usetoast';
-import Skeleton from 'primevue/skeleton';
+import { Button, Input, DatePicker, Divider, Skeleton, message, Modal, Progress } from 'ant-design-vue';
+import { FilePdfOutlined, CopyOutlined, UserOutlined } from '@ant-design/icons-vue';
 
 const route = useRoute();
 const students = ref([]);
 const template = ref(null);
 const templateId = ref(null);
-const toast = useToast();
 
 const issueDate = ref(new Date().toISOString().split('T')[0]);
 const expiryDate = ref(new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0]);
@@ -238,6 +245,9 @@ const isExportingPages = ref(false);
 const isExporting = ref(false);
 const isLoading = ref(true);
 const studentIdCount = ref(0);
+const exportProgress = ref(0);
+const currentCardIndex = ref(0);
+const totalCards = ref(0);
 
 const exportCanvasVisible = ref(false);
 
@@ -321,6 +331,11 @@ function applyExportColors(el) {
     if (containsOklch(style.borderColor)) {
       el.style.borderColor = '#D1D5DB';
     }
+
+    // Box Shadow
+    if (containsOklch(style.boxShadow)) {
+      el.style.boxShadow = 'none';
+    }
   });
 }
 
@@ -334,6 +349,8 @@ async function showExportCanvas() {
 
 async function exportCardsAsPages() {
   isExportingPages.value = true;
+  exportProgress.value = 0;
+  currentCardIndex.value = 0;
   await nextTick();
 
   try {
@@ -347,6 +364,7 @@ async function exportCardsAsPages() {
 
     const cardElements = document.querySelectorAll("#canvas .id-card");
     if (!cardElements.length) throw new Error("No card elements found!");
+    totalCards.value = cardElements.length;
 
     const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: [pageWidth, pageHeight] });
 
@@ -363,13 +381,16 @@ async function exportCardsAsPages() {
       const imgData = canvas.toDataURL("image/JPEG");
       if (i > 0) pdf.addPage([pageWidth, pageHeight], 'p');
       pdf.addImage(imgData, "JPEG", 0, 0, cardWidthMM, cardHeightMM);
+
+      currentCardIndex.value = i + 1;
+      exportProgress.value = Math.round(((i + 1) / cardElements.length) * 100);
     }
 
     pdf.save("StudentCards_Pages.pdf");
-    toast.add({ severity: "success", summary: "Exported All Pages", life: 2000 });
+    message.success("Exported All Pages");
   } catch (error) {
     console.error("Export error:", error);
-    toast.add({ severity: "error", summary: "Export failed", detail: error.message, life: 3000 });
+    message.error("Export failed: " + error.message);
   } finally {
     exportCanvasVisible.value = false;
     isExportingPages.value = false;
@@ -386,6 +407,7 @@ async function exportCards() {
     const canvasEl = document.getElementById('canvas');
     if (!canvasEl) return;
 
+    applyExportColors(canvasEl);
     const canvas = await html2canvas(canvasEl, {
       scale: 4,
       useCORS: true,
@@ -398,10 +420,10 @@ async function exportCards() {
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
     pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
     pdf.save('StudentCards_Grid.pdf');
-    toast.add({ severity: 'success', summary: 'Grid Exported', life: 2000 });
+    message.success('Grid Exported');
   } catch (err) {
     console.error('Grid export error:', err);
-    toast.add({ severity: "error", summary: "Export failed", detail: err.message, life: 3000 });
+    message.error("Export failed: " + err.message);
   } finally {
     exportCanvasVisible.value = false;
     isExporting.value = false;

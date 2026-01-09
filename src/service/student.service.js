@@ -1,10 +1,11 @@
 import { apiFetch } from './api';
 
-export async function getStudents(skip, limit) {
-  console.log(skip, limit);
-  
+export async function getStudents(skip, limit, batch, search) {
   const params = new URLSearchParams({ skip, limit });
-  return apiFetch(`/students?${params}`);
+  if (batch) params.append('batch', batch);
+  if (search) params.append('search', search);
+
+  return apiFetch(`/students/?${params}`);
 }
 
 export async function uploadExcel(formData) {

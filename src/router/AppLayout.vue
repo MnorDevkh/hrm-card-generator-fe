@@ -1,8 +1,19 @@
 <template>
-  <div class="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+  <div class="min-h-screen w-full bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 bg-blue-500 dark:bg-blue-900/10">
+    <!-- Mobile Header -->
+    <div class="md:hidden flex items-center justify-between p-4 bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-30">
+      <div class="flex items-center gap-3">
+        <img alt="Logo" src="@/assets/ailogo.png" class="w-8 h-8" />
+        <span class="text-lg font-semibold">HRM System</span>
+      </div>
+      <button @click="mobileMenuOpen = true" class="p-2 text-gray-600 dark:text-gray-300 focus:outline-none">
+        <i class="pi pi-bars text-xl"></i>
+      </button>
+    </div>
+
     <div class="flex">
       <!-- Sidebar -->
-      <aside class="w-64 bg-white dark:bg-gray-800 shadow-md h-screen sticky top-0">
+      <aside class="hidden md:block w-64 bg-white dark:bg-gray-800 shadow-md h-screen sticky top-0">
         <div class="p-6 flex items-center gap-4">
           <img alt="Logo" src="@/assets/ailogo.png" class="w-10 h-10" />
           <span class="text-xl font-semibold">HRM System</span>
@@ -23,6 +34,40 @@
         </nav>
       </aside>
 
+      <!-- Mobile Sidebar Overlay -->
+      <div v-if="mobileMenuOpen" class="fixed inset-0 z-50 flex md:hidden">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-black/50 transition-opacity" @click="mobileMenuOpen = false"></div>
+        
+        <!-- Sidebar Panel -->
+        <aside class="relative w-64 bg-white dark:bg-gray-800 h-full shadow-xl flex flex-col">
+          <div class="p-6 flex items-center justify-between border-b dark:border-gray-700">
+            <div class="flex items-center gap-3">
+              <img alt="Logo" src="@/assets/ailogo.png" class="w-8 h-8" />
+              <span class="text-lg font-semibold">HRM System</span>
+            </div>
+            <button @click="mobileMenuOpen = false" class="text-gray-500 hover:text-gray-700 dark:text-gray-400">
+              <i class="pi pi-times text-xl"></i>
+            </button>
+          </div>
+          <nav class="mt-4 flex-1 overflow-y-auto">
+            <ul>
+              <li v-for="item in menuItems" :key="item.label">
+                <router-link
+                  :to="item.to"
+                  class="flex items-center gap-3 px-6 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  active-class="bg-blue-50 dark:bg-gray-700 text-blue-600 dark:text-blue-300 border-r-4 border-blue-500"
+                  @click="mobileMenuOpen = false"
+                >
+                  <i :class="item.icon"></i>
+                  <span>{{ item.label }}</span>
+                </router-link>
+              </li>
+            </ul>
+          </nav>
+        </aside>
+      </div>
+
       <!-- Main Content -->
       <main class="flex-1 p-6 sm:p-8">
         <router-view />
@@ -33,7 +78,8 @@
 
 <script setup>
 import { ref } from 'vue';
-import Dashboard from './Dashboard.vue';
+
+const mobileMenuOpen = ref(false);
 
 const menuItems = ref([
   { label: 'Dashboard', icon: 'pi pi-home', to: '/' },

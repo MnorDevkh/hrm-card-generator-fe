@@ -11,11 +11,7 @@ import ConfirmationService from 'primevue/confirmationservice';
 import 'primeicons/primeicons.css';
 const app = createApp(App);
 app.use(router);
-app.use(PrimeVue, {
-    theme: {
-        preset: Aura
-    }
-});
+
 app.use(ToastService);
 app.use(ConfirmationService);
 app.component('Toast', Toast);

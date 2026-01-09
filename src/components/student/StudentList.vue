@@ -5,6 +5,11 @@
       accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
     <div class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md">
       <p class="text-xl font-bold text-gray-900 dark:text-white w-full sm:w-auto text-center sm:text-left">បញ្ញីរសិស្ស</p>
+      <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto items-center">
+        <Input v-model:value="searchQuery" placeholder="Search Name or ID" allowClear @pressEnter="handleSearch" class="w-full sm:w-64" />
+        <Input v-model:value="selectedBatch" placeholder="Batch" allowClear @pressEnter="handleSearch" class="w-full sm:w-32" />
+        <Button type="primary" @click="handleSearch">Search</Button>
+      </div>
       <Divider type="vertical" class="hidden sm:block h-8" />
       <div class="card flex flex-col sm:flex-row sm:flex-wrap justify-end gap-4 w-full sm:w-auto">
         <Button @click="exportCard" class="w-full sm:w-auto">
@@ -63,7 +68,7 @@
     </Card>
 
     <!-- View Student Dialog -->
-    <Modal v-model:open="viewDialogVisible" title="Student Details" width="1600px" :footer="null" destroyOnClose>
+    <Modal v-model:open="viewDialogVisible" title="Student Details" :footer="null" destroyOnClose width="min(1400px, 98vw)" style="top: 20px">
       <StudentDetail v-if="selectedStudent" :studentId="selectedStudent.id" :verificationId="selectedStudent.card_id || selectedStudent.identity_id" :embedded="true" />
     </Modal>
 
@@ -83,7 +88,7 @@
 
 <script setup>
 import { ref, onMounted, createVNode } from 'vue';
-import { Table, Button, Card, Divider, Modal, message, ConfigProvider } from 'ant-design-vue';
+import { Table, Button, Card, Divider, Modal, message, ConfigProvider, Input } from 'ant-design-vue';
 import { 
   EyeOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, 
   UploadOutlined, PlusOutlined, FileExcelOutlined, ExportOutlined 
@@ -100,6 +105,8 @@ const selectedRows = ref([]);
 const isUploading = ref(false);
 const fileInput = ref(null);
 const loading = ref(false);
+const searchQuery = ref('');
+const selectedBatch = ref('');
 const router = useRouter();
 
 const viewDialogVisible = ref(false);
@@ -138,13 +145,18 @@ const handleTableChange = (pag) => {
   loadStudents();
 };
 
+const handleSearch = () => {
+  pagination.value.current = 1;
+  loadStudents();
+};
+
 const loadStudents = async () => {
   loading.value = true;
   const offset = (pagination.value.current - 1) * pagination.value.pageSize;
   const limit = pagination.value.pageSize;
   
   try {
-    const response = await getStudents(offset, limit);
+    const response = await getStudents(offset, limit, selectedBatch.value, searchQuery.value);
     students.value = response.students;
     pagination.value.total = response.total;
   } catch (error) {

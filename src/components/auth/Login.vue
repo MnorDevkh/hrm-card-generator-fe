@@ -1,10 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import Button from 'primevue/button';
-import InputText from 'primevue/inputtext';
-import Password from 'primevue/password';
-import Message from 'primevue/message';
+import { Button, Input, Alert, ConfigProvider } from 'ant-design-vue';
 import { login } from '../../service/auth.service';
 
 const router = useRouter();
@@ -32,10 +29,11 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="h-screen flex items-center justify-center dark:bg-gray-100">
+  <ConfigProvider :theme="{ token: { fontFamily: 'inherit' } }">
+  <div class="h-screen flex items-center justify-center ">
     <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
       <div class="text-center mb-4">
-        <img src="@/assets/ailogo.png" alt="Logo" class="mb-3" style="width: 60px; height: 60px;">
+        <img src="@/assets/ailogo.png" alt="Logo" class="mb-3 mx-auto" style="width: 60px; height: 60px;">
         <div class="text-3xl font-semibold text-gray-900 dark:text-white mb-2">Welcome Back</div>
         <span class="text-gray-600 dark:text-gray-400 font-medium">Sign in to continue</span>
       </div>
@@ -43,11 +41,11 @@ const handleLogin = async () => {
       <form @submit.prevent="handleLogin" class="space-y-6">
         <div>
           <label for="email" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
-          <InputText id="email" v-model="email" type="email" placeholder="Email address" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white" autocomplete="username" />
+          <Input id="email" v-model:value="email" type="email" placeholder="Email address" size="large" autocomplete="username" />
         </div>
         <div>
           <label for="password" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
-          <Password id="password" v-model="password" placeholder="Password" :toggleMask="true" class="w-full" inputClass="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white" :feedback="false" autocomplete="current-password"></Password>
+          <Input.Password id="password" v-model:value="password" placeholder="Password" size="large" autocomplete="current-password" />
         </div>
 
         <div class="flex items-center justify-end">
@@ -55,13 +53,14 @@ const handleLogin = async () => {
         </div>
 
         <div v-if="error" class="mb-4">
-          <Message severity="error">{{ error }}</Message>
+          <Alert type="error" :message="error" show-icon />
         </div>
 
-        <Button type="submit" label="Sign In" :loading="loading" class="w-full py-3 text-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900"></Button>
+        <Button type="primary" html-type="submit" :loading="loading" block size="large" class="bg-blue-600 hover:bg-blue-700 border-blue-600 hover:border-blue-700 h-12 text-lg">Sign In</Button>
       </form>
     </div>
   </div>
+  </ConfigProvider>
 </template>
 
 <style scoped>

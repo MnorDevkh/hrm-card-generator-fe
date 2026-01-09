@@ -1,8 +1,8 @@
 <template>
   <ConfigProvider :theme="{ token: { fontFamily: 'inherit' } }">
     <div
-      :class="['w-full bg-gray-50 dark:bg-gray-900 px-2 py-4 sm:p-6 lg:p-8', embedded ? 'max-w-3xl mx-auto' : 'min-h-screen flex items-center justify-center']">
-      <div class="w-full max-w-3xl">
+      :class="['w-full bg-gray-50 dark:bg-gray-900 px-2 py-4 sm:p-6 lg:p-8', embedded ? 'w-full' : 'min-h-screen flex items-center justify-center']">
+      <div class="w-full">
         <div v-if="isLoading"
           class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex justify-center items-center">
           <Spin size="large" />
@@ -14,21 +14,8 @@
 
         <div v-else-if="student">
           <div class="flex flex-col gap-3 sm:gap-4 lg:gap-6">
-            <div class="text-center mb-1 sm:mb-2">
-              <div
-                class="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-green-100 dark:bg-green-900/30 mb-2 sm:mb-4">
-                <CheckCircleOutlined class="text-2xl sm:text-3xl text-green-600 dark:text-green-400" />
-              </div>
-              <p
-                class="text-base sm:text-lg lg:text-xl font-bold text-gray-900 dark:text-white mb-1 sm:mb-2 font-khmer">
-                ឯកសារមានសុពលភាព</p>
-              <p class="text-sm sm:text-base lg:text-lg text-gray-600 dark:text-gray-300 mb-1 font-khmer">ចេញដោយ
-                វិទ្យាស្ថានអាហ្គា</p>
-              <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-khmer px-2">
-                សូមពិនិត្យឯកសាររបស់លោកអ្នកជាមួយទិន្ន័យខាងក្រោម ដើម្បីផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ</p>
-            </div>
             <div
-              class="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-3 sm:p-4 lg:p-6 mb-3 sm:mb-4 lg:mb-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 lg:gap-6">
+              class="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl border border-gray-100 dark:border-gray-700 p-3 sm:p-4 lg:p-6 mb-3 sm:mb-4 lg:mb-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 lg:gap-6">
               <div class="flex-shrink-0">
                 <Image v-if="student.photo" :src="getPhotoUrl(student.photo)" :width="100"
                   class="sm:w-[120px] rounded-lg object-cover shadow-sm" />
@@ -51,69 +38,71 @@
                     {{ student.batch }}</span>
                 </div>
               </div>
-            </div>
-            <div
-              class="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-3 sm:p-4 lg:p-6">
-              <h3
-                class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
-                <UserOutlined /> Personal Information
-              </h3>
-              <Descriptions bordered :column="1" size="middle">
-                <Descriptions.Item label="Name (Khmer)">{{ student.name.khmer }}</Descriptions.Item>
-                <Descriptions.Item label="Name (English)">{{ student.name.english }}</Descriptions.Item>
-                <Descriptions.Item label="Card ID">{{ student.card_id }}</Descriptions.Item>
-                <Descriptions.Item label="System ID">{{ student.id }}</Descriptions.Item>
-                <Descriptions.Item label="National Identity">{{ student.identity_id }}</Descriptions.Item>
-                <Descriptions.Item label="Gender">{{ student.gender }}</Descriptions.Item>
-                <Descriptions.Item label="Date of Birth">{{ formatDate(student.birth_date) }}</Descriptions.Item>
-                <Descriptions.Item label="Phone">{{ student.phone }}</Descriptions.Item>
-                <Descriptions.Item label="Email">{{ student.email || '-' }}</Descriptions.Item>
-                <Descriptions.Item label="Birth Place">{{ formatAddress(student.birth_place) }}</Descriptions.Item>
-                <Descriptions.Item label="Current Address">{{ formatAddress(student.current_address) }}
-                </Descriptions.Item>
-              </Descriptions>
-            </div>
 
-            <div
-              class="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-3 sm:p-4 lg:p-6">
-              <h3
-                class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
-                <BookOutlined /> Academic Information
-              </h3>
-              <Descriptions bordered :column="1" size="middle">
-                <Descriptions.Item label="Faculty">{{ student.faculty }}</Descriptions.Item>
-                <Descriptions.Item label="Major">{{ student.major }}</Descriptions.Item>
-                <Descriptions.Item label="Study Shift">{{ student.study_shift }}</Descriptions.Item>
-                <Descriptions.Item label="Batch">{{ student.batch }}</Descriptions.Item>
-                <Descriptions.Item label="Education Level">{{ student.education_level }}</Descriptions.Item>
-                <Descriptions.Item label="High School">{{ student.high_school }}</Descriptions.Item>
-                <Descriptions.Item label="BacII Year">{{ student.bacII_year }}</Descriptions.Item>
-              </Descriptions>
             </div>
-
-            <div
-              class="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-3 sm:p-4 lg:p-6">
-              <h3
-                class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
-                <TeamOutlined /> Guardian Information
-              </h3>
-              <Descriptions bordered :column="1" size="middle">
-                <Descriptions.Item label="Guardian Name">{{ student.guardian?.name || '-' }}</Descriptions.Item>
-                <Descriptions.Item label="Guardian Phone">{{ student.guardian?.phone || '-' }}</Descriptions.Item>
-              </Descriptions>
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+              <div>
+                <h3
+                  class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
+                  <UserOutlined /> Personal Information
+                </h3>
+                <Descriptions bordered :column="1" size="middle">
+                  <Descriptions.Item label="Name (Khmer)">{{ student.name.khmer }}</Descriptions.Item>
+                  <Descriptions.Item label="Name (English)">{{ student.name.english }}</Descriptions.Item>
+                  <Descriptions.Item label="Card ID">{{ student.card_id }}</Descriptions.Item>
+                  <Descriptions.Item label="System ID">{{ student.id }}</Descriptions.Item>
+                  <Descriptions.Item label="National Identity">{{ student.identity_id }}</Descriptions.Item>
+                  <Descriptions.Item label="Gender">{{ student.gender }}</Descriptions.Item>
+                  <Descriptions.Item label="Date of Birth">{{ formatDate(student.birth_date) }}</Descriptions.Item>
+                  <Descriptions.Item label="Phone">{{ student.phone }}</Descriptions.Item>
+                  <Descriptions.Item label="Email">{{ student.email || '-' }}</Descriptions.Item>
+                  <Descriptions.Item label="Birth Place">{{ formatAddress(student.birth_place) }}</Descriptions.Item>
+                  <Descriptions.Item label="Current Address">{{ formatAddress(student.current_address) }}
+                  </Descriptions.Item>
+                </Descriptions>
+              </div>
+              <div>
+                <h3
+                  class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
+                  <BookOutlined /> Academic Information
+                </h3>
+                <Descriptions bordered :column="1" size="middle">
+                  <Descriptions.Item label="Faculty">{{ student.faculty }}</Descriptions.Item>
+                  <Descriptions.Item label="Major">{{ student.major }}</Descriptions.Item>
+                  <Descriptions.Item label="Study Shift">{{ student.study_shift }}</Descriptions.Item>
+                  <Descriptions.Item label="Batch">{{ student.batch }}</Descriptions.Item>
+                  <Descriptions.Item label="Education Level">{{ student.education_level }}</Descriptions.Item>
+                  <Descriptions.Item label="High School">{{ student.high_school }}</Descriptions.Item>
+                  <Descriptions.Item label="BacII Year">{{ student.bacII_year }}</Descriptions.Item>
+                </Descriptions>
+              </div>
+              <div>
+                <h3
+                  class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
+                  <TeamOutlined /> Guardian Information
+                </h3>
+                <Descriptions bordered :column="1" size="middle">
+                  <Descriptions.Item label="Guardian Name">{{ student.guardian?.name || '-' }}</Descriptions.Item>
+                  <Descriptions.Item label="Guardian Phone">{{ student.guardian?.phone || '-' }}</Descriptions.Item>
+                </Descriptions>
+              </div>
+              <div>
+                <h3
+                  class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
+                  <StarOutlined /> Scholarship Information
+                </h3>
+                <Descriptions bordered :column="1" size="middle">
+                  <Descriptions.Item label="Type">{{ student.scholarship_type || '-' }}</Descriptions.Item>
+                  <Descriptions.Item label="Card ID">{{ student.scholarship_card_id || '-' }}</Descriptions.Item>
+                  <Descriptions.Item label="Provided By">{{ student.scholarship_bye || '-' }}</Descriptions.Item>
+                </Descriptions>
+              </div>
             </div>
-
-            <div
-              class="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 p-3 sm:p-4 lg:p-6">
-              <h3
-                class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
-                <StarOutlined /> Scholarship Information
-              </h3>
-              <Descriptions bordered :column="1" size="middle">
-                <Descriptions.Item label="Type">{{ student.scholarship_type || '-' }}</Descriptions.Item>
-                <Descriptions.Item label="Card ID">{{ student.scholarship_card_id || '-' }}</Descriptions.Item>
-                <Descriptions.Item label="Provided By">{{ student.scholarship_bye || '-' }}</Descriptions.Item>
-              </Descriptions>
+            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 text-center">
+              <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-khmer leading-relaxed">
+                ©​copyright 2025 ទំនាក់ទំនងផ្នែកបច្ចេកទេស លោក ផាត់ ឧត្ដម ជាព្រឹទ្ធបុរសជំនួយមហាវិទ្យាល័យព័ត៌មានវិទ្យា
+                និងជាប្រធានការិយាល័យបច្ចេកទេសព័ត៌មានវិទ្យា
+              </p>
             </div>
           </div>
         </div>

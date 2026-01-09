@@ -1,6 +1,6 @@
 import StudentList from '@/components/student/StudentList.vue'
 import StudentIdentityVerification from '@/components/student/StudentIdentityVerification.vue'
-import StudentDetail from '@/components/student/StudentDetail.vue'
+import StudentViewDetail from '@/components/student/StudentViewDetail.vue'
 
 const student = [
   { path: '/student', component: StudentList },
@@ -13,8 +13,8 @@ const student = [
   },
    {
     path: '/students-detail/:id',
-    name: 'StudentDetail',
-    component: StudentDetail,
+    name: 'StudentViewDetail',
+    component: StudentViewDetail,
     meta: { layout: "BlankLayout", isPublic: true },
   }
 ]

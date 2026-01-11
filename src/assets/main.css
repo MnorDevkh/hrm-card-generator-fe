@@ -5,7 +5,10 @@
 body {
   color: var(--color-text);
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 100vh;
+  background: #502626;
   line-height: 1.6;
   font-family: 'Kantumruy', 'KoHo', sans-serif;
 };

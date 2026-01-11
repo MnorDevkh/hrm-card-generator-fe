@@ -1,87 +1,98 @@
 <template>
   <ConfigProvider :theme="{ token: { fontFamily: 'inherit' } }">
-  <div>
-    <input type="file" ref="fileInput" @change="onFileSelected" style="display: none"
-      accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
-    <div class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md">
-      <p class="text-xl font-bold text-gray-900 dark:text-white w-full sm:w-auto text-center sm:text-left">បញ្ញីរសិស្ស</p>
-      <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto items-center">
-        <Input v-model:value="searchQuery" placeholder="Search Name or ID" allowClear @pressEnter="handleSearch" class="w-full sm:w-64" />
-        <Input v-model:value="selectedBatch" placeholder="Batch" allowClear @pressEnter="handleSearch" class="w-full sm:w-32" />
-        <Button type="primary" @click="handleSearch">Search</Button>
+    <div class="p-4 sm:p-6 lg:p-8 space-y-4">
+      <input type="file" ref="fileInput" @change="onFileSelected" style="display: none"
+        accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
+      <div
+        class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md">
+        <p class="text-xl font-bold text-gray-900 dark:text-white w-full sm:w-auto text-center sm:text-left">បញ្ញីរសិស្ស
+        </p>
+        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto items-center">
+          <Input v-model:value="searchQuery" placeholder="Search Name or ID" allowClear @pressEnter="handleSearch"
+            class="w-full sm:w-64" />
+          <Input v-model:value="selectedBatch" placeholder="Batch" allowClear @pressEnter="handleSearch"
+            class="w-full sm:w-32" />
+          <Button type="primary" @click="handleSearch">Search</Button>
+        </div>
+        <Divider type="vertical" class="hidden sm:block h-8" />
+        <div class="card flex flex-col sm:flex-row sm:flex-wrap justify-end gap-4 w-full sm:w-auto">
+          <Button @click="exportCard" class="w-full sm:w-auto">
+            <template #icon>
+              <ExportOutlined />
+            </template>
+            Export Card
+          </Button>
+          <Button type="primary" ghost @click="importFromExcel" :loading="isUploading" class="w-full sm:w-auto">
+            <template #icon>
+              <FileExcelOutlined />
+            </template>
+            Excel Import
+          </Button>
+          <Button type="primary" @click="openNew" class="w-full sm:w-auto">
+            <template #icon>
+              <PlusOutlined />
+            </template>
+            Add New
+          </Button>
+          <Button danger type="primary" class="w-full sm:w-auto" :disabled="!selectedRowKeys.length">
+            <template #icon>
+              <DeleteOutlined />
+            </template>
+            Delete
+          </Button>
+        </div>
       </div>
-      <Divider type="vertical" class="hidden sm:block h-8" />
-      <div class="card flex flex-col sm:flex-row sm:flex-wrap justify-end gap-4 w-full sm:w-auto">
-        <Button @click="exportCard" class="w-full sm:w-auto">
-          <template #icon><ExportOutlined /></template>
-          Export Card
-        </Button>
-        <Button type="primary" ghost @click="importFromExcel" :loading="isUploading" class="w-full sm:w-auto">
-          <template #icon><FileExcelOutlined /></template>
-          Excel Import
-        </Button>
-        <Button type="primary" @click="openNew" class="w-full sm:w-auto">
-          <template #icon><PlusOutlined /></template>
-          Add New
-        </Button>
-        <Button danger type="primary" class="w-full sm:w-auto" :disabled="!selectedRowKeys.length">
-          <template #icon><DeleteOutlined /></template>
-          Delete
-        </Button>
-      </div>
+      <Divider />
+      <Card :bordered="false" class="shadow-sm">
+        <Table :dataSource="students" :columns="columns" :pagination="pagination" :row-selection="rowSelection"
+          :loading="loading" @change="handleTableChange" rowKey="id" :scroll="{ x: 1200 }">
+          <template #bodyCell="{ column, record, index }">
+            <template v-if="column.key === 'index'">
+              {{ (pagination.current - 1) * pagination.pageSize + index + 1 }}
+            </template>
+            <template v-else-if="column.key === 'photo'">
+              <img v-if="record.photo" :src="`${environment.apiBaseUrl}upload_image/image/${record.photo}`" alt="photo"
+                class="w-10 h-10 rounded-full object-cover" />
+              <span v-else class="text-gray-400">No Photo</span>
+            </template>
+            <template v-else-if="column.key === 'actions'">
+              <div class="flex gap-2">
+                <Button type="text" shape="circle" @click="viewStudent(record)">
+                  <template #icon>
+                    <EyeOutlined class="text-blue-500" />
+                  </template>
+                </Button>
+                <Button type="text" shape="circle" @click="editStudent(record)">
+                  <template #icon>
+                    <EditOutlined class="text-orange-500" />
+                  </template>
+                </Button>
+                <Button type="text" danger shape="circle" @click="requireConfirmation(record)">
+                  <template #icon>
+                    <DeleteOutlined />
+                  </template>
+                </Button>
+              </div>
+            </template>
+          </template>
+        </Table>
+      </Card>
+
+      <!-- View Student Dialog -->
+      <Modal v-model:open="viewDialogVisible" title="Student Details" :footer="null" destroyOnClose
+        width="min(1400px, 98vw)" style="top: 20px">
+        <StudentDetail v-if="selectedStudent" :studentId="selectedStudent.id"
+          :verificationId="selectedStudent.card_id || selectedStudent.identity_id" :embedded="true" />
+      </Modal>
+
+      <!-- Edit Student Dialog -->
+      <Modal v-model:open="editDialogVisible"
+        :title="selectedStudent && selectedStudent.id ? 'Edit Student' : 'New Student'" width="80%" :footer="null"
+        destroyOnClose>
+        <StudentForm v-if="editDialogVisible" :student="selectedStudent" @save="saveStudent"
+          @cancel="editDialogVisible = false" />
+      </Modal>
     </div>
-    <Divider />
-    <Card :bordered="false" class="shadow-sm">
-      <Table
-        :dataSource="students"
-        :columns="columns"
-        :pagination="pagination"
-        :row-selection="rowSelection"
-        :loading="loading"
-        @change="handleTableChange"
-        rowKey="id"
-        :scroll="{ x: 1200 }"
-      >
-        <template #bodyCell="{ column, record, index }">
-          <template v-if="column.key === 'index'">
-            {{ (pagination.current - 1) * pagination.pageSize + index + 1 }}
-          </template>
-          <template v-else-if="column.key === 'photo'">
-            <img v-if="record.photo" :src="`${environment.apiBaseUrl}upload_image/image/${record.photo}`" alt="photo" class="w-10 h-10 rounded-full object-cover" />
-            <span v-else class="text-gray-400">No Photo</span>
-          </template>
-          <template v-else-if="column.key === 'actions'">
-            <div class="flex gap-2">
-              <Button type="text" shape="circle" @click="viewStudent(record)">
-                <template #icon><EyeOutlined class="text-blue-500" /></template>
-              </Button>
-              <Button type="text" shape="circle" @click="editStudent(record)">
-                <template #icon><EditOutlined class="text-orange-500" /></template>
-              </Button>
-              <Button type="text" danger shape="circle" @click="requireConfirmation(record)">
-                <template #icon><DeleteOutlined /></template>
-              </Button>
-            </div>
-          </template>
-        </template>
-      </Table>
-    </Card>
-
-    <!-- View Student Dialog -->
-    <Modal v-model:open="viewDialogVisible" title="Student Details" :footer="null" destroyOnClose width="min(1400px, 98vw)" style="top: 20px">
-      <StudentDetail v-if="selectedStudent" :studentId="selectedStudent.id" :verificationId="selectedStudent.card_id || selectedStudent.identity_id" :embedded="true" />
-    </Modal>
-
-    <!-- Edit Student Dialog -->
-    <Modal v-model:open="editDialogVisible" :title="selectedStudent && selectedStudent.id ? 'Edit Student' : 'New Student'" width="80%" :footer="null" destroyOnClose>
-      <StudentForm 
-        v-if="editDialogVisible" 
-        :student="selectedStudent" 
-        @save="saveStudent" 
-        @cancel="editDialogVisible = false" 
-      />
-    </Modal>
-  </div>
   </ConfigProvider>
 
 </template>
@@ -89,9 +100,9 @@
 <script setup>
 import { ref, onMounted, createVNode } from 'vue';
 import { Table, Button, Card, Divider, Modal, message, ConfigProvider, Input } from 'ant-design-vue';
-import { 
-  EyeOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined, 
-  UploadOutlined, PlusOutlined, FileExcelOutlined, ExportOutlined 
+import {
+  EyeOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined,
+  UploadOutlined, PlusOutlined, FileExcelOutlined, ExportOutlined
 } from '@ant-design/icons-vue';
 import { getStudents, uploadExcel, deleteStudent, updateStudent, createStudent } from '../../service/student.service.js';
 import { environment } from '../../environments/environment';
@@ -154,7 +165,7 @@ const loadStudents = async () => {
   loading.value = true;
   const offset = (pagination.value.current - 1) * pagination.value.pageSize;
   const limit = pagination.value.pageSize;
-  
+
   try {
     const response = await getStudents(offset, limit, selectedBatch.value, searchQuery.value);
     students.value = response.students;
@@ -229,23 +240,23 @@ const saveStudent = async (studentData) => {
 };
 
 const requireConfirmation = (student) => {
-    Modal.confirm({
-        title: `Are you sure you want to delete ${student.name.english}?`,
-        icon: createVNode(ExclamationCircleOutlined),
-        content: 'This action cannot be undone.',
-        okText: 'Yes',
-        okType: 'danger',
-        cancelText: 'No',
-        async onOk() {
-            try {
-                await deleteStudent(student.id);
-                message.success('Student deleted');
-                loadStudents();
-            } catch (error) {
-                message.error('Failed to delete student');
-            }
-        },
-    });
+  Modal.confirm({
+    title: `Are you sure you want to delete ${student.name.english}?`,
+    icon: createVNode(ExclamationCircleOutlined),
+    content: 'This action cannot be undone.',
+    okText: 'Yes',
+    okType: 'danger',
+    cancelText: 'No',
+    async onOk() {
+      try {
+        await deleteStudent(student.id);
+        message.success('Student deleted');
+        loadStudents();
+      } catch (error) {
+        message.error('Failed to delete student');
+      }
+    },
+  });
 }
 onMounted(async () => {
   loadStudents();

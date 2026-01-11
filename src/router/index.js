@@ -5,17 +5,22 @@ import staff from "./modules/staff";
 import lecture from "./modules/lecture";
 import template from "./modules/template";
 import home from "./modules/home";
-import AppLayout from '../router/AppLayout.vue';
-import HomeComponent from '../components/Home/HomeComponent.vue';
+import DefaultLayout from '../DefaultLayout.vue';
 
 
 const routes = [
   ...auth,
-  ...student,
-  ...staff,
-  ...lecture,
-  ...template,
-  ...home,
+  {
+    path: '/',
+    component: DefaultLayout,
+    children: [
+      ...home,
+      ...student,
+      ...staff,
+      ...lecture,
+      ...template,
+    ]
+  }
 ]
 
 const router = createRouter({

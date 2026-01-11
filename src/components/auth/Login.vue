@@ -29,9 +29,9 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <ConfigProvider :theme="{ token: { fontFamily: 'inherit' } }">
-  <div class="h-screen flex items-center justify-center ">
-    <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
+  <div class="min-h-screen flex flex-col justify-center items-center w-full">
+    <ConfigProvider :theme="{ token: { fontFamily: 'inherit' } }">
+      <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
       <div class="text-center mb-4">
         <img src="@/assets/ailogo.png" alt="Logo" class="mb-3 mx-auto" style="width: 60px; height: 60px;">
         <div class="text-3xl font-semibold text-gray-900 dark:text-white mb-2">Welcome Back</div>
@@ -59,8 +59,8 @@ const handleLogin = async () => {
         <Button type="primary" html-type="submit" :loading="loading" block size="large" class="bg-blue-600 hover:bg-blue-700 border-blue-600 hover:border-blue-700 h-12 text-lg">Sign In</Button>
       </form>
     </div>
+    </ConfigProvider>
   </div>
-  </ConfigProvider>
 </template>
 
 <style scoped>

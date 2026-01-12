@@ -1,29 +1,43 @@
 <template>
-    <Toast />
     <input type="file" ref="fileInput" @change="onFileSelected" style="display: none" accept="image/*" />
     <div class="container mx-auto p-4 md:p-8">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">Certificate Templates</h2>
-            <Button label="Upload Template" icon="pi pi-upload" severity="info" @click="triggerFileUpload" :loading="isUploading" />
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Certificate Templates</h2>
+            <Button type="primary" @click="triggerFileUpload" :loading="isUploading">
+                <template #icon>
+                    <UploadOutlined />
+                </template>
+                Upload Template
+            </Button>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            <Card v-for="template in templates" :key="template.id" class="shadow-lg hover:shadow-xl transition-shadow duration-300 rounded-lg overflow-hidden">
-                <template #header>
+            <Card v-for="template in templates" :key="template.id" hoverable class="shadow-lg transition-shadow duration-300 rounded-lg overflow-hidden">
+                <template #cover>
                     <div class="h-64 overflow-hidden">
                         <img alt="template header" :src="getImageUrl(template.filename)" class="w-full h-full object-cover" />
                     </div>
                 </template>
-                <template #title>{{ template.name || 'Template' }}</template>
-                <template #subtitle>{{ template.type || 'Card Template' }}</template>
-                <template #content>
-                    <p class="m-0">
+                <div class="flex flex-col gap-2">
+                    <div class="font-bold text-lg">{{ template.name || 'Template' }}</div>
+                    <div class="text-gray-500">{{ template.type || 'Card Template' }}</div>
+                    <p class="m-0 text-gray-600 dark:text-gray-300">
                         Use this template to generate certificates for the selected {{ type === 'lecturer' ? 'lecturers' : 'students' }}.
                     </p>
-                </template>
-                <template #footer>
-                    <Button label="Use Template" icon="pi pi-check" class="w-full" @click="useTemplate(template.id)" />
-                </template>
+                    <div class="flex gap-2 mt-4">
+                        <Button type="primary" class="flex-1" @click="useTemplate(template.id)">
+                            <template #icon>
+                                <CheckOutlined />
+                            </template>
+                            Use Template
+                        </Button>
+                        <Button danger @click="confirmDelete(template)">
+                            <template #icon>
+                                <DeleteOutlined />
+                            </template>
+                        </Button>
+                    </div>
+                </div>
             </Card>
         </div>
     </div>
@@ -31,19 +45,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, createVNode } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import Button from 'primevue/button';
-import Card from 'primevue/card';
-import Toast from 'primevue/toast';
-import { useToast } from 'primevue/usetoast';
-import { getImagesByType, uploadImage } from '../../service/image.service';
+import { Button, Card, Modal, message } from 'ant-design-vue';
+import { UploadOutlined, CheckOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons-vue';
+import { getImagesByType, uploadImage, deleteImage } from '../../service/image.service';
 import { environment } from '../../environments/environment';
 
 const templates = ref([]);
 const router = useRouter();
 const route = useRoute();
-const toast = useToast();
 
 const fileInput = ref(null);
 const isUploading = ref(false);
@@ -75,11 +86,11 @@ const onFileSelected = async (event) => {
 
     try {
         await uploadImage(formData, 'template');
-        toast.add({ severity: 'success', summary: 'Success', detail: 'Template uploaded successfully', life: 3000 });
+        message.success('Template uploaded successfully');
         await loadTemplates(); // Refresh the list
     } catch (error) {
         console.error('Error uploading template:', error);
-        toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to upload template', life: 3000 });
+        message.error('Failed to upload template');
     } finally {
         isUploading.value = false;
         event.target.value = ''; // Reset file input
@@ -105,5 +116,25 @@ const useTemplate = (templateId) => {
     } else {
         router.push({ path: '/generate', query: { templateId, ids: JSON.stringify(studentIds.value) } });
     }
+};
+
+const confirmDelete = (template) => {
+    Modal.confirm({
+        title: 'Delete Confirmation',
+        icon: createVNode(ExclamationCircleOutlined),
+        content: 'Are you sure you want to delete this template?',
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
+        async onOk() {
+            try {
+                await deleteImage(template.id);
+                message.success('Template deleted');
+                loadTemplates();
+            } catch (error) {
+                message.error('Failed to delete template');
+            }
+        }
+    });
 };
 </script>

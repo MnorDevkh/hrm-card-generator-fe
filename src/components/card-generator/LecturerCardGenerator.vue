@@ -90,7 +90,7 @@
                         </div>
                         <p class="card-id text-[12px] font-bold text-gray-900 tracking-wider" style="margin-top: -5px;">
                             {{
-                                lecturer.identity_id }}</p>
+                                lecturer.card_id }}</p>
                         <div class="card-details flex flex-col items-center " style="margin-top: -5px;">
                             <p class="text-[14px] font-bold text-blue-900 tracking-wide mt-1"> Mr. {{
                                 lecturer.name?.english }}</p>
@@ -162,7 +162,7 @@
 
                         <!-- ID -->
                         <p class="card-id text-[12px] font-bold text-gray-900 tracking-wider">
-                            {{ lecturer.identity_id }}
+                            {{ lecturer.card_id  || '-' }}
                         </p>
 
                         <!-- Names -->

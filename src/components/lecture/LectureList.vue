@@ -107,7 +107,7 @@ import {
   DeleteOutlined, IdcardOutlined, EyeOutlined, EditOutlined, ExclamationCircleOutlined
 } from '@ant-design/icons-vue';
 import LectureForm from './LectureForm.vue';
-import LectureDetail from './StudentViewDetail.vue';
+import LectureDetail from './LecturerViewDetail.vue';
 import { getLecturers, createLecturer, updateLecturer, deleteLecturer } from '../../service/lecture.service';
 
 const lecturers = ref([]);

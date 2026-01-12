@@ -5,7 +5,7 @@
       <div class="p-8">
         <div class="text-center mb-8">
           <i class="pi pi-id-card text-4xl text-blue-600 mb-3"></i>
-          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">ផ្ទៀងផ្ទាត់ អត្ថសញ្ញាណសិស្ស</h2>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">ផ្ទៀងផ្ទាត់ អត្ថសញ្ញាណគ្រូ</h2>
           <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
             សូមបំពេញលេខកូដសម្គាល់កាត /n
 ឬលេខអត្តសញ្ញាណប័ណ្ណសញ្ជាតិខ្មែរ
@@ -58,14 +58,14 @@ const route = useRoute();
 const router = useRouter();
 const toast = useToast();
 
-const studentId = ref(route.params.id);
+const lecturerId = ref(route.params.id);
 const verificationId = ref('');
 
 const submitVerification = () => {
   const vId = verificationId.value.trim();
 
-  if (studentId.value && vId) {
-    router.push({ path: `/students-detail/${studentId.value}`, query: { verificationId: vId } });
+  if (lecturerId.value && vId) {
+    router.push({ path: `/lecturer-view-detail/${lecturerId.value}`, query: { verificationId: vId } });
   } else {
     toast.add({ severity: 'warn', summary: 'Input Required', detail: 'Please enter your Card ID or National Identity', life: 3000 });
   }

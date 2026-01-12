@@ -23,6 +23,10 @@
       </div>
       
       <div class="flex flex-col gap-2">
+        <label>Card ID</label>
+        <Input v-model:value="form.card_id" />
+      </div>
+      <div class="flex flex-col gap-2">
         <label>Identity ID</label>
         <Input v-model:value="form.identity_id" />
       </div>
@@ -149,6 +153,7 @@ const fileList = ref([]);
 
 const form = ref({
   id: '',
+  card_id: '',
   identity_id: '',
   nationality: '',
   name: { khmer: '', english: '' },

@@ -8,6 +8,10 @@
         </div>
         <ul class="list-none p-0 m-0">
             <li class="flex items-center py-3 px-2 border-b border-gray-200 dark:border-gray-700 flex-wrap">
+                <div class="text-gray-500 dark:text-gray-400 w-full md:w-1/4 font-medium">Card ID</div>
+                <div class="text-gray-900 dark:text-white w-full md:w-3/4">{{ lecture.card_id }}</div>
+            </li>
+            <li class="flex items-center py-3 px-2 border-b border-gray-200 dark:border-gray-700 flex-wrap">
                 <div class="text-gray-500 dark:text-gray-400 w-full md:w-1/4 font-medium">Identity ID</div>
                 <div class="text-gray-900 dark:text-white w-full md:w-3/4">{{ lecture.identity_id }}</div>
             </li>

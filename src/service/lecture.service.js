@@ -7,11 +7,11 @@ export async function getLecturers(page, size, sortBy, search) {
   if (sortBy) params.append('sortBy', sortBy);
   if (search) params.append('search', search);
 
-  return apiFetch(`/lecture/?${params.toString()}`);
+  return apiFetch(`/lecturer/?${params.toString()}`);
 }
 
 export async function createLecturer(data) {
-  return apiFetch('/lecture/', {
+  return apiFetch('/lecturer/', {
     method: 'POST',
     body: JSON.stringify(data),
   });

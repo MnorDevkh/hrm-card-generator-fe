@@ -51,7 +51,7 @@
               {{ (pagination.current - 1) * pagination.pageSize + index + 1 }}
             </template>
             <template v-else-if="column.key === 'photo'">
-              <img v-if="record.photo" :src="`${environment.apiBaseUrl}upload_image/image/${record.photo}`" alt="photo"
+              <img v-if="record.photo" :src="`${environment.apiBaseUrl}media/image/${record.photo}`" alt="photo"
                 class="w-10 h-10 rounded-full object-cover" />
               <span v-else class="text-gray-400">No Photo</span>
             </template>

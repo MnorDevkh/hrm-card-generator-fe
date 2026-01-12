@@ -60,7 +60,7 @@ onMounted(async () => {
     }
 });
 
-const getPhotoUrl = (photo) => (photo ? `${environment.apiBaseUrl}upload_image/image/${photo}` : '');
+const getPhotoUrl = (photo) => (photo ? `${environment.apiBaseUrl}media/image/${photo}` : '');
 </script>
 
 <style scoped></style>

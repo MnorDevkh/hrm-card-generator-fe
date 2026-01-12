@@ -36,7 +36,7 @@
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Quick Actions</h3>
         <div class="grid grid-cols-2 gap-4">
-          <button v-for="action in quickActions" :key="action.label" class="flex flex-col items-center justify-center p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+          <button v-for="action in quickActions" :key="action.label" @click="handleQuickAction(action)" class="flex flex-col items-center justify-center p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
             <i :class="action.icon" class="text-2xl mb-2 text-gray-600 dark:text-gray-300"></i>
             <span class="text-sm font-medium text-gray-700 dark:text-gray-200">{{ action.label }}</span>
           </button>
@@ -48,6 +48,9 @@
 
 <script setup>
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const stats = ref([
   { label: 'Total Students', value: '2,543', icon: 'pi pi-users', bgColor: 'bg-blue-500' },
@@ -64,9 +67,15 @@ const activities = ref([
 ]);
 
 const quickActions = ref([
-  { label: 'Add Student', icon: 'pi pi-user-plus' },
-  { label: 'Create ID Card', icon: 'pi pi-id-card' },
-  { label: 'Add Staff', icon: 'pi pi-briefcase' },
-  { label: 'View Reports', icon: 'pi pi-chart-bar' },
+  { label: 'Add Student', icon: 'pi pi-user-plus', route: '/students/add' },
+  { label: 'Create ID Card', icon: 'pi pi-id-card', route: '/cards/create' },
+  { label: 'Add Staff', icon: 'pi pi-briefcase', route: '/staff/add' },
+  { label: 'View Reports', icon: 'pi pi-chart-bar', route: '/reports' },
 ]);
+
+const handleQuickAction = (action) => {
+  if (action.route) {
+    router.push(action.route);
+  }
+};
 </script>

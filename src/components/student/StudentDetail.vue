@@ -15,10 +15,10 @@
         <div v-else-if="student">
           <div class="flex flex-col gap-3 sm:gap-4 lg:gap-6">
             <div
-              class="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl border border-gray-100 dark:border-gray-700 p-3 sm:p-4 lg:p-6 mb-3 sm:mb-4 lg:mb-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 lg:gap-6">
+              class="bg-white dark:bg-gray-800 rounded-lg sm:rounded-2xl border border-gray-100 dark:border-gray-700 p-3 sm:p-4 lg:p-6 mb-3 sm:mb-4 lg:mb-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 lg:gap-6">
               <div class="flex-shrink-0">
                 <Image v-if="student.photo" :src="getPhotoUrl(student.photo)" :width="100"
-                  class="sm:w-[120px] rounded-lg object-cover shadow-sm" />
+                  class="sm:w-[120px] [130px] rounded-lg object-cover shadow-sm" />
                 <div v-else
                   class="w-[100px] h-[130px] sm:w-[120px] sm:h-[160px] bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center shadow-sm border border-gray-200 dark:border-gray-600">
                   <UserOutlined class="text-3xl sm:text-4xl text-gray-400" />
@@ -163,7 +163,7 @@ onMounted(async () => {
   }
 });
 
-const getPhotoUrl = (photo) => (photo ? `${environment.apiBaseUrl}upload_image/image/${photo}` : '');
+const getPhotoUrl = (photo) => (photo ? `${environment.apiBaseUrl}media/image/${photo}` : '');
 
 const formatDate = (dateString) => {
   if (!dateString) return '-';

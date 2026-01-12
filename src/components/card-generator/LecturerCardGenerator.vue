@@ -250,7 +250,7 @@ const goBack = () => {
     router.back();
 };
 
-const getPhotoUrl = (photo) => photo ? `${environment.apiBaseUrl}upload_image/image/${photo}` : '';
+const getPhotoUrl = (photo) => photo ? `${environment.apiBaseUrl}media/image/${photo}` : '';
 
 function parseDateString(value) {
     if (!value && value !== 0) return null;
@@ -295,13 +295,13 @@ const loadData = async () => {
         const templates = await getImagesByType('template');
         const template = templates.find(t => t.id == templateId);
         if (template) {
-            templateUrl.value = `${environment.apiBaseUrl}upload_image/image/${template.filename}`;
+            templateUrl.value = `${environment.apiBaseUrl}media/image/${template.filename}`;
         }
 
         // Load Lecturers
         if (ids.length > 0) {
             const token = localStorage.getItem('auth_token');
-            const response = await fetch(`${environment.apiBaseUrl}lecture/by-ids`, {
+            const response = await fetch(`${environment.apiBaseUrl}lecturer/by-ids`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

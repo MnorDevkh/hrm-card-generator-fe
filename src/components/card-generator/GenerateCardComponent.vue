@@ -254,12 +254,12 @@ const exportCanvasVisible = ref(false);
 
 const templateImageUrl = computed(() =>
   template.value?.filename
-    ? `${environment.apiBaseUrl}upload_image/image/${template.value.filename}`
+    ? `${environment.apiBaseUrl}media/image/${template.value.filename}`
     : ''
 );
 
 const getPhotoUrl = (photo) =>
-  photo ? `${environment.apiBaseUrl}upload_image/image/${photo}` : '';
+  photo ? `${environment.apiBaseUrl}media/image/${photo}` : '';
 
 function parseDateString(value) {
   if (!value && value !== 0) return null;

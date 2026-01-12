@@ -106,7 +106,7 @@ onMounted(async () => {
 });
 
 const getImageUrl = (filename) => {
-    return `${environment.apiBaseUrl}upload_image/image/${filename}`;
+    return `${environment.apiBaseUrl}media/image/${filename}`;
 };
 
 const useTemplate = (templateId) => {

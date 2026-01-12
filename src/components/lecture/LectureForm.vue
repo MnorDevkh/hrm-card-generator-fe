@@ -1,152 +1,272 @@
 <template>
-    <div class="form-container">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-            <!-- Left Column -->
-            <div class="flex flex-col gap-4">
-                <div class="flex flex-col gap-2">
-                    <label for="identity_id" class="font-semibold">Identity ID</label>
-                    <Input id="identity_id" v-model:value="formData.identity_id" class="w-full" />
-                </div>
-                <div class="flex flex-col gap-2">
-                    <label for="name_kh" class="font-semibold">Name (Khmer)</label>
-                    <Input id="name_kh" v-model:value="formData.name.khmer" class="w-full" />
-                </div>
-                <div class="flex flex-col gap-2">
-                    <label for="name_en" class="font-semibold">Name (English)</label>
-                    <Input id="name_en" v-model:value="formData.name.english" class="w-full" />
-                </div>
-                <div class="flex flex-col gap-2">
-                    <label for="gender" class="font-semibold">Gender</label>
-                    <Input id="gender" v-model:value="formData.gender" class="w-full" />
-                </div>
-                <div class="flex flex-col gap-2">
-                    <label for="nationality" class="font-semibold">Nationality</label>
-                    <Input id="nationality" v-model:value="formData.nationality" class="w-full" />
-                </div>
-                <div class="flex flex-col gap-2">
-                    <label for="birth_date" class="font-semibold">Birth Date</label>
-                    <DatePicker id="birth_date" v-model:value="formData.birth_date" class="w-full" />
-                </div>
-                 <div class="flex flex-col gap-2">
-                    <label class="font-semibold">Birth Place</label>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        <div>
-                            <Input placeholder="Village" v-model:value="formData.birth_place.village" class="w-full"/>
-                        </div>
-                        <div>
-                            <Input placeholder="Commune" v-model:value="formData.birth_place.commune" class="w-full"/>
-                        </div>
-                        <div>
-                            <Input placeholder="District" v-model:value="formData.birth_place.district" class="w-full"/>
-                        </div>
-                        <div>
-                            <Input placeholder="Province" v-model:value="formData.birth_place.province" class="w-full"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <ConfigProvider :theme="{ token: { fontFamily: 'inherit' } }">
+  <div class="form-container">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <!-- Profile Photo -->
+      <div class="col-span-1 md:col-span-2 flex justify-center mb-6">
+        <div class="relative">
+          <div class="w-32 h-32 rounded-lg h-40 overflow-hidden bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 flex items-center justify-center">
+            <img v-if="form.photo" :src="getPhotoUrl(form.photo)" alt="Profile" class="w-full h-full object-cover" />
+            <i v-else class="pi pi-user text-4xl text-gray-400"></i>
+          </div>
+          <Upload :show-upload-list="false" :customRequest="uploadPhoto" accept="image/*" class="absolute bottom-0 right-0">
+            <Button shape="circle" type="primary" size="small">
+              <template #icon><EditOutlined /></template>
+            </Button>
+          </Upload>
+        </div>
+      </div>
 
-            <!-- Right Column -->
-            <div class="flex flex-col gap-4">
-                <div class="flex flex-col gap-2">
-                    <label class="font-semibold">Current Address</label>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        <div>
-                            <Input placeholder="Village" v-model:value="formData.current_address.village" class="w-full"/>
-                        </div>
-                        <div>
-                            <Input placeholder="Commune" v-model:value="formData.current_address.commune" class="w-full"/>
-                        </div>
-                        <div>
-                            <Input placeholder="District" v-model:value="formData.current_address.district" class="w-full"/>
-                        </div>
-                        <div>
-                            <Input placeholder="Province" v-model:value="formData.current_address.province" class="w-full"/>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-col gap-2">
-                    <label for="phone" class="font-semibold">Phone</label>
-                    <Input id="phone" v-model:value="formData.phone" class="w-full" />
-                </div>
-                <div class="flex flex-col gap-2">
-                    <label for="email" class="font-semibold">Email</label>
-                    <Input id="email" v-model:value="formData.email" class="w-full" />
-                </div>
-                <div class="flex flex-col gap-2">
-                    <label class="font-semibold">Education</label>
-                    <div class="flex flex-col gap-2">
-                        <Input placeholder="Level" v-model:value="formData.education.level" class="w-full"/>
-                        <Input placeholder="Year" v-model:value="formData.education.year" class="w-full"/>
-                        <Input placeholder="Training Institution" v-model:value="formData.education.training_institution" class="w-full"/>
-                    </div>
-                </div>
-                <div class="flex flex-col gap-2">
-                    <label for="faculty" class="font-semibold">Faculty</label>
-                    <Input id="faculty" v-model:value="formData.faculty" class="w-full" />
-                </div>
-                <div class="flex flex-col gap-2">
-                    <label for="major" class="font-semibold">Major</label>
-                    <Input id="major" v-model:value="formData.major" class="w-full" />
-                </div>
-                <div class="flex flex-col gap-2">
-                    <label for="notes" class="font-semibold">Notes</label>
-                    <Input.TextArea id="notes" v-model:value="formData.notes" :rows="3" class="w-full" />
-                </div>
-            </div>
-        </div>
-        <div class="flex justify-end gap-2 mt-6">
-            <Button @click="$emit('cancel')">Cancel</Button>
-            <Button type="primary" @click="submitForm">Save</Button>
-        </div>
+      <!-- Basic Info -->
+      <div class="col-span-1 md:col-span-2">
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Basic Information</h3>
+      </div>
+      
+      <div class="flex flex-col gap-2">
+        <label>Identity ID</label>
+        <Input v-model:value="form.identity_id" />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label>Nationality</label>
+        <Input v-model:value="form.nationality" />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label>Name (English)</label>
+        <Input v-model:value="form.name.english" />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label>Name (Khmer)</label>
+        <Input v-model:value="form.name.khmer" />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label>Gender</label>
+        <Select v-model:value="form.gender" placeholder="Select Gender">
+          <SelectOption value="Male">Male</SelectOption>
+          <SelectOption value="Female">Female</SelectOption>
+        </Select>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label>Date of Birth</label>
+        <DatePicker v-model:value="form.birth_date" valueFormat="YYYY-MM-DD" class="w-full" />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label>Phone</label>
+        <Input v-model:value="form.phone" />
+      </div>
+      <div class="flex flex-col gap-2">
+        <label>Email</label>
+        <Input v-model:value="form.email" />
+      </div>
+
+      <!-- Birth Place -->
+      <div class="col-span-1 md:col-span-2 mt-4">
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Birth Place</h3>
+      </div>
+      <div class="flex flex-col gap-2"><label>Province</label><Input v-model:value="form.birth_place.province" /></div>
+      <div class="flex flex-col gap-2"><label>District</label><Input v-model:value="form.birth_place.district" /></div>
+      <div class="flex flex-col gap-2"><label>Commune</label><Input v-model:value="form.birth_place.commune" /></div>
+      <div class="flex flex-col gap-2"><label>Village</label><Input v-model:value="form.birth_place.village" /></div>
+
+      <!-- Current Address -->
+      <div class="col-span-1 md:col-span-2 mt-4">
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Current Address</h3>
+      </div>
+      <div class="flex flex-col gap-2"><label>Province</label><Input v-model:value="form.current_address.province" /></div>
+      <div class="flex flex-col gap-2"><label>District</label><Input v-model:value="form.current_address.district" /></div>
+      <div class="flex flex-col gap-2"><label>Commune</label><Input v-model:value="form.current_address.commune" /></div>
+      <div class="flex flex-col gap-2"><label>Village</label><Input v-model:value="form.current_address.village" /></div>
+
+      <!-- Education -->
+      <div class="col-span-1 md:col-span-2 mt-4">
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Education</h3>
+      </div>
+      <div class="flex flex-col gap-2"><label>Level</label><Input v-model:value="form.education.level" /></div>
+      <div class="flex flex-col gap-2"><label>Year</label><Input v-model:value="form.education.year" /></div>
+      <div class="col-span-1 md:col-span-2 flex flex-col gap-2"><label>Training Institution</label><Input v-model:value="form.education.training_institution" /></div>
+
+      <!-- Academic Info -->
+      <div class="col-span-1 md:col-span-2 mt-4">
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Academic Information</h3>
+      </div>
+      <div class="flex flex-col gap-2"><label>Faculty</label><Input v-model:value="form.faculty" /></div>
+      <div class="flex flex-col gap-2"><label>Major</label><Input v-model:value="form.major" /></div>
+
+      <!-- Other -->
+      <div class="col-span-1 md:col-span-2 mt-4">
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Other</h3>
+      </div>
+      <div class="col-span-1 md:col-span-2 flex flex-col gap-2">
+        <label>Notes</label>
+        <Textarea v-model:value="form.notes" :rows="3" />
+      </div>
+
+      <!-- Documents -->
+      <div class="col-span-1 md:col-span-2 mt-4">
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Documents</h3>
+        <Upload
+          v-model:file-list="fileList"
+          :customRequest="customUpload"
+          @remove="handleRemove"
+          list-type="text"
+        >
+          <Button>
+            <UploadOutlined />
+            Upload Document
+          </Button>
+        </Upload>
+      </div>
     </div>
+
+    <div class="flex justify-end gap-2 mt-6 pt-4 border-t">
+      <Button @click="$emit('cancel')">
+        <template #icon><CloseOutlined /></template>
+        Cancel
+      </Button>
+      <Button type="primary" @click="save">
+        <template #icon><CheckOutlined /></template>
+        Save
+      </Button>
+    </div>
+  </div>
+  </ConfigProvider>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import { Input, Button, DatePicker } from 'ant-design-vue';
-import dayjs from 'dayjs';
+import { ref, watch, onMounted } from 'vue';
+import { Input, Textarea, Select, SelectOption, DatePicker, Button, ConfigProvider, Upload, message } from 'ant-design-vue';
+import { CheckOutlined, CloseOutlined, UploadOutlined, EditOutlined } from '@ant-design/icons-vue';
 
 const props = defineProps({
-    lecture: Object
+  lecture: {
+    type: Object,
+    default: () => ({})
+  }
 });
+
 const emit = defineEmits(['save', 'cancel']);
 
-const getInitialFormData = (data) => {
-    const initialData = {
-        identity_id: '',
-        nationality: '',
-        name: { khmer: '', english: '' },
-        gender: '',
-        birth_date: null,
-        birth_place: { village: '', commune: '', district: '', province: '' },
-        current_address: { village: '', commune: '', district: '', province: '' },
-        phone: '',
-        education: { level: '', year: '', training_institution: '' },
-        faculty: '',
-        major: '',
-        email: '',
-        notes: '',
-        ...data
-    };
+const fileList = ref([]);
 
-    if (initialData.birth_date) {
-        initialData.birth_date = dayjs(initialData.birth_date);
-    }
-    return initialData;
-};
-
-const formData = ref(getInitialFormData(props.lecture));
-
-watch(() => props.lecture, (newVal) => {
-    formData.value = getInitialFormData(newVal);
+const form = ref({
+  id: '',
+  identity_id: '',
+  nationality: '',
+  name: { khmer: '', english: '' },
+  gender: '',
+  birth_date: null,
+  birth_place: { village: '', commune: '', district: '', province: '' },
+  current_address: { village: '', commune: '', district: '', province: '' },
+  phone: '',
+  education: { level: '', year: '', training_institution: '' },
+  faculty: '',
+  major: '',
+  email: '',
+  notes: '',
+  photo: '',
+  docs: []
 });
 
-const submitForm = () => {
-    const payload = { ...formData.value };
-    if (payload.birth_date) {
-        payload.birth_date = payload.birth_date.toDate();
+const getPhotoUrl = (path) => {
+  if (!path) return '';
+  if (path.startsWith('http')) return path;
+  return `https://cardsystemapi.aga-institute.edu.kh/media/image/${path}`;
+};
+
+const uploadPhoto = async ({ file, onSuccess, onError }) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch('https://cardsystemapi.aga-institute.edu.kh/media/upload/?type_=lecturers&related_id=0', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData
+    });
+
+    if (!response.ok) throw new Error('Upload failed');
+
+    const data = await response.json();
+    form.value.photo = data.filename;
+    onSuccess(data);
+    message.success('Photo uploaded successfully');
+  } catch (error) {
+    onError(error);
+    message.error('Failed to upload photo');
+  }
+};
+
+const initForm = () => {
+  if (props.lecture && Object.keys(props.lecture).length > 0) {
+    form.value = JSON.parse(JSON.stringify(props.lecture));
+    
+    // Initialize fileList from docs
+    if (form.value.docs && Array.isArray(form.value.docs)) {
+      fileList.value = form.value.docs.map((doc, index) => ({
+        uid: String(index),
+        name: doc.file_path,
+        status: 'done',
+        url: '' // Can be set if a base URL is available
+      }));
+    } else {
+      form.value.docs = [];
+      fileList.value = [];
     }
-    emit('save', payload);
+  }
+};
+
+watch(() => props.lecture, initForm, { deep: true });
+
+onMounted(() => {
+  initForm();
+});
+
+const customUpload = async ({ file, onSuccess, onError }) => {
+  const formData = new FormData();
+  formData.append('file', file);
+  
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch('https://cardsystemapi.aga-institute.edu.kh/media/upload/?type_=docs&related_id=0', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData
+    });
+
+    if (!response.ok) throw new Error('Upload failed');
+
+    const data = await response.json();
+    
+    const newDoc = {
+      doc_type: data.type,
+      file_path: data.filename,
+      uploaded_at: data.created_at
+    };
+    
+    if (!form.value.docs) form.value.docs = [];
+    form.value.docs.push(newDoc);
+    
+    onSuccess(data, file);
+    message.success(`${file.name} uploaded successfully.`);
+  } catch (error) {
+    onError(error);
+    message.error(`${file.name} upload failed.`);
+  }
+};
+
+const handleRemove = (file) => {
+  const filePath = file.response ? file.response.filename : file.name;
+  const index = form.value.docs.findIndex(d => d.file_path === filePath);
+  if (index !== -1) {
+    form.value.docs.splice(index, 1);
+  }
+};
+
+const save = () => {
+  emit('save', form.value);
 };
 </script>

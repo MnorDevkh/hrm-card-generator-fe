@@ -5,7 +5,7 @@
         class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md">
         <p class="text-xl font-bold text-gray-900 dark:text-white w-full sm:w-auto text-center sm:text-left">Lecturer
           List</p>
-        <div class="flex gap-2 w-full sm:w-auto justify-center sm:justify-end">
+        <!-- <div class="flex gap-2 w-full sm:w-auto justify-center sm:justify-end">
           <Button type="primary" @click="openNew" class="w-full sm:w-auto">
             <template #icon>
               <PlusOutlined />
@@ -18,12 +18,12 @@
             </template>
             Refresh
           </Button>
-        </div>
+        </div> -->
       </div>
 
       <Divider />
 
-      <div class="card flex flex-col sm:flex-row sm:flex-wrap justify-end gap-4 w-full sm:w-auto">
+      <div class="card flex flex-col sm:flex-row sm:flex-wrap justify-end gap-4 w-full sm:w-auto mb-4">
         <Button @click="exportCard" class="w-full sm:w-auto">
           <template #icon>
             <ExportOutlined />

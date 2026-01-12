@@ -27,11 +27,11 @@
                 <div class="flex flex-wrap gap-4 items-center">
                     <div class="flex flex-col">
                         <label class="font-bold block mb-2 text-sm">Issue</label>
-                        <DatePicker v-model:value="issueDate" value-format="YYYY-MM-DD" class="w-full" />
+                        <DatePicker v-model:value="issueDate" value-format="YYYY-MM-DD" format="DD-MM-YYYY" class="w-full" />
                     </div>
                     <div class="flex flex-col">
                         <label class="font-bold block mb-2 text-sm">Expiry</label>
-                        <DatePicker v-model:value="expiryDate" value-format="YYYY-MM-DD" class="w-full" />
+                        <DatePicker v-model:value="expiryDate" value-format="YYYY-MM-DD" format="DD-MM-YYYY" class="w-full" />
                     </div>
                     <div class="flex flex-col">
                         <label class="font-bold block mb-2 text-sm">Year</label>
@@ -282,7 +282,10 @@ function parseDateString(value) {
 function formatDate(dateStr) {
     const d = parseDateString(dateStr);
     if (!d) return '-';
-    return d.toLocaleDateString('en-GB');
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const year = d.getFullYear();
+    return `${day}-${month}-${year}`;
 }
 
 const loadData = async () => {

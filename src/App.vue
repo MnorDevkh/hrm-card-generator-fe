@@ -3,9 +3,9 @@
 </script>
 
 <template>
-  <router-view />
+  <div class="w-full min-h-screen">
+    <router-view />
+  </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

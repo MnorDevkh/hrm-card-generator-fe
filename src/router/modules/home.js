@@ -1,7 +1,11 @@
 import Dashboard from '../Dashboard.vue';
 
 const home = [
-  { path: "", component: Dashboard },
+  { path: "", 
+    component: Dashboard,
+    name: 'Dashboard',
+    meta: { layout: "BlankLayout", title: 'Dashboard - HRM' } 
+  }
   //   { path: '/about', component: AboutView },
 ];
 

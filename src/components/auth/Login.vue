@@ -29,7 +29,7 @@ const handleLogin = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen flex flex-col justify-center items-center w-full">
+  <div class="min-h-screen flex flex-col justify-center items-center w-full mx-auto" style="width: 100%;">
     <ConfigProvider :theme="{ token: { fontFamily: 'inherit' } }">
       <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
       <div class="text-center mb-4">

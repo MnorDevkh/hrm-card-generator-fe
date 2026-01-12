@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p-6 m-4 bg-white rounded-lg shadow-md dark:bg-gray-800">
     <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Dashboard Overview</h2>
     
     <!-- Stats Cards -->
@@ -15,7 +15,7 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-6">
       <!-- Recent Activity -->
       <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <h3 class="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Recent Activity</h3>

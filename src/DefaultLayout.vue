@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-screen w-full overflow-hidden bg-gray-500 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+  <div class="flex h-screen w-full overflow-hidden bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
     <!-- Sidebar -->
     <Sidebar :mobile-open="sidebarOpen" @close="sidebarOpen = false" />
 

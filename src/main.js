@@ -1,6 +1,7 @@
 import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
+import BlankLayout from './BlankLayout.vue';
 import router from './router';
 import {  Ripple, Toast, ToastService } from 'primevue';
 import ConfirmationService from 'primevue/confirmationservice';

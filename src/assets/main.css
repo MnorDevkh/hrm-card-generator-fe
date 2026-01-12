@@ -5,10 +5,15 @@
 body {
   color: var(--color-text);
   display: flex;
+  margin: auto;
   justify-content: space-between;
   width: 100%;
-  min-height: 100vh;
-  background: #502626;
-  line-height: 1.6;
+  min-height: 100vh;  line-height: 1.6;
   font-family: 'Kantumruy', 'KoHo', sans-serif;
 };
+
+html, body, #app {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}

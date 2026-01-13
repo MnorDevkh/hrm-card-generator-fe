@@ -1,19 +1,19 @@
 import LectureList from '@/components/lecture/LectureList.vue'
-import StudentIdentityVerification from '@/components/student/StudentIdentityVerification.vue'
-import StudentViewDetail from '@/components/student/StudentViewDetail.vue'
+import LecturerIdentityVerification from '@/components/lecture/LecturerIdentityVerification.vue'
+import LecturerViewDetail from '@/components/lecture/LecturerViewDetail.vue'
 
 const lecture = [
   { path: '/lecture', component: LectureList },
   {
     path: '/lecturer-identity-verification/:id',
     name: 'LecturerIdentityVerification',
-    component: StudentIdentityVerification,
+    component: LecturerIdentityVerification,
     meta: { layout: "BlankLayout", isPublic: true },
   },
   {
-    path: '/lecturers-detail/:id',
-    name: 'LecturerViewDetail',
-    component: StudentViewDetail,
+    path: '/Lecturer-detail-view/:id',
+    name: 'Lecturer-detail-view',
+    component: LecturerViewDetail,
     meta: { layout: "BlankLayout", isPublic: true },
   }
 ]

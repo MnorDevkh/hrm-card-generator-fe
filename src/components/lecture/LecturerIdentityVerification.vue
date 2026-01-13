@@ -33,10 +33,11 @@
 
           <button 
             type="submit" 
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            :disabled="loading"
+            class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
           >
-            <i class="pi pi-check-circle"></i>
-            Verify Identity
+            <i :class="loading ? 'pi pi-spin pi-spinner' : 'pi pi-check-circle'"></i>
+            {{ loading ? 'Verifying...' : 'Verify Identity' }}
           </button>
         </form>
       </div>
@@ -53,6 +54,7 @@
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
+import { environment } from '../../environments/environment';
 
 const route = useRoute();
 const router = useRouter();
@@ -60,14 +62,33 @@ const toast = useToast();
 
 const lecturerId = ref(route.params.id);
 const verificationId = ref('');
+const loading = ref(false);
 
-const submitVerification = () => {
+const submitVerification = async () => {
   const vId = verificationId.value.trim();
 
-  if (lecturerId.value && vId) {
-    router.push({ path: `/lecturer-view-detail/${lecturerId.value}`, query: { verificationId: vId } });
-  } else {
+  if (!lecturerId.value || !vId) {
     toast.add({ severity: 'warn', summary: 'Input Required', detail: 'Please enter your Card ID or National Identity', life: 3000 });
+    return;
+  }
+
+  loading.value = true;
+  try {
+    const response = await fetch(`${environment.apiBaseUrl}lecturer/${lecturerId.value}/${vId}`, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (response.ok) {
+      router.push({ path: `/Lecturer-detail-view/${lecturerId.value}`, query: { verificationId: vId } });
+    } else {
+      toast.add({ severity: 'error', summary: 'Verification Failed', detail: 'Invalid Card ID or National Identity', life: 3000 });
+    }
+  } catch (error) {
+    console.error('Verification error:', error);
+    toast.add({ severity: 'error', summary: 'System Error', detail: 'Unable to verify identity at this time.', life: 3000 });
+  } finally {
+    loading.value = false;
   }
 };
 </script>

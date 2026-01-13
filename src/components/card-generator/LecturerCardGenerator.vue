@@ -92,8 +92,8 @@
                             {{
                                 lecturer.card_id }}</p>
                         <div class="card-details flex flex-col items-center " style="margin-top: -5px;">
-                            <p class="text-[14px] font-bold text-blue-900 tracking-wide mt-1"> Mr. {{
-                                lecturer.name?.english }}</p>
+                            <p class="text-[14px] font-bold text-blue-900 tracking-wide mt-1"> {{ getTitle(lecturer.gender) }} {{
+                                lecturer.name?.english }} </p>
                             <p class="text-[12px] font-bold text-red-600 leading-none" style="margin-top: -5px;">
                                 lecturer</p>
                         </div>
@@ -167,8 +167,8 @@
 
                         <!-- Names -->
                         <div class="card-details flex flex-col items-center " style="margin-top: -6px;">
-                            <p class="text-[14px] font-bold text-blue-900 tracking-wide mt-1"> Mr. {{
-                                lecturer.name?.english }}</p>
+                            <p class="text-[14px] font-bold text-blue-900 tracking-wide mt-1"> {{ getTitle(lecturer.gender) }} {{
+                                lecturer.name?.english }} </p>
                             <p class="text-[12px] font-bold text-red-600 leading-none" style="margin-top: -5px;">
                                 lecturer</p>
                         </div>
@@ -251,6 +251,11 @@ const goBack = () => {
 };
 
 const getPhotoUrl = (photo) => photo ? `${environment.apiBaseUrl}media/image/${photo}` : '';
+
+function getTitle(gender) {
+    if (!gender) return 'Mr.';
+    return (gender.toLowerCase() === 'female' || gender.toLowerCase() === 'f') ? 'Ms.' : 'Mr.';
+}
 
 function parseDateString(value) {
     if (!value && value !== 0) return null;

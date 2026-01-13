@@ -307,33 +307,40 @@ function formatDate(dateStr) {
 
 
 function applyExportColors(el) {
-  const allEls = [el, ...el.querySelectorAll('*')];
+    const allEls = [el, ...el.querySelectorAll('*')];
 
-  allEls.forEach(el => {
-    const style = getComputedStyle(el);
-    const containsOklch = (value) => value && value.includes('oklch');
+    // Map of Tailwind classes to Hex values to bypass oklch issues in html2canvas
+    allEls.forEach(element => {
+        // Text Colors
+        if (element.classList.contains('text-gray-900')) element.style.color = '#111827';
+        else if (element.classList.contains('text-red-600')) element.style.color = '#DC2626';
+        else if (element.classList.contains('text-blue-900')) element.style.color = '#1E3A8A';
+        else if (element.classList.contains('text-gray-300')) element.style.color = '#D1D5DB';
+        else if (element.classList.contains('text-gray-500')) element.style.color = '#6B7280';
+        else if (element.classList.contains('text-gray-600')) element.style.color = '#4B5563';
+        else if (element.classList.contains('text-gray-700')) element.style.color = '#374151';
 
-    // Text color
-    if (el.classList.contains('text-gray-900')) el.style.color = '#111827';
-    else if (el.classList.contains('text-red-600')) el.style.color = '#DC2626';
-    else if (el.classList.contains('text-blue-900')) el.style.color = '#1E3A8A';
-    else if (el.classList.contains('text-gray-300')) el.style.color = '#D1D5DB';
+        // Background Colors
+        if (element.classList.contains('bg-white')) element.style.backgroundColor = '#ffffff';
+        else if (element.classList.contains('bg-gray-50')) element.style.backgroundColor = '#F9FAFB';
 
-    // Background color
-    if (containsOklch(style.backgroundColor)) {
-      el.style.backgroundColor = '#ffffff';
-    }
+        // Border Colors
+        if (element.classList.contains('border-gray-200')) element.style.borderColor = '#E5E7EB';
+        else if (element.classList.contains('border-gray-300')) element.style.borderColor = '#D1D5DB';
+        else if (element.classList.contains('border-blue-500')) element.style.borderColor = '#3B82F6';
 
-    // Border color
-    if (containsOklch(style.borderColor)) {
-      el.style.borderColor = '#D1D5DB';
-    }
+        // Shadows
+        if (element.classList.contains('shadow-lg')) {
+            element.style.boxShadow = '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)';
+        } else if (element.classList.contains('shadow')) {
+            element.style.boxShadow = '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1)';
+        }
 
-    // Box Shadow
-    if (containsOklch(style.boxShadow)) {
-      el.style.boxShadow = 'none';
-    }
-  });
+        // Force default text color on card root to avoid inherited oklch
+        if (element.classList.contains('id-card')) {
+            if (!element.style.color) element.style.color = '#111827';
+        }
+    });
 }
 
 async function showExportCanvas() {

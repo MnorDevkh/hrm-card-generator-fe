@@ -2,8 +2,8 @@
   <ConfigProvider :theme="{ token: { fontFamily: 'inherit' } }">
     <div class="p-4 sm:p-6 lg:p-8 space-y-4">
       <div
-        class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md">
-        <p class="text-xl font-bold text-gray-900 dark:text-white w-full sm:w-auto text-center sm:text-left">Lecturer
+        class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl shadow-md">
+        <p class="text-xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">Lecturer
           List</p>
         <!-- <div class="flex gap-2 w-full sm:w-auto justify-center sm:justify-end">
           <Button type="primary" @click="openNew" class="w-full sm:w-auto">

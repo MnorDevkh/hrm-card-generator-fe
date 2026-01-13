@@ -4,8 +4,8 @@
       <input type="file" ref="fileInput" @change="onFileSelected" style="display: none"
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
       <div
-        class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-md">
-        <p class="text-xl font-bold text-gray-900 dark:text-white w-full sm:w-auto text-center sm:text-left">បញ្ញីរសិស្ស
+        class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl shadow-md">
+        <p class="text-xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">បញ្ញីរសិស្ស
         </p>
         <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto items-center">
           <Input v-model:value="searchQuery" placeholder="Search Name or ID" allowClear @pressEnter="handleSearch"
@@ -52,7 +52,7 @@
             </template>
             <template v-else-if="column.key === 'photo'">
               <img v-if="record.photo" :src="`${environment.apiBaseUrl}media/image/${record.photo}`" alt="photo"
-                class="w-10 h-10 rounded-full object-cover" />
+                class="w-10 h-10 rounded-[5x] object-cover" />
               <span v-else class="text-gray-400">No Photo</span>
             </template>
             <template v-else-if="column.key === 'actions'">

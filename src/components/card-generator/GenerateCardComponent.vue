@@ -105,7 +105,7 @@
             </div>
 
             <!-- Info Table -->
-            <div class="mt-1 w-[170px]">
+            <div class="mt-1 w-[170px] text-gray-900">
               <table class="w-full text-[10px] text-left">
                 <tbody>
                   <tr>
@@ -180,7 +180,7 @@
             <!-- Info Table -->
             <div class="mt-1 w-[170px]">
               <table class="w-full text-[10px] text-left">
-                <tbody>
+                <tbody class="text-gray-900">
                   <tr>
                     <td class="w-[50px]">DOB</td>
                     <td>: {{ formatDate(student.birth_date) }}</td>
@@ -208,7 +208,7 @@
           </div>
 
           <!-- QR Code -->
-          <div class="absolute bottom-[29px] right-4 w-[1.5cm] h-[1.5cm] flex items-center justify-center">
+          <div class="absolute bottom-[29px] right-4 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
             <QrcodeVue :value="`${environment.url}student-identity-verification/${student.id}`" :size="52" level="M" render-as="svg"
               class="w-13 h-13" />
           </div>
@@ -314,13 +314,10 @@ function applyExportColors(el) {
     const containsOklch = (value) => value && value.includes('oklch');
 
     // Text color
-    if (containsOklch(style.color)) {
-      if (el.classList.contains('text-gray-900')) el.style.color = '#111827';
-      else if (el.classList.contains('text-red-600')) el.style.color = '#DC2626';
-      else if (el.classList.contains('text-blue-900')) el.style.color = '#1E3A8A';
-      else if (el.classList.contains('text-gray-300')) el.style.color = '#D1D5DB';
-      else el.style.color = '#000000';
-    }
+    if (el.classList.contains('text-gray-900')) el.style.color = '#111827';
+    else if (el.classList.contains('text-red-600')) el.style.color = '#DC2626';
+    else if (el.classList.contains('text-blue-900')) el.style.color = '#1E3A8A';
+    else if (el.classList.contains('text-gray-300')) el.style.color = '#D1D5DB';
 
     // Background color
     if (containsOklch(style.backgroundColor)) {

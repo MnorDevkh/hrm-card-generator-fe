@@ -31,25 +31,25 @@ const handleLogin = async () => {
 <template>
   <div class="min-h-screen flex flex-col justify-center items-center w-full mx-auto" style="width: 100%;">
     <ConfigProvider :theme="{ token: { fontFamily: 'inherit' } }">
-      <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
+      <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
       <div class="text-center mb-4">
         <img src="@/assets/ailogo.png" alt="Logo" class="mb-3 mx-auto" style="width: 60px; height: 60px;">
-        <div class="text-3xl font-semibold text-gray-900 dark:text-white mb-2">Welcome Back</div>
-        <span class="text-gray-600 dark:text-gray-400 font-medium">Sign in to continue</span>
+        <div class="text-3xl font-semibold text-gray-900 mb-2">Welcome Back</div>
+        <span class="text-gray-600 font-medium">Sign in to continue</span>
       </div>
 
       <form @submit.prevent="handleLogin" class="space-y-6">
         <div>
-          <label for="email" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+          <label for="email" class="block text-lg font-medium text-gray-700 mb-2">Email</label>
           <Input id="email" v-model:value="email" type="email" placeholder="Email address" size="large" autocomplete="username" />
         </div>
         <div>
-          <label for="password" class="block text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
+          <label for="password" class="block text-lg font-medium text-gray-700 mb-2">Password</label>
           <Input.Password id="password" v-model:value="password" placeholder="Password" size="large" autocomplete="current-password" />
         </div>
 
         <div class="flex items-center justify-end">
-          <a href="#" class="text-sm text-blue-600 hover:underline dark:text-blue-400">Forgot password?</a>
+          <a href="#" class="text-sm text-blue-600 hover:underline">Forgot password?</a>
         </div>
 
         <div v-if="error" class="mb-4">

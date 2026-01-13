@@ -1,10 +1,10 @@
 <template>
   <ConfigProvider :theme="{ token: { fontFamily: 'inherit' } }">
     <div
-      :class="['w-full bg-gray-50 dark:bg-gray-900 px-2 py-4 sm:p-6 lg:p-8', embedded ? 'w-full' : 'min-h-screen flex items-center justify-center']">
+      :class="['w-full bg-gray-50 px-2 py-4 sm:p-6 lg:p-8', embedded ? 'w-full' : 'min-h-screen flex items-center justify-center']">
       <div class="w-full">
         <div v-if="isLoading"
-          class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex justify-center items-center">
+          class="bg-white rounded-xl shadow-lg p-6 flex justify-center items-center">
           <Spin size="large" />
         </div>
 
@@ -15,19 +15,19 @@
         <div v-else-if="student">
           <div class="flex flex-col gap-3 sm:gap-4 lg:gap-6">
             <div
-              class="bg-white dark:bg-gray-800 rounded-lg sm:rounded-2xl border border-gray-100 dark:border-gray-700 p-3 sm:p-4 lg:p-6 mb-3 sm:mb-4 lg:mb-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 lg:gap-6">
+              class="bg-white rounded-lg sm:rounded-sm border border-gray-100 p-3 sm:p-4 lg:p-6 mb-3 sm:mb-4 lg:mb-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 lg:gap-6">
               <div class="flex-shrink-0">
                 <Image v-if="student.photo" :src="getPhotoUrl(student.photo)" :width="100"
-                  class="sm:w-[120px] [130px] rounded-lg object-cover shadow-sm" />
+                  class="sm:w-[120px] rounded-lg object-cover shadow-sm" />
                 <div v-else
-                  class="w-[100px] h-[130px] sm:w-[120px] sm:h-[160px] bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center shadow-sm border border-gray-200 dark:border-gray-600">
+                  class="w-[100px] h-[130px] sm:w-[120px] sm:h-[160px] bg-gray-100 rounded-lg flex items-center justify-center shadow-sm border border-gray-200">
                   <UserOutlined class="text-3xl sm:text-4xl text-gray-400" />
                 </div>
               </div>
               <div class="text-center sm:text-left flex-1 min-w-0">
-                <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white mb-1 truncate">{{
+                <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-1 truncate">{{
                   student.name.english }}</h1>
-                <h2 class="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-300 font-khmer mb-2 sm:mb-3">{{
+                <h2 class="text-base sm:text-lg lg:text-xl text-gray-600 font-khmer mb-2 sm:mb-3">{{
                   student.name.khmer }}</h2>
                 <div class="flex flex-wrap gap-1 sm:gap-2 justify-center sm:justify-start">
                   <span
@@ -43,7 +43,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
               <div>
                 <h3
-                  class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
+                  class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800">
                   <UserOutlined /> Personal Information
                 </h3>
                 <Descriptions bordered :column="1" size="middle">
@@ -63,7 +63,7 @@
               </div>
               <div>
                 <h3
-                  class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
+                  class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800">
                   <BookOutlined /> Academic Information
                 </h3>
                 <Descriptions bordered :column="1" size="middle">
@@ -78,7 +78,7 @@
               </div>
               <div>
                 <h3
-                  class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
+                  class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800">
                   <TeamOutlined /> Guardian Information
                 </h3>
                 <Descriptions bordered :column="1" size="middle">
@@ -88,7 +88,7 @@
               </div>
               <div>
                 <h3
-                  class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
+                  class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800">
                   <StarOutlined /> Scholarship Information
                 </h3>
                 <Descriptions bordered :column="1" size="middle">
@@ -98,8 +98,8 @@
                 </Descriptions>
               </div>
             </div>
-            <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 text-center">
-              <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-khmer leading-relaxed">
+            <div class="mt-4 pt-4 border-t border-gray-200 text-center">
+              <p class="text-xs sm:text-sm text-gray-500 font-khmer leading-relaxed">
                 ©​copyright 2025 ទំនាក់ទំនងផ្នែកបច្ចេកទេស លោក ផាត់ ឧត្ដម ជាព្រឹទ្ធបុរសជំនួយមហាវិទ្យាល័យព័ត៌មានវិទ្យា
                 និងជាប្រធានការិយាល័យបច្ចេកទេសព័ត៌មានវិទ្យា
               </p>

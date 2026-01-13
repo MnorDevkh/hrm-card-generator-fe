@@ -6,20 +6,28 @@ import lecture from "./modules/lecture";
 import template from "./modules/template";
 import home from "./modules/home";
 import DefaultLayout from '../DefaultLayout.vue';
+import BlankLayout from '@/BlankLayout.vue';
 
+
+const appRoutes = [
+  ...home,
+  ...student,
+  ...staff,
+  ...lecture,
+  ...template,
+];
 
 const routes = [
   ...auth,
   {
     path: '/',
     component: DefaultLayout,
-    children: [
-      ...home,
-      ...student,
-      ...staff,
-      ...lecture,
-      ...template,
-    ]
+    children: appRoutes.filter(route => route.meta?.layout !== 'BlankLayout')
+  },
+  {
+    path: '/',
+    component: BlankLayout,
+    children: appRoutes.filter(route => route.meta?.layout === 'BlankLayout')
   }
 ]
 

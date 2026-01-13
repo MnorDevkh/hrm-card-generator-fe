@@ -57,7 +57,7 @@
             <div class="mt-2 w-[170px] space-y-2 flex flex-col items-center">
               <Skeleton.Button active :style="{ width: '100%', height: '10px' }" v-for="j in 5" :key="j" />
             </div>
-            <div class="absolute bottom-[26px] right-4">
+            <div class="absolute bottom-[26px] right-5">
               <Skeleton.Button active :style="{ width: '52px', height: '52px' }" />
             </div>
           </div>
@@ -135,7 +135,7 @@
           </div>
 
           <!-- QR Code -->
-          <div class="absolute bottom-[29px] right-4 w-[1.5cm] h-[1.5cm] flex items-center justify-center">
+          <div class="absolute bottom-[29px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
             <QrcodeVue :value="`${environment.url}student-identity-verification/${student.id}`" :size="52" level="M" render-as="svg"
               class="w-13 h-13" />
           </div>
@@ -208,7 +208,7 @@
           </div>
 
           <!-- QR Code -->
-          <div class="absolute bottom-[29px] right-4 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
+          <div class="absolute bottom-[29px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
             <QrcodeVue :value="`${environment.url}student-identity-verification/${student.id}`" :size="52" level="M" render-as="svg"
               class="w-13 h-13" />
           </div>

@@ -1,6 +1,6 @@
 <template>
     <div class="container mx-auto my-8">
-        <div class="bg-gray-100 dark:bg-gray-800 p-8 rounded-xl shadow-lg">
+        <div class="bg-gray-100 p-8 rounded-xl shadow-lg">
             <!-- Top Bar -->
             <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
                 <div class="flex gap-2">
@@ -58,7 +58,7 @@
                             <Skeleton.Input active size="small" style="width: 100%; height: 10px; min-height: 10px"
                                 v-for="j in 5" :key="j" />
                         </div>
-                        <div class="absolute bottom-[26px] right-4">
+                        <div class="absolute bottom-[26px] right-5">
                             <Skeleton.Button active style="width: 52px; height: 52px" />
                         </div>
                     </div>
@@ -81,14 +81,14 @@
                     }">
                     <!-- Content (Same as main grid) -->
                     <div class="absolute inset-0 flex flex-col items-center text-center card-content"
-                        style="padding-top: 90px;">
+                        style="padding-top: 87px;">
                         <div
                             class="photo-container w-[65px] h-[80px] border border-gray-300 rounded flex items-center justify-center overflow-hidden shadow bg-white">
                             <img v-if="lecturer.photo" :src="getPhotoUrl(lecturer.photo)" alt="Photo"
                                 class="w-full h-full object-cover" />
                             <UserOutlined v-else class="text-3xl text-gray-300" />
                         </div>
-                        <p class="card-id text-[12px] font-bold text-gray-900 tracking-wider" style="margin-top: -5px;">
+                        <p class="card-id text-[12px] font-bold text-gray-900 tracking-wider" style="margin-top: -6px;">
                             {{
                                 lecturer.card_id }}</p>
                         <div class="card-details flex flex-col items-center " style="margin-top: -5px;">
@@ -97,7 +97,7 @@
                             <p class="text-[12px] font-bold text-red-600 leading-none" style="margin-top: -5px;">
                                 lecturer</p>
                         </div>
-                        <div class="w-[170px]">
+                        <div class="w-[170px] text-gray-900">
                             <table class="w-full text-[10px] text-left">
                                 <tbody>
                                     <tr>
@@ -129,7 +129,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="absolute bottom-[29px] right-4 w-[1.5cm] h-[1.5cm] flex items-center justify-center">
+                    <div class="absolute bottom-[29px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
                         <QrcodeVue :value="`${environment.url}lecturer-identity-verification/${lecturer.id}`" :size="52"
                             level="M" render-as="svg" class="w-13 h-13" />
                     </div>
@@ -151,7 +151,7 @@
                     }">
 
                     <div class="absolute inset-0 flex flex-col items-center text-center card-content"
-                        style="padding-top: 85px;">
+                        style="padding-top: 87px;">
                         <!-- Photo -->
                         <div
                             class="photo-container w-[65px] h-[80px] border border-gray-300 rounded flex items-center justify-center overflow-hidden shadow bg-white">
@@ -166,7 +166,7 @@
                         </p>
 
                         <!-- Names -->
-                        <div class="card-details flex flex-col items-center " style="margin-top: -5px;">
+                        <div class="card-details flex flex-col items-center " style="margin-top: -6px;">
                             <p class="text-[14px] font-bold text-blue-900 tracking-wide mt-1"> Mr. {{
                                 lecturer.name?.english }}</p>
                             <p class="text-[12px] font-bold text-red-600 leading-none" style="margin-top: -5px;">
@@ -174,7 +174,7 @@
                         </div>
 
                         <!-- Info Table -->
-                        <div class="w-[170px]">
+                        <div class="w-[170px] text-gray-900">
                             <table class="w-full text-[10px] text-left">
                                 <tbody>
                                     <tr>
@@ -208,7 +208,7 @@
                     </div>
 
                     <!-- QR Code -->
-                    <div class="absolute bottom-[29px] right-4 w-[1.5cm] h-[1.5cm] flex items-center justify-center">
+                    <div class="absolute bottom-[29px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
                         <QrcodeVue :value="`${environment.url}lecturer-identity-verification/${lecturer.id}`" :size="52"
                             level="M" render-as="svg" class="w-13 h-13" />
                     </div>

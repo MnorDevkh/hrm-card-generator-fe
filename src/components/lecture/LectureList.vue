@@ -36,6 +36,7 @@
           </template>
           Excel Import
         </Button>
+        <input type="file" ref="fileInput" class="hidden" accept=".xlsx, .xls" @change="handleFileUpload" />
         <Button type="primary" @click="openNew" class="w-full sm:w-auto">
           <template #icon>
             <PlusOutlined />
@@ -108,7 +109,7 @@ import {
 } from '@ant-design/icons-vue';
 import LectureForm from './LectureForm.vue';
 import LectureDetail from './LecturerViewDetail.vue';
-import { getLecturers, createLecturer, updateLecturer, deleteLecturer } from '../../service/lecture.service';
+import { getLecturers, createLecturer, updateLecturer, deleteLecturer, uploadExcel } from '../../service/lecture.service';
 
 const lecturers = ref([]);
 const selectedRowKeys = ref([]);
@@ -119,6 +120,7 @@ const viewDialogVisible = ref(false);
 const editDialogVisible = ref(false);
 const selectedLecturer = ref({});
 const router = useRouter();
+const fileInput = ref(null);
 
 const pagination = ref({
   current: 1,
@@ -197,7 +199,28 @@ const exportCard = () => {
 };
 
 const importFromExcel = () => {
-  message.info('Import feature coming soon');
+  fileInput.value.click();
+};
+
+const handleFileUpload = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  isUploading.value = true;
+  try {
+    await uploadExcel(formData);
+    message.success('Lecturers imported successfully');
+    loadLecturers();
+  } catch (error) {
+    console.error('Upload failed:', error);
+    message.error('Failed to import lecturers');
+  } finally {
+    isUploading.value = false;
+    event.target.value = '';
+  }
 };
 
 const saveLecturer = async (lectureData) => {

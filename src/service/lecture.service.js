@@ -29,3 +29,10 @@ export async function deleteLecturer(id) {
     method: 'DELETE',
   });
 }
+
+export async function uploadExcel(formData) {
+  return apiFetch('/lecturer/upload-excel/', {
+    method: 'POST',
+    body: formData,
+  });
+}

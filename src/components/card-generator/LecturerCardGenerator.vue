@@ -42,6 +42,17 @@
 
             <Divider />
 
+            <!-- Export Progress Modal -->
+            <Modal v-model:open="isExportingPages" :footer="null" :closable="false" :maskClosable="false" title="Exporting Pages" centered>
+                <div class="flex flex-col items-center justify-center p-6 gap-4">
+                    <Progress type="circle" :percent="exportProgress" />
+                    <div class="text-center">
+                        <p class="font-semibold text-lg">Processing...</p>
+                        <p class="text-gray-500">Card {{ currentCardIndex }} of {{ totalCards }}</p>
+                    </div>
+                </div>
+            </Modal>
+
             <!-- Skeleton Loader -->
             <div v-if="loading"
                 class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
@@ -227,7 +238,7 @@ import { ref, onMounted, nextTick } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-import { Button, DatePicker, Input, Divider, Skeleton, message } from 'ant-design-vue';
+import { Button, DatePicker, Input, Divider, Skeleton, message, Modal, Progress } from 'ant-design-vue';
 import { ArrowLeftOutlined, FilePdfOutlined, CopyOutlined, UserOutlined } from '@ant-design/icons-vue';
 import QrcodeVue from 'qrcode.vue';
 import { getImagesByType } from '../../service/image.service';
@@ -245,6 +256,9 @@ const year = ref(new Date().getFullYear().toString());
 const isExporting = ref(false);
 const isExportingPages = ref(false);
 const exportCanvasVisible = ref(false);
+const exportProgress = ref(0);
+const currentCardIndex = ref(0);
+const totalCards = ref(0);
 
 const goBack = () => {
     router.back();
@@ -338,6 +352,7 @@ function applyExportColors(el) {
         else if (element.classList.contains('text-red-600')) element.style.color = '#DC2626';
         else if (element.classList.contains('text-blue-900')) element.style.color = '#1E3A8A';
         else if (element.classList.contains('text-gray-300')) element.style.color = '#D1D5DB';
+        else if (element.classList.contains('text-gray-500')) element.style.color = '#6B7280';
         else if (element.classList.contains('text-gray-600')) element.style.color = '#4B5563';
         else if (element.classList.contains('text-gray-700')) element.style.color = '#374151';
 
@@ -372,6 +387,8 @@ async function showExportCanvas() {
 
 async function exportCardsAsPages() {
     isExportingPages.value = true;
+    exportProgress.value = 0;
+    currentCardIndex.value = 0;
     await nextTick();
 
     try {
@@ -385,6 +402,7 @@ async function exportCardsAsPages() {
 
         const cardElements = document.querySelectorAll("#canvas .id-card");
         if (!cardElements.length) throw new Error("No card elements found!");
+        totalCards.value = cardElements.length;
 
         const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: [pageWidth, pageHeight] });
 
@@ -401,6 +419,9 @@ async function exportCardsAsPages() {
             const imgData = canvas.toDataURL("image/JPEG");
             if (i > 0) pdf.addPage([pageWidth, pageHeight], 'p');
             pdf.addImage(imgData, "JPEG", 0, 0, cardWidthMM, cardHeightMM);
+
+            currentCardIndex.value = i + 1;
+            exportProgress.value = Math.round(((i + 1) / cardElements.length) * 100);
         }
 
         pdf.save("LecturerCards_Pages.pdf");

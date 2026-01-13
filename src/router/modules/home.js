@@ -4,7 +4,7 @@ const home = [
   { path: "", 
     component: Dashboard,
     name: 'Dashboard',
-    meta: { layout: "BlankLayout", title: 'Dashboard - HRM' } 
+    meta: { title: 'Dashboard - HRM' } 
   }
   //   { path: '/about', component: AboutView },
 ];

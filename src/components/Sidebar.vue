@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- Sidebar -->
-        <aside class="hidden md:flex flex-col bg-white ">
+        <aside class="hidden md:flex flex-col bg-white h-screen w-64 border-r border-gray-200 shadow-lg">
             <div class="p-6 flex items-center gap-4">
                 <img alt="Logo" src="@/assets/ailogo.png" class="w-10 h-10" />
                 <span class="text-xl font-semibold">HRM System</span>

@@ -1,19 +1,32 @@
 <template>
-    <div class="flex flex-col gap-3 sm:gap-4 lg:gap-6 pt-10">
-            <div class="text-center mb-1 sm:mb-2">
-              <div
-                class="inline-flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full bg-green-100 mb-2 sm:mb-4">
-                <CheckCircleOutlined class="text-2xl sm:text-3xl text-green-600" />
-              </div>
-              <p
-                class="text-base sm:text-lg lg:text-xl font-bold text-gray-900 mb-1 sm:mb-2 font-khmer">
-                ឯកសារមានសុពលភាព</p>
-              <p class="text-sm sm:text-base lg:text-lg text-gray-600 mb-1 font-khmer">ចេញដោយ
-                វិទ្យាស្ថានអាហ្គា</p>
-              <p class="text-xs sm:text-sm text-gray-500 font-khmer px-2">
-                សូមពិនិត្យឯកសាររបស់លោកអ្នកជាមួយទិន្ន័យខាងក្រោម <br> ដើម្បីផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ</p>
+    <div class="min-h-screen bg-gray-50/30 py-8 sm:py-12 px-4 sm:px-6">
+        <div class="max-w-4xl mx-auto space-y-6 sm:space-y-8">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 text-center relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
+                
+                <div class="flex justify-center mb-6">
+                    <img alt="Logo" src="@/assets/ailogo.png" class="w-20 h-20 sm:w-24 sm:h-24 object-contain drop-shadow-sm hover:scale-105 transition-transform duration-300" />
+                </div>
+
+                <div class="flex flex-col items-center gap-3">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-green-50 text-green-700 rounded-full border border-green-100 shadow-sm">
+                        <CheckCircleOutlined class="text-lg" />
+                        <span class="font-bold font-khmer text-sm sm:text-base">ឯកសារមានសុពលភាព</span>
+                    </div>
+
+                    <div class="space-y-1">
+                        <p class="text-gray-500 font-khmer text-xs sm:text-sm">ចេញដោយ</p>
+                        <h1 class="text-xl sm:text-2xl font-bold text-gray-900 font-khmer tracking-wide">វិទ្យាស្ថានអាហ្គា</h1>
+                    </div>
+
+                    <p class="text-gray-400 text-xs sm:text-sm font-khmer max-w-md mx-auto leading-relaxed mt-2">
+                        សូមពិនិត្យឯកសាររបស់លោកអ្នកជាមួយទិន្ន័យខាងក្រោម <br class="hidden sm:block" /> ដើម្បីផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ
+                    </p>
+                </div>
             </div>
-        <StudentDetail :studentId="studentId" :verificationId="verificationId" :embedded="embedded" />
+            
+            <StudentDetail :studentId="studentId" :verificationId="verificationId" :embedded="embedded" />
+        </div>
     </div>
 </template>
 

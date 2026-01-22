@@ -34,7 +34,7 @@
             </template>
             Add New
           </Button>
-          <Button danger type="primary" class="w-full sm:w-auto" :disabled="!selectedRowKeys.length">
+          <Button danger type="primary" class="w-full sm:w-auto" :disabled="!selectedRowKeys.length" @click="confirmBulkDelete">
             <template #icon>
               <DeleteOutlined />
             </template>
@@ -237,6 +237,28 @@ const saveStudent = async (studentData) => {
   } catch (error) {
     message.error('Failed to save student');
   }
+};
+
+const confirmBulkDelete = () => {
+  Modal.confirm({
+    title: `Are you sure you want to delete ${selectedRowKeys.value.length} students?`,
+    icon: createVNode(ExclamationCircleOutlined),
+    content: 'This action cannot be undone.',
+    okText: 'Yes',
+    okType: 'danger',
+    cancelText: 'No',
+    async onOk() {
+      try {
+        await Promise.all(selectedRowKeys.value.map(id => deleteStudent(id)));
+        message.success('Selected students deleted successfully');
+        selectedRowKeys.value = [];
+        selectedRows.value = [];
+        loadStudents();
+      } catch (error) {
+        message.error('Failed to delete selected students');
+      }
+    },
+  });
 };
 
 const requireConfirmation = (student) => {

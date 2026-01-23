@@ -5,7 +5,7 @@
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
       <div
         class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl shadow-md">
-        <p class="text-xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">បញ្ញីរសិស្ស
+        <p class="text-xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">បញ្ជីនិស្សិត
         </p>
         <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto items-center">
           <Input v-model:value="searchQuery" placeholder="Search Name or ID" allowClear @pressEnter="handleSearch"

@@ -42,54 +42,54 @@
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
               <div>
                 <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800">
-                  <UserOutlined /> Personal Information
+                  <UserOutlined />ព័ត៌មានផ្ទាល់ខ្លួន
                 </h3>
                 <Descriptions bordered :column="1" size="middle">
-                  <Descriptions.Item label="Name (Khmer)">{{ student.name.khmer }}</Descriptions.Item>
-                  <Descriptions.Item label="Name (English)">{{ student.name.english }}</Descriptions.Item>
-                  <Descriptions.Item label="Card ID">{{ student.card_id }}</Descriptions.Item>
-                  <Descriptions.Item label="System ID">{{ student.id }}</Descriptions.Item>
-                  <Descriptions.Item label="National Identity">{{ student.identity_id }}</Descriptions.Item>
-                  <Descriptions.Item label="Gender">{{ student.gender }}</Descriptions.Item>
-                  <Descriptions.Item label="Date of Birth">{{ formatDate(student.birth_date) }}</Descriptions.Item>
-                  <Descriptions.Item label="Phone">{{ student.phone }}</Descriptions.Item>
-                  <Descriptions.Item label="Email">{{ student.email || '-' }}</Descriptions.Item>
-                  <Descriptions.Item label="Birth Place">{{ formatAddress(student.birth_place) }}</Descriptions.Item>
-                  <Descriptions.Item label="Current Address">{{ formatAddress(student.current_address) }}
+                  <Descriptions.Item label="ឈ្មោះខ្មែរ">{{ student.name.khmer }}</Descriptions.Item>
+                  <Descriptions.Item label="ឈ្មោះឡាតាំង">{{ student.name.english }}</Descriptions.Item>
+                  <Descriptions.Item label="លេខសម្គាល់កាត">{{ student.card_id }}</Descriptions.Item>
+                  <Descriptions.Item label="លេខសម្គាល់ប្រព័ន្ធ">{{ student.id }}</Descriptions.Item>
+                  <Descriptions.Item label="អត្ដសញ្ញាណបណ្ណ">{{ student.identity_id }}</Descriptions.Item>
+                  <Descriptions.Item label="ភេទ">{{ student.gender }}</Descriptions.Item>
+                  <Descriptions.Item label="ថ្ងៃខែឆ្នាំកើត">{{ formatDate(student.birth_date) }}</Descriptions.Item>
+                  <Descriptions.Item label="ទូរសព្ទលេខ">{{ student.phone }}</Descriptions.Item>
+                  <Descriptions.Item label="អ៊ីម៉ែល">{{ student.email || '-' }}</Descriptions.Item>
+                  <Descriptions.Item label="ទីកន្លែងកំណើត">{{ formatAddress(student.birth_place) }}</Descriptions.Item>
+                  <Descriptions.Item label="អាសយដ្ឋានបច្ចុប្បន្ន">{{ formatAddress(student.current_address) }}
                   </Descriptions.Item>
                 </Descriptions>
               </div>
               <div>
                 <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800">
-                  <BookOutlined /> Academic Information
+                  <BookOutlined /> ព័ត៌មានសិក្សា
                 </h3>
                 <Descriptions bordered :column="1" size="middle">
-                  <Descriptions.Item label="Faculty">{{ student.faculty }}</Descriptions.Item>
-                  <Descriptions.Item label="Major">{{ student.major }}</Descriptions.Item>
-                  <Descriptions.Item label="Study Shift">{{ student.study_shift }}</Descriptions.Item>
-                  <Descriptions.Item label="Batch">{{ student.batch }}</Descriptions.Item>
-                  <Descriptions.Item label="Education Level">{{ student.education_level }}</Descriptions.Item>
-                  <Descriptions.Item label="High School">{{ student.high_school }}</Descriptions.Item>
-                  <Descriptions.Item label="BacII Year">{{ student.bacII_year }}</Descriptions.Item>
+                  <Descriptions.Item label="មហាវិទ្យាល័យ">{{ student.faculty }}</Descriptions.Item>
+                  <Descriptions.Item label="មុខជំនាញ">{{ student.major }}</Descriptions.Item>
+                  <Descriptions.Item label="វេនសិក្សា">{{ student.study_shift }}</Descriptions.Item>
+                  <Descriptions.Item label="ជំនាន់ទី">{{ student.batch }}</Descriptions.Item>
+                  <Descriptions.Item label="បញ្ចប់ការសិក្សាថ្នាក់">{{ student.education_level }}</Descriptions.Item>
+                  <Descriptions.Item label="អតីតសិស្ស/និស្សិត">{{ student.high_school }}</Descriptions.Item>
+                  <Descriptions.Item label="ឆ្នាំបញ្ចប់ BacII">{{ student.bacII_year }}</Descriptions.Item>
                 </Descriptions>
               </div>
               <div>
                 <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800">
-                  <TeamOutlined /> Guardian Information
+                  <TeamOutlined /> ព័ត៌មានអាណាព្យាបាល
                 </h3>
                 <Descriptions bordered :column="1" size="middle">
-                  <Descriptions.Item label="Guardian Name">{{ student.guardian?.name || '-' }}</Descriptions.Item>
-                  <Descriptions.Item label="Guardian Phone">{{ student.guardian?.phone || '-' }}</Descriptions.Item>
+                  <Descriptions.Item label="ឈ្មោះអាណាព្យាបាល">{{ student.guardian?.name || '-' }}</Descriptions.Item>
+                  <Descriptions.Item label="លេខទូរសព្ទ">{{ student.guardian?.phone || '-' }}</Descriptions.Item>
                 </Descriptions>
               </div>
               <div>
                 <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800">
-                  <StarOutlined /> Scholarship Information
+                  <StarOutlined /> ព័ត៌មានអាហារូបករណ៍
                 </h3>
                 <Descriptions bordered :column="1" size="middle">
-                  <Descriptions.Item label="Type">{{ student.scholarship_type || '-' }}</Descriptions.Item>
-                  <Descriptions.Item label="Card ID">{{ student.scholarship_card_id || '-' }}</Descriptions.Item>
-                  <Descriptions.Item label="Provided By">{{ student.scholarship_bye || '-' }}</Descriptions.Item>
+                  <Descriptions.Item label="ប្រភេទអាហារូបករណ៍">{{ student.scholarship_type || '-' }}</Descriptions.Item>
+                  <Descriptions.Item label="លេខសម្គាល់ប័ណ្ណ">{{ student.scholarship_card_id || '-' }}</Descriptions.Item>
+                  <Descriptions.Item label="ស្ថាប័នឧបត្ថម">{{ student.scholarship_bye || '-' }}</Descriptions.Item>
                 </Descriptions>
               </div>
             </div>
@@ -97,8 +97,8 @@
               class="bg-gray-50 px-4 py-4 text-center border-t border-gray-200 ">
               <p class="text-xs sm:text-sm text-gray-600  font-khmer leading-relaxed">
                 <span class="font-semibold">©​copyright 2026 </span>
-                ទំនាក់ទំនងផ្នែកបច្ចេកទេស <span class="font-bold">លោក ផាត់ ឧត្ដម</span>
-                ជាព្រឹទ្ធបុរសជំនួយមហាវិទ្យាល័យព័ត៌មានវិទ្យា
+                ទំនាក់ទំនងផ្នែកបច្ចេកទេស <span class="font-bold">លោកសាស្រ្ដាចារ្យជំនួយ ផាត់ ឧត្ដម</span>
+                ជាព្រឹទ្ធបុរសជំនួយ មហាវិទ្យាល័យព័ត៌មានវិទ្យា
                 និងជាប្រធានការិយាល័យបច្ចេកទេសព័ត៌មានវិទ្យា
               </p>
               <button @click="openPopup"

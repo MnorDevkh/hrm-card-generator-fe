@@ -14,16 +14,11 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             <Card v-for="template in templates" :key="template.id" hoverable class="shadow-lg transition-shadow duration-300 rounded-lg overflow-hidden">
                 <template #cover>
-                    <div class="h-64 overflow-hidden">
-                        <img alt="template header" :src="getImageUrl(template.filename)" class="w-full h-full object-cover" />
+                    <div class="h-90% w-96 overflow-hidden bg-gray-100 dark:bg-gray-700">
+                        <img alt="template header" :src="getImageUrl(template.filename)" class="w-full h-full object-contain" />
                     </div>
                 </template>
                 <div class="flex flex-col gap-2">
-                    <div class="font-bold text-lg">{{ template.name || 'Template' }}</div>
-                    <div class="text-gray-500">{{ template.type || 'Card Template' }}</div>
-                    <p class="m-0 text-gray-600 dark:text-gray-300">
-                        Use this template to generate certificates for the selected {{ type === 'lecturer' ? 'lecturers' : 'students' }}.
-                    </p>
                     <div class="flex gap-2 mt-4">
                         <Button type="primary" class="flex-1" @click="useTemplate(template.id)">
                             <template #icon>

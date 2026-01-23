@@ -12,6 +12,8 @@
             class="w-full sm:w-64" />
           <Input v-model:value="selectedBatch" placeholder="Batch" allowClear @pressEnter="handleSearch"
             class="w-full sm:w-32" />
+          <Input v-model:value="selectedFaculty" placeholder="Faculty" allowClear @pressEnter="handleSearch"
+            class="w-full sm:w-48" />
           <Button type="primary" @click="handleSearch">Search</Button>
         </div>
         <Divider type="vertical" class="hidden sm:block h-8" />
@@ -118,6 +120,7 @@ const fileInput = ref(null);
 const loading = ref(false);
 const searchQuery = ref('');
 const selectedBatch = ref('');
+const selectedFaculty = ref('');
 const router = useRouter();
 
 const viewDialogVisible = ref(false);
@@ -167,7 +170,7 @@ const loadStudents = async () => {
   const limit = pagination.value.pageSize;
 
   try {
-    const response = await getStudents(offset, limit, selectedBatch.value, searchQuery.value);
+    const response = await getStudents(offset, limit,  searchQuery.value,selectedBatch.value, selectedFaculty.value);
     students.value = response.students;
     pagination.value.total = response.total;
   } catch (error) {

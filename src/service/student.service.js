@@ -1,11 +1,11 @@
 import { apiFetch } from './api';
 
-export async function getStudents(skip, limit, search, batch, faculty) {
+export async function getStudents(skip, limit, search, batch, faculty, study_shift) {
   const params = new URLSearchParams({ skip, limit });
   if (batch) params.append('batch', batch);
   if (search) params.append('search', search);
   if (faculty) params.append('faculty', faculty);
-
+  if (study_shift) params.append('study_shift', study_shift);
   return apiFetch(`/students/?${params}`);
 }
 

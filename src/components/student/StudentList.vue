@@ -12,8 +12,8 @@
             class="w-full sm:w-64" />
           <Input v-model:value="selectedBatch" placeholder="Batch" allowClear @pressEnter="handleSearch"
             class="w-full sm:w-32" />
-          <Input v-model:value="selectedFaculty" placeholder="Faculty" allowClear @pressEnter="handleSearch"
-            class="w-full sm:w-48" />
+          <Select v-model:value="selectedFaculty" placeholder="Faculty" allowClear @change="handleSearch"
+            class="w-full sm:w-48" :options="facultyOptions" />
           <Button type="primary" @click="handleSearch">Search</Button>
         </div>
         <Divider type="vertical" class="hidden sm:block h-8" />
@@ -101,7 +101,7 @@
 
 <script setup>
 import { ref, onMounted, createVNode } from 'vue';
-import { Table, Button, Card, Divider, Modal, message, ConfigProvider, Input } from 'ant-design-vue';
+import { Table, Button, Card, Divider, Modal, message, ConfigProvider, Input, Select } from 'ant-design-vue';
 import {
   EyeOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined,
   UploadOutlined, PlusOutlined, FileExcelOutlined, ExportOutlined
@@ -120,7 +120,7 @@ const fileInput = ref(null);
 const loading = ref(false);
 const searchQuery = ref('');
 const selectedBatch = ref('');
-const selectedFaculty = ref('');
+const selectedFaculty = ref(undefined);
 const router = useRouter();
 
 const viewDialogVisible = ref(false);
@@ -133,6 +133,12 @@ const pagination = ref({
   total: 0,
   showSizeChanger: true,
 });
+
+const facultyOptions = ref([
+  { value: 'ភាសាបរទេស', label: 'ភាសាបរទេស' },
+  { value: 'ព័ត៌មានវិទ្យា', label: 'ព័ត៌មានវិទ្យា' },
+  { value: 'គ្រប់គ្រង', label: 'គ្រប់គ្រង' },
+]);
 
 const columns = [
   { title: 'No', key: 'index', width: 60 },

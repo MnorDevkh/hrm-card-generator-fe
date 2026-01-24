@@ -89,7 +89,7 @@
                 <Descriptions bordered :column="1" size="middle">
                   <Descriptions.Item label="ប្រភេទអាហារូបករណ៍">{{ student.scholarship_type || '-' }}</Descriptions.Item>
                   <Descriptions.Item label="លេខសម្គាល់ប័ណ្ណ">{{ student.scholarship_card_id || '-' }}</Descriptions.Item>
-                  <Descriptions.Item label="ស្ថាប័នឧបត្ថម">{{ student.scholarship_bye || '-' }}</Descriptions.Item>
+                  <Descriptions.Item label="ស្ថាប័នឧបត្ថម">{{ student.scholarship_by || '-' }}</Descriptions.Item>
                 </Descriptions>
               </div>
             </div>

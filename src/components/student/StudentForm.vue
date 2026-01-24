@@ -110,7 +110,7 @@
       </div>
       <div class="flex flex-col gap-2"><label>Type</label><Input v-model:value="form.scholarship_type" /></div>
       <div class="flex flex-col gap-2"><label>Card ID</label><Input v-model:value="form.scholarship_card_id" /></div>
-      <div class="flex flex-col gap-2"><label>Scholarship By</label><Input v-model:value="form.scholarship_bye" /></div>
+      <div class="flex flex-col gap-2"><label>Scholarship By</label><Input v-model:value="form.scholarship_by" /></div>
 
       <!-- Other -->
       <div class="col-span-1 md:col-span-2 mt-4">
@@ -171,7 +171,7 @@ const form = ref({
   study_shift: '',
   scholarship_type: '',
   scholarship_card_id: '',
-  scholarship_bye: '',
+  scholarship_by: '',
   email: '',
   notes: '',
   photo: '',

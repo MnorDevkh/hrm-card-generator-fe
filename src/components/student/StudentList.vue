@@ -7,7 +7,7 @@
         class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl shadow-md">
         <p class="text-xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">បញ្ជីឈ្មោះនិស្សិត
         </p>
-        <div class="flex flex-col sm:flex-row gap-2 w-full sm:w-auto items-center">
+        <div class="grid grid-cols-1 sm:grid-cols-none sm:grid-flow-col gap-2 w-full sm:w-auto items-center">
           <Input v-model:value="searchQuery" placeholder="Search Name or ID" allowClear @pressEnter="handleSearch"
             class="w-full sm:w-64" />
           <Input v-model:value="selectedBatch" placeholder="Batch" allowClear @pressEnter="handleSearch"
@@ -137,7 +137,7 @@ const pagination = ref({
 const facultyOptions = ref([
   { value: 'ភាសាបរទេស', label: 'ភាសាបរទេស' },
   { value: 'ព័ត៌មានវិទ្យា', label: 'ព័ត៌មានវិទ្យា' },
-  { value: 'គ្រប់គ្រង', label: 'គ្រប់គ្រង' },
+  { value: 'គ្រប់គ្រង', label: '' },
 ]);
 
 const columns = [

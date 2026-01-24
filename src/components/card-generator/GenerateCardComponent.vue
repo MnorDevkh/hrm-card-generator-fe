@@ -97,12 +97,12 @@
 
 
             <!-- Card ID - fixed spacing -->
-            <p class="card-id text-[12px] font-bold text-gray-900 tracking-wider " style="margin-top: -8px;">{{
+            <p class="card-id font-bold font-koh text-gray-900 tracking-wider " style="margin-top: -8px;">{{
               student.card_id }}</p>
 
             <!-- Rest of content with adjusted spacing -->
             <div class="card-details flex flex-col items-center">
-              <p class="text-[16px] font-bold text-red-600 leading-none">{{ student.name.khmer }}</p>
+              <p class="text-[16px] font-khmer text-red-600 leading-none">{{ student.name.khmer }}</p>
               <p class="text-sm font-bold text-blue-900 tracking-wide mt-1">{{ student.name.english }}</p>
             </div>
 
@@ -169,12 +169,12 @@
             </div>
 
             <!-- Card ID - fixed spacing -->
-            <p class="card-id text-[12px] font-bold text-gray-900 tracking-wider" style="margin-top: 2px;">{{
+            <p class="card-id text-[12px] font-bold font-koh text-gray-900 tracking-wider" style="margin-top: 2px;">{{
               student.card_id }}</p>
 
             <!-- Rest of content with adjusted spacing -->
             <div class="card-details flex flex-col items-center">
-              <p class="text-[16px] font-bold text-red-600 leading-none">{{ student.name.khmer }}</p>
+              <p class="text-[16px] font-khmer text-red-600 leading-none">{{ student.name.khmer }}</p>
               <p class="text-sm font-bold text-blue-900 tracking-wide mt-1">{{ student.name.english }}</p>
             </div>
 
@@ -471,5 +471,13 @@ onMounted(async () => {
 <style scoped>
 .id-card:hover {
   cursor: pointer;
+}
+.font-khmer {
+  font-family: 'Kantumruy Pro', sans-serif;
+  font-weight: 512;
+}
+.font-koh {
+  font-family: 'Koh Santepheap', serif;
+  font-size: 9px;
 }
 </style>

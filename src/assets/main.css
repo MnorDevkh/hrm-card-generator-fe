@@ -9,11 +9,41 @@ body {
   justify-content: space-between;
   width: 100%;
   min-height: 100vh;  line-height: 1.6;
-  font-family: 'Kantumruy', 'KoHo', sans-serif;
+  font-family: 'Kantumruy Pro', 'Khmer', 'Koh Santepheap', sans-serif;
 };
 
 html, body, #app {
   width: 100%;
   height: 100%;
   margin: 0;
+}
+
+.koh-santepheap-thin {
+  font-family: "Koh Santepheap", serif;
+  font-weight: 100;
+  font-style: normal;
+}
+
+.koh-santepheap-light {
+  font-family: "Koh Santepheap", serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.koh-santepheap-regular {
+  font-family: "Koh Santepheap", serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.koh-santepheap-bold {
+  font-family: "Koh Santepheap", serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.koh-santepheap-black {
+  font-family: "Koh Santepheap", serif;
+  font-weight: 900;
+  font-style: normal;
 }

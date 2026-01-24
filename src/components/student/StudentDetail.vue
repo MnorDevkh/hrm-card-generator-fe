@@ -51,7 +51,7 @@
                   <Descriptions.Item label="លេខសម្គាល់ប្រព័ន្ធ">{{ student.id }}</Descriptions.Item>
                   <Descriptions.Item label="អត្ដសញ្ញាណបណ្ណ">{{ student.identity_id }}</Descriptions.Item>
                   <Descriptions.Item label="ភេទ">{{ student.gender }}</Descriptions.Item>
-                  <Descriptions.Item label="ថ្ងៃខែឆ្នាំកើត">{{ formatDate(student.birth_date) }}</Descriptions.Item>
+                  <Descriptions.Item label="ថ្ងៃខែឆ្នាំកំណើត">{{ formatDate(student.birth_date) }}</Descriptions.Item>
                   <Descriptions.Item label="ទូរសព្ទលេខ">{{ student.phone }}</Descriptions.Item>
                   <Descriptions.Item label="អ៊ីម៉ែល">{{ student.email || '-' }}</Descriptions.Item>
                   <Descriptions.Item label="ទីកន្លែងកំណើត">{{ formatAddress(student.birth_place) }}</Descriptions.Item>

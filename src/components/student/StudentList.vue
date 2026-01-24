@@ -14,6 +14,8 @@
             class="w-full sm:w-32" />
           <Select v-model:value="selectedFaculty" placeholder="Faculty" allowClear @change="handleSearch"
             class="w-full sm:w-48" :options="facultyOptions" />
+          <Select v-model:value="selectedStudyShift" placeholder="Shift" allowClear @change="handleSearch"
+            class="w-full sm:w-32" :options="studyShiftOptions" />
           <Button type="primary" @click="handleSearch">Search</Button>
         </div>
         <Divider type="vertical" class="hidden sm:block h-8" />
@@ -121,6 +123,7 @@ const loading = ref(false);
 const searchQuery = ref('');
 const selectedBatch = ref('');
 const selectedFaculty = ref(undefined);
+const selectedStudyShift = ref(undefined);
 const router = useRouter();
 
 const viewDialogVisible = ref(false);
@@ -138,6 +141,13 @@ const facultyOptions = ref([
   { value: 'ភាសាបរទេស', label: 'ភាសាបរទេស' },
   { value: 'ព័ត៌មានវិទ្យា', label: 'ព័ត៌មានវិទ្យា' },
   { value: 'គ្រប់គ្រង', label: '' },
+]);
+
+const studyShiftOptions = ref([
+  { value: 'ព្រឹក', label: 'វេនព្រឹក' },
+  { value: 'ល្ងាច', label: 'វេនល្ងាច' },
+  { value: 'យប់', label: 'វេនយប់' },
+  { value: 'ចេញសប្តាហ៍', label: 'វេនចេញសប្តាហ៍' },
 ]);
 
 const columns = [
@@ -176,7 +186,7 @@ const loadStudents = async () => {
   const limit = pagination.value.pageSize;
 
   try {
-    const response = await getStudents(offset, limit,  searchQuery.value,selectedBatch.value, selectedFaculty.value);
+    const response = await getStudents(offset, limit, searchQuery.value, selectedBatch.value, selectedFaculty.value, selectedStudyShift.value);
     students.value = response.students;
     pagination.value.total = response.total;
   } catch (error) {

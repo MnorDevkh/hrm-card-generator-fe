@@ -13,6 +13,9 @@ export async function login(email, password) {
 
   if (response.access_token) {
     localStorage.setItem('auth_token', response.access_token);
+    if (response.role) {
+      localStorage.setItem('role', response.role);
+    }
   }
   return response;
 }

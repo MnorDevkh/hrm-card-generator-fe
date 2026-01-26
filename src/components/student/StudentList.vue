@@ -20,7 +20,7 @@
         </div>
         <Divider type="vertical" class="hidden sm:block h-8" />
         <div class="card flex flex-col sm:flex-row sm:flex-wrap justify-end gap-4 w-full sm:w-auto">
-          <Button @click="exportCard" class="w-full sm:w-auto">
+          <Button v-if="isAdmin" @click="exportCard" class="w-full sm:w-auto">
             <template #icon>
               <ExportOutlined />
             </template>
@@ -129,6 +129,7 @@ const router = useRouter();
 const viewDialogVisible = ref(false);
 const editDialogVisible = ref(false);
 const selectedStudent = ref(null);
+const isAdmin = ref(localStorage.getItem('role') === 'admin_hrm');
 
 const pagination = ref({
   current: 1,

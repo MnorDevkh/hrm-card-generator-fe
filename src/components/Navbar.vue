@@ -16,10 +16,12 @@
     <!-- Right Side (User Profile, etc.) - Placeholder -->
     <div class="flex items-center gap-4">
       <!-- Add user dropdown or other actions here -->
+      <AccountMenu />
     </div>
   </header>
 </template>
 
 <script setup>
+import AccountMenu from './AccountMenu.vue';
 defineEmits(['toggle']);
 </script>

@@ -26,7 +26,7 @@
             </template>
             Export Card
           </Button>
-          <Button type="primary" ghost @click="importFromExcel" :loading="isUploading" class="w-full sm:w-auto">
+          <Button v-if="isAdmin" type="primary" ghost @click="importFromExcel" :loading="isUploading" class="w-full sm:w-auto">
             <template #icon>
               <FileExcelOutlined />
             </template>

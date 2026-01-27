@@ -70,5 +70,5 @@ const menuItems = ref(isAdmin ? [
   { label: 'Lecturers', icon: 'pi pi-briefcase', to: '/lecture' }, // Assuming you have these routes
   { label: 'Card Templates', icon: 'pi pi-palette', to: '/template' },
   { label: 'Student Photos', icon: 'pi pi-image', to: '/template/student-photos' } // New menu item
-] : [{ label: 'Students', icon: 'pi pi-users', to: '/student' }]);
+] : [{ label: 'Dashboard', icon: 'pi pi-home', to: '/' },{ label: 'Students', icon: 'pi pi-users', to: '/student' }]);
 </script>

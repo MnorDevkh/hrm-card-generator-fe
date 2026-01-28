@@ -140,9 +140,9 @@ const pagination = ref({
 });
 
 const facultyOptions = ref([
-  { value: 'ភាសាបរទេស', label: 'មហា ភាសាបរទេស' },
-  { value: 'ព័ត៌មានវិទ្យា', label: 'មហា ព័ត៌មានវិទ្យា' },
-  { value: 'គ្រប់គ្រង', label: 'មហា គ្រប់គ្រង' },
+  { value: 'ភាសាបរទេស', label: 'មហា. ភាសាបរទេស' },
+  { value: 'ព័ត៌មានវិទ្យា', label: 'មហា. ព័ត៌មានវិទ្យា' },
+  { value: 'គ្រប់គ្រង', label: 'មហា. គ្រប់គ្រង' },
 ]);
 
 const studyShiftOptions = ref([

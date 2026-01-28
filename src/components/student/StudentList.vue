@@ -146,9 +146,9 @@ const facultyOptions = ref([
 
 const studyShiftOptions = ref([
   { value: 'ព្រឹក', label: 'វេនព្រឹក' },
+  { value: 'រសៀល', label: 'វេនរសៀល' },
   { value: 'ល្ងាច', label: 'វេនល្ងាច' },
-  { value: 'យប់', label: 'វេនយប់' },
-  { value: 'ចេញសប្តាហ៍', label: 'វេនចេញសប្តាហ៍' },
+  { value: 'ចុងសប្ដាហ៍', label: 'វេនចុងសប្ដាហ៍' },
 ]);
 
 const columns = [

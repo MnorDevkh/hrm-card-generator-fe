@@ -12,15 +12,17 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            <Card v-for="template in templates" :key="template.id" hoverable class="shadow-lg transition-shadow duration-300 rounded-lg overflow-hidden">
+            <Card v-for="template in templates" :key="template.id" hoverable
+                class="shadow-lg transition-shadow duration-300 rounded-lg overflow-hidden">
                 <template #cover>
                     <div class="h-90% w-96 overflow-hidden bg-gray-100 dark:bg-gray-700">
-                        <img alt="template header" :src="getImageUrl(template.filename)" class="w-full h-full object-contain" />
+                        <img alt="template header" :src="getImageUrl(template.filename)"
+                            class="w-full h-full object-contain" />
                     </div>
                 </template>
                 <div class="flex flex-col gap-2">
                     <div class="flex gap-2 mt-4">
-                        <Button type="primary" class="flex-1" @click="useTemplate(template.id)">
+                        <Button v-if="showUseTemplate" type="primary" class="flex-1" @click="useTemplate(template.id)">
                             <template #icon>
                                 <CheckOutlined />
                             </template>
@@ -50,6 +52,8 @@ import { environment } from '../../environments/environment';
 const templates = ref([]);
 const router = useRouter();
 const route = useRoute();
+const showUseTemplate = computed(() => route.query.ids);
+
 
 const fileInput = ref(null);
 const isUploading = ref(false);

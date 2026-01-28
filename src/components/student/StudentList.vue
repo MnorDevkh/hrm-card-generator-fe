@@ -224,6 +224,10 @@ const onFileSelected = async (event) => {
 };
 
 const exportCard = () => {
+    if (selectedRows.value.length === 0) {
+    message.warning('Please select at least one student to export.');
+    return;
+  }
   const ids = selectedRows.value.map(s => s.id);
   router.push({ path: '/template', query: { ids: JSON.stringify(ids) } });
 };

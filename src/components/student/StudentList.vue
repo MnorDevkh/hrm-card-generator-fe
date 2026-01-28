@@ -133,15 +133,16 @@ const isAdmin = ref(localStorage.getItem('role') === 'admin_hrm');
 
 const pagination = ref({
   current: 1,
-  pageSize: 10,
+  pageSize: 100,
   total: 0,
   showSizeChanger: true,
+  pageSizeOptions: ['10', '20', '100', '200', '500'],
 });
 
 const facultyOptions = ref([
-  { value: 'ភាសាបរទេស', label: 'ភាសាបរទេស' },
-  { value: 'ព័ត៌មានវិទ្យា', label: 'ព័ត៌មានវិទ្យា' },
-  { value: 'គ្រប់គ្រង', label: '' },
+  { value: 'ភាសាបរទេស', label: 'មហា ភាសាបរទេស' },
+  { value: 'ព័ត៌មានវិទ្យា', label: 'មហា ព័ត៌មានវិទ្យា' },
+  { value: 'គ្រប់គ្រង', label: 'មហា គ្រប់គ្រង' },
 ]);
 
 const studyShiftOptions = ref([

@@ -101,9 +101,9 @@
               student.card_id }}</p>
 
             <!-- Rest of content with adjusted spacing -->
-            <div class="card-details flex flex-col items-center">
-              <p class="text-[16px] font-khmer text-red-600 leading-none">{{ student.name.khmer }}</p>
-              <p class="text-sm font-bold text-blue-900 tracking-wide mt-1">{{ student.name.english }}</p>
+            <div class="card-details justify-center items-baseline gap-x-2" style="min-height: 38px;">
+              <p class="font-khmer text-red-600 leading-none" :style="{ fontSize: (student.name.khmer || '').length > 15 ? '14px' : '16px' }">{{ student.name.khmer }}</p>
+              <p class="font-bold text-blue-900 tracking-wide" :style="{ fontSize: (student.name.english || '').length > 15 ? '10px' : '14px' }">{{ student.name.english }}</p>
             </div>
 
             <!-- Info Table -->
@@ -116,7 +116,7 @@
                   </tr>
                   <tr>
                     <td>Faculty</td>
-                    <td>: {{ student.faculty || '-' }}, <span class="font-bold">Batch</span>: {{ student.batch || '-' }}
+                    <td>: {{ getFacultyInEnglish(student.faculty) || '-' }}
                     </td>
                   </tr>
                   <tr>
@@ -173,9 +173,9 @@
               student.card_id }}</p>
 
             <!-- Rest of content with adjusted spacing -->
-            <div class="card-details flex flex-col items-center">
-              <p class="text-[16px] font-khmer text-red-600 leading-none">{{ student.name.khmer }}</p>
-              <p class="text-sm font-bold text-blue-900 tracking-wide mt-1">{{ student.name.english }}</p>
+            <div class="card-details justify-center items-baseline gap-x-2" style="min-height: 38px;">
+              <p class="font-khmer text-red-600 leading-none" :style="{ fontSize: (student.name.khmer || '').length > 15 ? '14px' : '16px' }">{{ student.name.khmer }}</p>
+              <p class="font-bold text-blue-900 tracking-wide" :style="{ fontSize: (student.name.english || '').length > 15 ? '10px' : '14px' }">{{ student.name.english }}</p>
             </div>
 
             <!-- Info Table -->
@@ -188,7 +188,7 @@
                   </tr>
                   <tr>
                     <td>Faculty</td>
-                    <td>: {{ student.faculty || '-' }}, <span class="font-bold">Batch</span>: {{ student.batch || '-' }}
+                    <td>: {{ getFacultyInEnglish(student.faculty) || '-' }}
                     </td>
                   </tr>
                   <tr>
@@ -253,6 +253,15 @@ const totalCards = ref(0);
 
 const exportCanvasVisible = ref(false);
 
+
+const getFacultyInEnglish = (faculty) => {
+  const facultyMap = {
+    'ភាសាបរទេស': 'Foreign Languages',
+    'ព័ត៌មានវិទ្យា': 'Information Technology',
+    'គ្រប់គ្រង': 'Management',
+  };
+  return facultyMap[faculty] || faculty;
+};
 
 const templateImageUrl = computed(() =>
   template.value?.filename

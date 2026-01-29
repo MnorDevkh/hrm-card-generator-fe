@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen bg-gray-50/30 py-8 sm:py-12 px-4 sm:px-6">
-        <div class="max-w-4xl mx-auto space-y-6 sm:space-y-8">
+        <div class=" mx-auto space-y-6 sm:space-y-8">
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 text-center relative overflow-hidden">
                 <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
                 
@@ -16,7 +16,7 @@
 
                     <div class="space-y-1">
                         <p class="text-gray-500 font-khmer text-xs sm:text-sm">ចេញដោយ</p>
-                        <h1 class="text-xl sm:text-2xl font-bold text-gray-900 font-khmer tracking-wide">វិទ្យាស្ថានអាហ្គា</h1>
+                        <h1 class="text-xl sm:text-2xl font-bold text-gray-900 font-khmer tracking-wide">វិទ្យាស្ថានអាហ្កា</h1>
                     </div>
 
                     <p class="text-gray-400 text-xs sm:text-sm font-khmer max-w-md mx-auto leading-relaxed mt-2">

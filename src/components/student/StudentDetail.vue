@@ -1,6 +1,6 @@
 <template>
   <ConfigProvider :theme="{ token: { fontFamily: 'inherit' } }">
-    <div
+    <div class="bg-"
       :class="['w-full bg-gray-50 px-2 py-4 sm:p-6 lg:p-8', embedded ? 'w-full' : 'min-h-screen flex items-center justify-center']">
       <div class="w-full">
         <div v-if="isLoading" class="bg-white rounded-xl shadow-lg p-6 flex justify-center items-center">

@@ -5,11 +5,12 @@
     <div class=" max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden">
       <div class="p-8">
         <div class="text-center mb-8">
-          <i class="pi pi-id-card text-4xl text-blue-600 mb-3"></i>
-          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">ផ្ទៀងផ្ទាត់ អត្ថសញ្ញាណសិស្ស</h2>
+          <div class="inline-block">
+            <img src="@/assets/ailogo.png" alt="Logo" class="animated-logo h-24 w-auto mx-auto mb-3 block" />
+          </div>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">សូមធ្វើការផ្ទៀងផ្ទាត់ទិន្នន័យ</h2>
           <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
-            សូមបំពេញលេខកូដសម្គាល់កាត /n
-            ឬលេខអត្តសញ្ញាណប័ណ្ណសញ្ជាតិខ្មែរ
+            សូមបញ្ចូលលេខសម្គាល់កាត ឬលេខអត្ដសញ្ញាណប័ណ្ណ
           </p>
         </div>
 
@@ -18,7 +19,7 @@
           <!-- Verification ID Input -->
           <div class="p-5">
             <label for="verification_id" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-              Card ID / National Identity
+              បញ្ចូលលេខសម្គាល់កាត ឬអត្ដ.
             </label>
             <div class="relative">
               <i class="pi pi-id-card absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
@@ -31,13 +32,13 @@
           <button type="submit"
             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
             <i class="pi pi-check-circle"></i>
-            Verify Identity
+            -ផ្ទៀងផ្ទាត់ទិន្នន័៏យ
           </button>
         </form>
       </div>
       <div class="bg-gray-50 dark:bg-gray-700/50 px-8 py-4 text-center">
         <p class="text-xs text-gray-500 dark:text-gray-400">
-          Secure Verification System
+          AI System
         </p>
       </div>
     </div>
@@ -66,3 +67,23 @@ const submitVerification = () => {
   }
 };
 </script>
+
+<style scoped>
+.animated-logo {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+</style>

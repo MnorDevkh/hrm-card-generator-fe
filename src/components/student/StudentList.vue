@@ -3,8 +3,7 @@
     <div class="p-4 sm:p-6 lg:p-8 space-y-4">
       <input type="file" ref="fileInput" @change="onFileSelected" style="display: none"
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
-      <div
-        class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl shadow-md">
+      <div class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl shadow-md">
         <p class="text-xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">បញ្ជីឈ្មោះនិស្សិត
         </p>
         <div class="grid grid-cols-1 sm:grid-cols-none sm:grid-flow-col gap-2 w-full sm:w-auto items-center">
@@ -26,7 +25,8 @@
             </template>
             Export Card
           </Button>
-          <Button v-if="isAdmin" type="primary" ghost @click="importFromExcel" :loading="isUploading" class="w-full sm:w-auto">
+          <Button v-if="isAdmin" type="primary" ghost @click="importFromExcel" :loading="isUploading"
+            class="w-full sm:w-auto">
             <template #icon>
               <FileExcelOutlined />
             </template>
@@ -38,7 +38,8 @@
             </template>
             Add New
           </Button>
-          <Button danger type="primary" class="w-full sm:w-auto" :disabled="!selectedRowKeys.length" @click="confirmBulkDelete">
+          <Button v-if="isAdmin" danger type="primary" class="w-full sm:w-auto" :disabled="!selectedRowKeys.length"
+            @click="confirmBulkDelete">
             <template #icon>
               <DeleteOutlined />
             </template>
@@ -71,7 +72,7 @@
                     <EditOutlined class="text-orange-500" />
                   </template>
                 </Button>
-                <Button type="text" danger shape="circle" @click="requireConfirmation(record)">
+                <Button v-if="isAdmin" type="text" danger shape="circle" @click="requireConfirmation(record)">
                   <template #icon>
                     <DeleteOutlined />
                   </template>
@@ -225,7 +226,7 @@ const onFileSelected = async (event) => {
 };
 
 const exportCard = () => {
-    if (selectedRows.value.length === 0) {
+  if (selectedRows.value.length === 0) {
     message.warning('Please select at least one student to export.');
     return;
   }

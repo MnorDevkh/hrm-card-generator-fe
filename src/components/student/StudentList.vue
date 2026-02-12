@@ -32,7 +32,7 @@
             </template>
             Excel Import
           </Button>
-          <Button type="primary" @click="openNew" class="w-full sm:w-auto">
+          <Button v-if="isAdmin" type="primary" @click="openNew" class="w-full sm:w-auto">
             <template #icon>
               <PlusOutlined />
             </template>

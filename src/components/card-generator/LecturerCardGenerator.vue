@@ -92,7 +92,7 @@
                     }">
                     <!-- Content (Same as main grid) -->
                     <div class="absolute inset-0 flex flex-col items-center text-center card-content"
-                        style="padding-top: 87px;">
+                        style="padding-top: 100px;">
                         <div
                             class="photo-container w-[65px] h-[80px] border border-gray-300 rounded flex items-center justify-center overflow-hidden shadow bg-white">
                             <img v-if="lecturer.photo" :src="getPhotoUrl(lecturer.photo)" alt="Photo"
@@ -162,17 +162,17 @@
                     }">
 
                     <div class="absolute inset-0 flex flex-col items-center text-center card-content"
-                        style="padding-top: 87px;">
+                        style="padding-top: 100px;">
                         <!-- Photo -->
                         <div
-                            class="photo-container w-[65px] h-[80px] border border-gray-300 rounded flex items-center justify-center overflow-hidden shadow bg-white">
+                            class="photo-container w-[65px] h-[80px] border border-gray-300 rounded flex items-center justify-center overflow-hidden shadow bg-white ">
                             <img v-if="lecturer.photo" :src="getPhotoUrl(lecturer.photo)" alt="Photo"
                                 class="w-full h-full object-cover" />
                             <UserOutlined v-else class="text-3xl text-gray-300" />
                         </div>
 
                         <!-- ID -->
-                        <p class="card-id text-[12px] font-bold text-gray-900 tracking-wider">
+                        <p class="card-id text-[12px] font-bold text-gray-900 tracking-wider ">
                             {{ lecturer.card_id  || '-' }}
                         </p>
 

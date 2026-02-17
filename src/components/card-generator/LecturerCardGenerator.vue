@@ -100,7 +100,7 @@
                             {{
                                 lecturer.card_id }}</p>
                         <div class="card-details flex flex-col items-center " style="margin-top: -5px;">
-                            <p class="text-[14px] font-bold text-blue-900 tracking-wide mt-1"> {{ getTitle(lecturer.gender) }} {{
+                            <p class="text-[14px] text-blue-900 tracking-wide mt-1 lecturer-name koh-santepheap-regular" > {{ getTitle(lecturer.gender) }} {{
                                 lecturer.name?.english }} </p>
                             <p class="text-[12px] font-bold text-red-600 leading-none" style="margin-top: -5px;">
                                 lecturer</p>
@@ -165,13 +165,13 @@
                         </div>
 
                         <!-- ID -->
-                        <p class="card-id text-[12px] font-bold text-gray-900 tracking-wider ">
+                        <p class="card-id text-[11px] font-bold text-gray-900 tracking-wider ">
                             {{ lecturer.card_id  || '-' }}
                         </p>
 
                         <!-- Names -->
                         <div class="card-details flex flex-col items-center " style="margin-top: -6px;">
-                            <p class="text-[14px] font-bold text-blue-900 tracking-wide mt-1"> {{ getTitle(lecturer.gender) }} {{
+                            <p class="text-[14px] text-blue-900 tracking-wide mt-1 lecturer-name koh-santepheap-bold"> {{ getTitle(lecturer.gender) }} {{
                                 lecturer.name?.english }} </p>
                             <p class="text-[12px] font-bold text-red-600 leading-none" style="margin-top: -5px;">
                                 lecturer</p>
@@ -368,6 +368,10 @@ function applyExportColors(el) {
         // Force default text color on card root to avoid inherited oklch
         if (element.classList.contains('id-card')) {
             if (!element.style.color) element.style.color = '#111827';
+        }
+        // Lecturer name: ensure extra bold in export
+        if (element.classList.contains('lecturer-name')) {
+            element.style.fontWeight = '900';
         }
     });
 }

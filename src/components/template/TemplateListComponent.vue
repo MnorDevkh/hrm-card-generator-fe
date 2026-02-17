@@ -112,6 +112,8 @@ const useTemplate = (templateId) => {
     // Navigate to the generate page with the template ID and student IDs
     if (type.value === 'lecturer') {
         router.push({ path: '/card-generator/lecturer', query: { templateId, ids: JSON.stringify(studentIds.value), type: 'lecturer' } });
+    } else if (type.value === 'staff') {
+        router.push({ path: '/card-generator/staff', query: { templateId, ids: JSON.stringify(studentIds.value), type: 'staff' } });
     } else {
         router.push({ path: '/generate', query: { templateId, ids: JSON.stringify(studentIds.value) } });
     }

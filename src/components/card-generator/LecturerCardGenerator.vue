@@ -81,15 +81,12 @@
                 class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
                 style="position:fixed; left:-9999px; top:-9999px; width:auto; height:auto; pointer-events:none;">
                 <div v-for="lecturer in lecturers" :key="lecturer.id"
-                    class="id-card relative rounded-xl shadow-lg bg-white border border-gray-200 overflow-hidden"
-                    :style="{
-                        width: '216px',
-                        height: '342px',
-                        backgroundImage: `url(${templateUrl})`,
-                        backgroundSize: '100% 100%',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat'
-                    }">
+                    class="id-card relative rounded-xl shadow-lg border border-gray-200 overflow-hidden"
+                    :data-lecturer-id="lecturer.id" style="width: 216px; height: 342px;">
+                    <!-- Template image at fixed size -->
+                    <div class="absolute inset-0 z-0">
+                        <img :src="templateUrl" class="w-[216px] h-[342px] object-cover" crossorigin="anonymous" />
+                    </div>
                     <!-- Content (Same as main grid) -->
                     <div class="absolute inset-0 flex flex-col items-center text-center card-content"
                         style="padding-top: 100px;">
@@ -151,16 +148,12 @@
             <div v-if="!loading && lecturers.length && templateUrl"
                 class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
                 <div v-for="lecturer in lecturers" :key="lecturer.id"
-                    class="id-card relative rounded-xl shadow-lg bg-white border border-gray-200 overflow-hidden"
-                    :style="{
-                        width: '216px',
-                        height: '342px',
-                        backgroundImage: `url(${templateUrl})`,
-                        backgroundSize: '100% 100%',
-                        backgroundPosition: 'center',
-                        backgroundRepeat: 'no-repeat'
-                    }">
-
+                    class="id-card relative rounded-xl shadow-lg border border-gray-200 overflow-hidden"
+                    :data-lecturer-id="lecturer.id" style="width: 216px; height: 342px;">
+                    <!-- Template image at fixed size -->
+                    <div class="absolute inset-0 z-0">
+                        <img :src="templateUrl" class="w-[216px] h-[342px] object-cover" crossorigin="anonymous" />
+                    </div>
                     <div class="absolute inset-0 flex flex-col items-center text-center card-content"
                         style="padding-top: 100px;">
                         <!-- Photo -->
@@ -410,15 +403,19 @@ async function exportCardsAsPages() {
             const el = cardElements[i];
 
             applyExportColors(el);
+
+            // High-res canvas capture (same as GenerateCardComponent)
             const canvas = await html2canvas(el, {
-                scale: 4,
-                backgroundColor: "#ffffff",
+                scale: window.devicePixelRatio * 4,
+                width: 216,
+                height: 342,
+                backgroundColor: null,
                 useCORS: true,
                 allowTaint: true,
             });
-            const imgData = canvas.toDataURL("image/JPEG");
+            const imgData = canvas.toDataURL("image/png");
             if (i > 0) pdf.addPage([pageWidth, pageHeight], 'p');
-            pdf.addImage(imgData, "JPEG", 0, 0, cardWidthMM, cardHeightMM);
+            pdf.addImage(imgData, "PNG", 0, 0, cardWidthMM, cardHeightMM);
 
             currentCardIndex.value = i + 1;
             exportProgress.value = Math.round(((i + 1) / cardElements.length) * 100);

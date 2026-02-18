@@ -120,7 +120,7 @@ const columns = [
   { title: 'Name (KH)', dataIndex: ['identity', 'kh_name'], key: 'name_kh', sorter: true },
   { title: 'Name (EN)', dataIndex: ['identity', 'en_name'], key: 'name_en', sorter: true },
   { title: 'Gender', dataIndex: ['identity', 'gender'], key: 'gender', sorter: true },
-  { title: 'Date of Birth', dataIndex: ['identity', 'date_of_birth'], key: 'date_of_birth', sorter: true },
+  { title: 'Date of Birth', dataIndex: ['identity', 'date_of_birth'], key: 'date_of_birth', sorter: true, customRender: ({ text }) => text ? (typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text) : '-' },
   { title: 'Phone', dataIndex: ['contact', 'phone'], key: 'phone' },
   { title: 'Email', dataIndex: ['contact', 'email'], key: 'email' },
   { title: 'Department', dataIndex: ['employment', 'department'], key: 'department', sorter: true },

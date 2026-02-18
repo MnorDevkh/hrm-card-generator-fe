@@ -159,7 +159,7 @@ const columns = [
   { title: 'Name (EN)', dataIndex: ['name', 'english'], key: 'name_en' },
   { title: 'Name (KH)', dataIndex: ['name', 'khmer'], key: 'name_kh' },
   { title: 'Gender', dataIndex: 'gender', key: 'gender' },
-  { title: 'Date of Birth', dataIndex: 'birth_date', key: 'birth_date' },
+  { title: 'Date of Birth', dataIndex: 'birth_date', key: 'birth_date', customRender: ({ text }) => text ? (typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text) : '-' },
   { title: 'Phone', dataIndex: 'phone', key: 'phone' },
   { title: 'Batch', dataIndex: 'batch', key: 'batch' },
   { title: 'Photo', key: 'photo' },

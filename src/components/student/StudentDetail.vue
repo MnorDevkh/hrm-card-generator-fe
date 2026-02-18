@@ -168,40 +168,9 @@ onMounted(async () => {
 
 const getPhotoUrl = (photo) => (photo ? `${environment.apiBaseUrl}media/image/${photo}` : '');
 
-function parseDateString(value) {
-  if (!value && value !== 0) return null;
-  if (typeof value === 'number') {
-    const d = new Date(value);
-    return isNaN(d) ? null : d;
-  }
-  if (typeof value !== 'string') return null;
-  const s = value.trim();
-  if (!s) return null;
-  if (s.includes('T') || /[zZ]|[+\-]\d{2}:\d{2}$/.test(s)) {
-    const d = new Date(s);
-    return isNaN(d) ? null : d;
-  }
-  let datePart = s.split(' ')[0];
-  datePart = datePart.replace(/\//g, '-');
-  const m = datePart.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
-  if (m) {
-    const y = parseInt(m[1], 10);
-    const mo = parseInt(m[2], 10) - 1;
-    const d = parseInt(m[3], 10);
-    const dt = new Date(y, mo, d);
-    return isNaN(dt) ? null : dt;
-  }
-  const d0 = new Date(s);
-  return isNaN(d0) ? null : d0;
-}
-
 const formatDate = (dateString) => {
-  const d = parseDateString(dateString);
-  if (!d) return '-';
-  const day = String(d.getDate()).padStart(2, '0');
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const year = d.getFullYear();
-  return `${day}-${month}-${year}`;
+  if (!dateString) return '-';
+  return new Date(dateString.split(' ')[0]).toLocaleDateString('en-GB');
 };
 
 const formatDateEN = (dateString) => {

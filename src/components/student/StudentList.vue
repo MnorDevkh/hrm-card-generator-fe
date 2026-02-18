@@ -49,7 +49,7 @@
       </div>
       <Divider />
       <Card :bordered="false" class="shadow-sm">
-        <Table :dataSource="filteredStudents" :columns="columns" :pagination="pagination" :row-selection="rowSelection"
+        <Table :dataSource="students" :columns="columns" :pagination="pagination" :row-selection="rowSelection"
           :loading="loading" @change="handleTableChange" rowKey="id" :scroll="{ x: 1200 }">
           <template #bodyCell="{ column, record, index }">
             <template v-if="column.key === 'index'">
@@ -103,7 +103,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, createVNode, h } from 'vue';
+import { ref, onMounted, createVNode } from 'vue';
 import { Table, Button, Card, Divider, Modal, message, ConfigProvider, Input, Select } from 'ant-design-vue';
 import {
   EyeOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined,
@@ -112,8 +112,6 @@ import {
 import { getStudents, uploadExcel, deleteStudent, updateStudent, createStudent } from '../../service/student.service.js';
 import { environment } from '../../environments/environment';
 import { useRouter } from 'vue-router';
-import { applyColumnFilters } from '../../composables/useTableColumnFilter.js';
-import ColumnFilterDropdown from '../table/ColumnFilterDropdown.vue';
 import StudentDetail from './StudentDetail.vue';
 import StudentForm from './StudentForm.vue';
 
@@ -133,7 +131,6 @@ const viewDialogVisible = ref(false);
 const editDialogVisible = ref(false);
 const selectedStudent = ref(null);
 const isAdmin = ref(localStorage.getItem('role') === 'admin_hrm');
-const columnFilterState = ref({});
 
 const pagination = ref({
   current: 1,
@@ -156,43 +153,18 @@ const studyShiftOptions = ref([
   { value: 'ចុងសប្ដាហ៍', label: 'វេនចុងសប្ដាហ៍' },
 ]);
 
-const baseColumns = [
+const columns = [
   { title: 'No', key: 'index', width: 60 },
   { title: 'Card ID', dataIndex: 'card_id', key: 'card_id' },
   { title: 'Name (EN)', dataIndex: ['name', 'english'], key: 'name_en' },
   { title: 'Name (KH)', dataIndex: ['name', 'khmer'], key: 'name_kh' },
   { title: 'Gender', dataIndex: 'gender', key: 'gender' },
-  { title: 'Date of Birth', dataIndex: 'birth_date', key: 'birth_date', customRender: ({ text }) => { if (!text) return '-'; const part = typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text; const m = String(part).match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/); if (m) return `${String(parseInt(m[3], 10)).padStart(2, '0')}-${String(parseInt(m[2], 10)).padStart(2, '0')}-${m[1]}`; return part; } },
+  { title: 'Date of Birth', dataIndex: 'birth_date', key: 'birth_date', customRender: ({ text }) => text ? (typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text) : '-' },
   { title: 'Phone', dataIndex: 'phone', key: 'phone' },
   { title: 'Batch', dataIndex: 'batch', key: 'batch' },
   { title: 'Photo', key: 'photo' },
   { title: 'Actions', key: 'actions', fixed: 'right', width: 150 },
 ];
-
-const filterableKeys = ['card_id', 'name_en', 'name_kh', 'gender', 'birth_date', 'phone', 'batch'];
-
-const columns = computed(() => {
-  return baseColumns.map((col) => {
-    if (!filterableKeys.includes(col.key)) return col;
-    const key = col.key;
-    const state = columnFilterState.value[key];
-    const hasFilter = state && (state.mode !== 'all' || (state.text && state.text.trim()));
-    return {
-      ...col,
-      filteredValue: hasFilter ? [key] : null,
-      filterDropdown: (props) => h(ColumnFilterDropdown, {
-        columnKey: key,
-        filterState: columnFilterState,
-        confirm: props.confirm,
-        clearFilters: props.clearFilters,
-      }),
-    };
-  });
-});
-
-const filteredStudents = computed(() =>
-  applyColumnFilters(students.value, baseColumns, columnFilterState.value)
-);
 
 const rowSelection = {
   onChange: (keys, rows) => {

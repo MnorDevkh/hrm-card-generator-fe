@@ -203,18 +203,10 @@ const uploadPhoto = async ({ file, onSuccess, onError }) => {
   }
 };
 
-/** Normalize API date string (e.g. "2003-03-25 00:00:00") to "YYYY-MM-DD" for DatePicker */
-const toDateOnly = (v) => {
-  if (v == null || v === '') return null;
-  if (typeof v === 'string' && v.includes(' ')) return v.trim().split(' ')[0];
-  return v;
-};
-
 const initForm = () => {
   if (props.lecture && Object.keys(props.lecture).length > 0) {
     form.value = JSON.parse(JSON.stringify(props.lecture));
-    form.value.birth_date = toDateOnly(form.value.birth_date);
-
+    
     // Initialize fileList from docs
     if (form.value.docs && Array.isArray(form.value.docs)) {
       fileList.value = form.value.docs.map((doc, index) => ({

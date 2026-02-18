@@ -178,13 +178,6 @@ const form = ref({
   batch: ''
 });
 
-/** Normalize API date string (e.g. "2003-03-25 00:00:00") to "YYYY-MM-DD" for DatePicker */
-const toDateOnly = (v) => {
-  if (v == null || v === '') return null;
-  if (typeof v === 'string' && v.includes(' ')) return v.trim().split(' ')[0];
-  return v;
-};
-
 const initForm = () => {
   if (props.student && Object.keys(props.student).length > 0) {
     // Deep merge to ensure nested objects exist
@@ -197,7 +190,8 @@ const initForm = () => {
       current_address: { ...form.value.current_address, ...(props.student.current_address || {}) },
       guardian: { ...form.value.guardian, ...(props.student.guardian || {}) }
     };
-    form.value.birth_date = toDateOnly(form.value.birth_date);
+    
+    // Ant Design DatePicker with valueFormat handles strings directly
   }
 };
 

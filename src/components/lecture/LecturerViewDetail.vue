@@ -55,7 +55,12 @@ onMounted(async () => {
 
 const formatDate = (dateString) => {
     if (!dateString) return '';
-    return new Date(dateString).toLocaleDateString();
+    const datePart = typeof dateString === 'string' && dateString.includes(' ') ? dateString.split(' ')[0] : dateString;
+    const m = String(datePart).match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+    if (m) return `${String(parseInt(m[3], 10)).padStart(2, '0')}-${String(parseInt(m[2], 10)).padStart(2, '0')}-${m[1]}`;
+    const d = new Date(datePart);
+    if (isNaN(d)) return '';
+    return `${String(d.getDate()).padStart(2, '0')}-${String(d.getMonth() + 1).padStart(2, '0')}-${d.getFullYear()}`;
 };
 
 const formatAddress = (address) => {

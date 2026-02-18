@@ -292,12 +292,12 @@ function parseDateString(value) {
 }
 
 function formatDate(dateStr) {
-    const d = parseDateString(dateStr);
-    if (!d) return '-';
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const year = d.getFullYear();
-    return `${day}-${month}-${year}`;
+  const d = parseDateString(dateStr);
+  if (!d) return '-';
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year = d.getFullYear();
+  return `${day}-${month}-${year}`;
 }
 
 const loadData = async () => {

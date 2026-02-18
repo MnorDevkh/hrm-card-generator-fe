@@ -52,7 +52,7 @@
       </div>
 
       <Card :bordered="false" class="shadow-sm">
-        <Table :dataSource="lecturers" :columns="columns" :pagination="pagination" :row-selection="rowSelection"
+        <Table :dataSource="filteredLecturers" :columns="columns" :pagination="lecturerPagination" :row-selection="rowSelection"
           :loading="loading" @change="handleTableChange" rowKey="id" :scroll="{ x: 1200 }">
           <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'actions'">
@@ -100,13 +100,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted, createVNode } from 'vue';
+import { ref, computed, onMounted, createVNode, h } from 'vue';
 import { useRouter } from 'vue-router';
 import { Table, Button, Card, Divider, Modal, message, ConfigProvider } from 'ant-design-vue';
 import {
   PlusOutlined, ReloadOutlined, ExportOutlined, FileExcelOutlined,
   DeleteOutlined, IdcardOutlined, EyeOutlined, EditOutlined, ExclamationCircleOutlined
 } from '@ant-design/icons-vue';
+import { applyColumnFilters } from '../../composables/useTableColumnFilter.js';
+import ColumnFilterDropdown from '../table/ColumnFilterDropdown.vue';
 import LectureForm from './LectureForm.vue';
 import LectureDetail from './LecturerViewDetail.vue';
 import { getLecturers, createLecturer, updateLecturer, deleteLecturer, uploadExcel } from '../../service/lecture.service';
@@ -121,6 +123,7 @@ const editDialogVisible = ref(false);
 const selectedLecturer = ref({});
 const router = useRouter();
 const fileInput = ref(null);
+const columnFilterState = ref({});
 
 const pagination = ref({
   current: 1,
@@ -129,17 +132,47 @@ const pagination = ref({
   showSizeChanger: true,
 });
 
-const columns = [
+const baseColumns = [
   { title: 'ID', dataIndex: 'identity_id', key: 'identity_id', sorter: true },
   { title: 'Name (KH)', dataIndex: ['name', 'khmer'], key: 'name_kh', sorter: true },
   { title: 'Name (EN)', dataIndex: ['name', 'english'], key: 'name_en', sorter: true },
   { title: 'Gender', dataIndex: 'gender', key: 'gender', sorter: true },
-  { title: 'Date of Birth', dataIndex: 'birth_date', key: 'birth_date', sorter: true, customRender: ({ text }) => text ? (typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text) : '-' },
+  { title: 'Date of Birth', dataIndex: 'birth_date', key: 'birth_date', sorter: true, customRender: ({ text }) => { if (!text) return '-'; const part = typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text; const m = String(part).match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/); if (m) return `${String(parseInt(m[3], 10)).padStart(2, '0')}-${String(parseInt(m[2], 10)).padStart(2, '0')}-${m[1]}`; return part; } },
   { title: 'Phone', dataIndex: 'phone', key: 'phone' },
   { title: 'Email', dataIndex: 'email', key: 'email' },
   { title: 'Faculty', dataIndex: 'faculty', key: 'faculty', sorter: true },
   { title: 'Actions', key: 'actions', width: 200, fixed: 'right' },
 ];
+
+const filterableKeys = ['identity_id', 'name_kh', 'name_en', 'gender', 'birth_date', 'phone', 'email', 'faculty'];
+
+const columns = computed(() => {
+  return baseColumns.map((col) => {
+    if (!filterableKeys.includes(col.key)) return col;
+    const key = col.key;
+    const state = columnFilterState.value[key];
+    const hasFilter = state && (state.mode !== 'all' || (state.text && state.text.trim()));
+    return {
+      ...col,
+      filteredValue: hasFilter ? [key] : null,
+      filterDropdown: (props) => h(ColumnFilterDropdown, {
+        columnKey: key,
+        filterState: columnFilterState,
+        confirm: props.confirm,
+        clearFilters: props.clearFilters,
+      }),
+    };
+  });
+});
+
+const filteredLecturers = computed(() =>
+  applyColumnFilters(lecturers.value, baseColumns, columnFilterState.value)
+);
+
+const lecturerPagination = computed(() => ({
+  ...pagination.value,
+  total: filteredLecturers.value.length,
+}));
 
 const rowSelection = {
   onChange: (keys, rows) => {

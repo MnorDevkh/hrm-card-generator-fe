@@ -38,7 +38,7 @@
       </div>
 
       <Card :bordered="false" class="shadow-sm">
-        <Table :dataSource="staffList" :columns="columns" :pagination="pagination" :row-selection="rowSelection"
+        <Table :dataSource="filteredStaff" :columns="columns" :pagination="pagination" :row-selection="rowSelection"
           :loading="loading" @change="handleTableChange" rowKey="id" :scroll="{ x: 1200 }">
           <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'actions'">
@@ -86,13 +86,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted, createVNode } from 'vue';
+import { ref, computed, onMounted, createVNode, h } from 'vue';
 import { useRouter } from 'vue-router';
 import { Table, Button, Card, Divider, Modal, message, ConfigProvider } from 'ant-design-vue';
 import {
   PlusOutlined, ExportOutlined, FileExcelOutlined,
   DeleteOutlined, IdcardOutlined, EyeOutlined, EditOutlined, ExclamationCircleOutlined
 } from '@ant-design/icons-vue';
+import { applyColumnFilters } from '../../composables/useTableColumnFilter.js';
+import ColumnFilterDropdown from '../table/ColumnFilterDropdown.vue';
 import StaffForm from './StaffForm.vue';
 import StaffDetail from './StaffDetail.vue';
 import { getStaff, getStaffById, createStaff, updateStaff, deleteStaff, uploadExcel } from '../../service/staff.service';
@@ -107,6 +109,7 @@ const editDialogVisible = ref(false);
 const selectedStaff = ref({});
 const router = useRouter();
 const fileInput = ref(null);
+const columnFilterState = ref({});
 
 const pagination = ref({
   current: 1,
@@ -115,17 +118,42 @@ const pagination = ref({
   showSizeChanger: true,
 });
 
-const columns = [
+const baseColumns = [
   { title: 'ID', dataIndex: ['identity', 'employee_id'], key: 'employee_id', sorter: true },
   { title: 'Name (KH)', dataIndex: ['identity', 'kh_name'], key: 'name_kh', sorter: true },
   { title: 'Name (EN)', dataIndex: ['identity', 'en_name'], key: 'name_en', sorter: true },
   { title: 'Gender', dataIndex: ['identity', 'gender'], key: 'gender', sorter: true },
-  { title: 'Date of Birth', dataIndex: ['identity', 'date_of_birth'], key: 'date_of_birth', sorter: true, customRender: ({ text }) => text ? (typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text) : '-' },
+  { title: 'Date of Birth', dataIndex: ['identity', 'date_of_birth'], key: 'date_of_birth', sorter: true, customRender: ({ text }) => { if (!text) return '-'; const part = typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text; const m = String(part).match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/); if (m) return `${String(parseInt(m[3], 10)).padStart(2, '0')}-${String(parseInt(m[2], 10)).padStart(2, '0')}-${m[1]}`; return part; } },
   { title: 'Phone', dataIndex: ['contact', 'phone'], key: 'phone' },
   { title: 'Email', dataIndex: ['contact', 'email'], key: 'email' },
   { title: 'Department', dataIndex: ['employment', 'department'], key: 'department', sorter: true },
   { title: 'Actions', key: 'actions', width: 200, fixed: 'right' },
 ];
+
+const filterableKeys = ['employee_id', 'name_kh', 'name_en', 'gender', 'date_of_birth', 'phone', 'email', 'department'];
+
+const columns = computed(() => {
+  return baseColumns.map((col) => {
+    if (!filterableKeys.includes(col.key)) return col;
+    const key = col.key;
+    const state = columnFilterState.value[key];
+    const hasFilter = state && (state.mode !== 'all' || (state.text && state.text.trim()));
+    return {
+      ...col,
+      filteredValue: hasFilter ? [key] : null,
+      filterDropdown: (props) => h(ColumnFilterDropdown, {
+        columnKey: key,
+        filterState: columnFilterState,
+        confirm: props.confirm,
+        clearFilters: props.clearFilters,
+      }),
+    };
+  });
+});
+
+const filteredStaff = computed(() =>
+  applyColumnFilters(staffList.value, baseColumns, columnFilterState.value)
+);
 
 const rowSelection = {
   onChange: (keys, rows) => {

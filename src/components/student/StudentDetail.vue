@@ -168,23 +168,59 @@ onMounted(async () => {
 
 const getPhotoUrl = (photo) => (photo ? `${environment.apiBaseUrl}media/image/${photo}` : '');
 
+function parseDateString(value) {
+  if (!value && value !== 0) return null;
+  if (typeof value === 'number') {
+    const d = new Date(value);
+    return isNaN(d) ? null : d;
+  }
+  if (typeof value !== 'string') return null;
+
+  const s = value.trim();
+  if (!s) return null;
+
+  if (s.includes('T') || /[zZ]|[+\-]\d{2}:\d{2}$/.test(s)) {
+    const d = new Date(s);
+    return isNaN(d) ? null : d;
+  }
+
+  let datePart = s.split(' ')[0];
+  datePart = datePart.replace(/\//g, '-');
+
+  const m = datePart.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+  if (m) {
+    const dt = new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10));
+    return isNaN(dt) ? null : dt;
+  }
+
+  const m2 = datePart.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+  if (m2) {
+    const dt = new Date(parseInt(m2[3], 10), parseInt(m2[2], 10) - 1, parseInt(m2[1], 10));
+    return isNaN(dt) ? null : dt;
+  }
+
+  const d0 = new Date(s);
+  return isNaN(d0) ? null : d0;
+}
+
 const formatDate = (dateString) => {
-  if (!dateString) return '-';
-  return new Date(dateString.split(' ')[0]).toLocaleDateString('en-GB');
+  const d = parseDateString(dateString);
+  if (!d) return '-';
+  return d.toLocaleDateString('en-GB').replace(/\//g, '-');
 };
 
 const formatDateEN = (dateString) => {
-  if (!dateString) return '-';
-  const date = new Date(dateString.split(' ')[0]);
+  const d = parseDateString(dateString);
+  if (!d) return '-';
   const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-  return `${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;
+  return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
 };
 
 const formatDateKH = (dateString) => {
-  if (!dateString) return '-';
-  const date = new Date(dateString.split(' ')[0]);
+  const d = parseDateString(dateString);
+  if (!d) return '-';
   const khmerMonths = ['ខែមករា', 'ខែកុម្ភៈ', 'ខែមីនា', 'ខែមេសា', 'ខែឧសភា', 'ខែមិថុនា', 'ខែកក្កដា', 'ខែសីហា', 'ខែកញ្ញា', 'ខែតុលា', 'ខែវិច្ឆិកា', 'ខែធ្នូ'];
-  return `${date.getDate()} ${khmerMonths[date.getMonth()]} ${date.getFullYear()}`;
+  return `${d.getDate()} ${khmerMonths[d.getMonth()]} ${d.getFullYear()}`;
 };
 
 const formatAddress = (addr) => {

@@ -178,20 +178,30 @@ const form = ref({
   batch: ''
 });
 
+function normalizeDateToYMD(value) {
+  if (!value || typeof value !== 'string') return value;
+  const s = value.trim().split(' ')[0].replace(/\//g, '-');
+  const m = s.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+  if (m) {
+    const dd = m[1].padStart(2, '0');
+    const mm = m[2].padStart(2, '0');
+    return `${m[3]}-${mm}-${dd}`;
+  }
+  return value;
+}
+
 const initForm = () => {
   if (props.student && Object.keys(props.student).length > 0) {
-    // Deep merge to ensure nested objects exist
     form.value = {
       ...form.value,
       ...JSON.parse(JSON.stringify(props.student)),
-      // Ensure nested objects are not null
       name: { ...form.value.name, ...(props.student.name || {}) },
       birth_place: { ...form.value.birth_place, ...(props.student.birth_place || {}) },
       current_address: { ...form.value.current_address, ...(props.student.current_address || {}) },
       guardian: { ...form.value.guardian, ...(props.student.guardian || {}) }
     };
-    
-    // Ant Design DatePicker with valueFormat handles strings directly
+
+    form.value.birth_date = normalizeDateToYMD(form.value.birth_date);
   }
 };
 

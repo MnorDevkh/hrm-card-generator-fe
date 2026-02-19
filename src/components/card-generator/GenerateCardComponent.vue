@@ -305,6 +305,15 @@ function parseDateString(value) {
     return isNaN(dt) ? null : dt;
   }
 
+  const m2 = datePart.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+  if (m2) {
+    const d = parseInt(m2[1], 10);
+    const mo = parseInt(m2[2], 10) - 1;
+    const y = parseInt(m2[3], 10);
+    const dt = new Date(y, mo, d);
+    return isNaN(dt) ? null : dt;
+  }
+
   // Last resort: try Date constructor
   const d0 = new Date(s);
   return isNaN(d0) ? null : d0;

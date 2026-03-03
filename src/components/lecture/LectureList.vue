@@ -49,11 +49,11 @@
           <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'actions'">
               <div class="flex gap-2">
-                <Button type="text" shape="circle" @click="generateCard(record)">
+                <!-- <Button type="text" shape="circle" @click="generateCard(record)">
                   <template #icon>
                     <IdcardOutlined class="text-purple-500" />
                   </template>
-                </Button>
+                </Button> -->
                 <Button type="text" shape="circle" @click="viewLecturer(record)">
                   <template #icon>
                     <EyeOutlined class="text-blue-500" />

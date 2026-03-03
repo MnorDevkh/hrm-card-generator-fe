@@ -4,31 +4,37 @@
       <div
         class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl shadow-md">
         <p class="text-xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">Staff List</p>
+        <div class="grid grid-cols-1 sm:grid-cols-none sm:grid-flow-col gap-2 w-full sm:w-auto items-center">
+          <Input v-model:value="searchQuery" placeholder="Search Name or ID" allowClear @pressEnter="handleSearch"
+            class="w-full sm:w-64" />
+          <Button type="primary" @click="handleSearch">Search</Button>
+        </div>
       </div>
 
       <Divider />
 
       <div class="card flex flex-col sm:flex-row sm:flex-wrap justify-end gap-4 w-full sm:w-auto mb-4">
-        <Button @click="exportCard" class="w-full sm:w-auto">
+        <Button v-if="isAdmin" @click="exportCard" class="w-full sm:w-auto">
           <template #icon>
             <ExportOutlined />
           </template>
           Export Card
         </Button>
-        <Button type="primary" ghost @click="importFromExcel" :loading="isUploading" class="w-full sm:w-auto">
+        <Button v-if="isAdmin" type="primary" ghost @click="importFromExcel" :loading="isUploading"
+          class="w-full sm:w-auto">
           <template #icon>
             <FileExcelOutlined />
           </template>
           Excel Import
         </Button>
         <input type="file" ref="fileInput" class="hidden" accept=".xlsx, .xls" @change="handleFileUpload" />
-        <Button type="primary" @click="openNew" class="w-full sm:w-auto">
+        <Button v-if="isAdmin" type="primary" @click="openNew" class="w-full sm:w-auto">
           <template #icon>
             <PlusOutlined />
           </template>
           Add New
         </Button>
-        <Button danger type="primary" class="w-full sm:w-auto" :disabled="!selectedRowKeys.length"
+        <Button v-if="isAdmin" danger type="primary" class="w-full sm:w-auto" :disabled="!selectedRowKeys.length"
           @click="confirmBulkDelete">
           <template #icon>
             <DeleteOutlined />
@@ -58,7 +64,7 @@
                     <EditOutlined class="text-orange-500" />
                   </template>
                 </Button>
-                <Button type="text" danger shape="circle" @click="confirmDelete(record)">
+                <Button v-if="isAdmin" type="text" danger shape="circle" @click="confirmDelete(record)">
                   <template #icon>
                     <DeleteOutlined />
                   </template>
@@ -72,7 +78,8 @@
       <!-- View Dialog -->
       <Modal v-model:open="viewDialogVisible" title="Staff Details" :footer="null" destroyOnClose
         width="min(1000px, 98vw)">
-        <StaffDetail v-if="selectedStaff" :staff="selectedStaff" />
+        <StaffDetail v-if="selectedStaff" :staff="selectedStaff" @back="viewDialogVisible = false"
+          @edit="handleDetailEdit" @delete="handleDetailDelete" />
       </Modal>
 
       <!-- Edit/New Dialog -->
@@ -88,7 +95,7 @@
 <script setup>
 import { ref, onMounted, createVNode } from 'vue';
 import { useRouter } from 'vue-router';
-import { Table, Button, Card, Divider, Modal, message, ConfigProvider } from 'ant-design-vue';
+import { Table, Button, Card, Divider, Modal, message, ConfigProvider, Input } from 'ant-design-vue';
 import {
   PlusOutlined, ExportOutlined, FileExcelOutlined,
   DeleteOutlined, IdcardOutlined, EyeOutlined, EditOutlined, ExclamationCircleOutlined
@@ -107,6 +114,10 @@ const editDialogVisible = ref(false);
 const selectedStaff = ref({});
 const router = useRouter();
 const fileInput = ref(null);
+
+const isAdmin = ref(localStorage.getItem('role') === 'admin_hrm');
+
+const searchQuery = ref('');
 
 const pagination = ref({
   current: 1,
@@ -139,10 +150,15 @@ const handleTableChange = (pag) => {
   pagination.value.pageSize = pag.pageSize;
 };
 
+const handleSearch = () => {
+  pagination.value.current = 1;
+  loadStaff();
+};
+
 const loadStaff = async () => {
   loading.value = true;
   try {
-    const response = await getStaff(pagination.value.current, pagination.value.pageSize);
+    const response = await getStaff(pagination.value.current, pagination.value.pageSize, undefined, searchQuery.value);
     const list = Array.isArray(response) ? response : (response.data ?? response.staff ?? response.staffs ?? []);
     staffList.value = list;
     pagination.value.total = response.total ?? list.length;
@@ -234,6 +250,16 @@ const saveStaff = async (staffData) => {
   } catch (error) {
     message.error('Failed to save staff');
   }
+};
+
+const handleDetailEdit = (staff) => {
+  viewDialogVisible.value = false;
+  editStaff(staff);
+};
+
+const handleDetailDelete = (staff) => {
+  viewDialogVisible.value = false;
+  confirmDelete(staff);
 };
 
 const confirmDelete = (staff) => {

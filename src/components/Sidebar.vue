@@ -63,12 +63,21 @@ defineEmits(['close']);
 
 const isAdmin = localStorage.getItem('role') === 'admin_hrm';
 
-const menuItems = ref(isAdmin ? [
+const adminMenu = [
   { label: 'Dashboard', icon: 'pi pi-home', to: '/' },
   { label: 'Students', icon: 'pi pi-users', to: '/student' },
-  { label: 'Staff', icon: 'pi pi-id-card', to: '/staff' }, // Assuming you have these routes
-  { label: 'Lecturers', icon: 'pi pi-briefcase', to: '/lecture' }, // Assuming you have these routes
+  { label: 'Staff', icon: 'pi pi-id-card', to: '/staff' },
+  { label: 'Lecturers', icon: 'pi pi-briefcase', to: '/lecture' },
   { label: 'Card Templates', icon: 'pi pi-palette', to: '/template' },
-  { label: 'Student Photos', icon: 'pi pi-image', to: '/template/student-photos' } // New menu item
-] : [{ label: 'Dashboard', icon: 'pi pi-home', to: '/' },{ label: 'Students', icon: 'pi pi-users', to: '/student' }]);
+  { label: 'Student Photos', icon: 'pi pi-image', to: '/template/student-photos' }
+];
+
+const userMenu = [
+  { label: 'Dashboard', icon: 'pi pi-home', to: '/' },
+  { label: 'Students', icon: 'pi pi-users', to: '/student' },
+  { label: 'Staff', icon: 'pi pi-id-card', to: '/staff' },
+  { label: 'Lecturers', icon: 'pi pi-briefcase', to: '/lecture' }
+];
+
+const menuItems = ref(isAdmin ? adminMenu : userMenu);
 </script>

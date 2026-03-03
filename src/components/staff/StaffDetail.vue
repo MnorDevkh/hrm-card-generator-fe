@@ -15,18 +15,44 @@
                   <UserOutlined class="text-3xl sm:text-4xl text-gray-400" />
                 </div>
               </div>
-              <div class="text-center sm:text-left flex-1 min-w-0">
-                <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-1 truncate">{{
-                  staff.identity?.en_name }}</h1>
-                <h2 class="text-base sm:text-lg lg:text-xl text-gray-600 font-khmer mb-2 sm:mb-3">{{
-                  staff.identity?.kh_name }}</h2>
-                <div class="flex flex-wrap gap-1 sm:gap-2 justify-center sm:justify-start">
-                  <span
-                    class="px-2 sm:px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs sm:text-sm font-medium border border-blue-100">ID:
-                    {{ staff.identity?.employee_id }}</span>
-                  <span v-if="staff.employment?.department"
-                    class="px-2 sm:px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-xs sm:text-sm font-medium border border-purple-100">Department:
-                    {{ staff.employment.department }}</span>
+              <div class="flex-1 min-w-0 w-full">
+                <div class="flex flex-col sm:flex-row sm:items-start gap-3 sm:gap-4">
+                  <div class="text-center sm:text-left flex-1 min-w-0">
+                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-1 truncate">
+                      {{ staff.identity?.en_name }}
+                    </h1>
+                    <h2 class="text-base sm:text-lg lg:text-xl text-gray-600 font-khmer mb-2 sm:mb-3">
+                      {{ staff.identity?.kh_name }}
+                    </h2>
+                    <div class="flex flex-wrap gap-1 sm:gap-2 justify-center sm:justify-start">
+                      <span
+                        class="px-2 sm:px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs sm:text-sm font-medium border border-blue-100">ID:
+                        {{ staff.identity?.employee_id }}</span>
+                      <span v-if="staff.employment?.department"
+                        class="px-2 sm:px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-xs sm:text-sm font-medium border border-purple-100">Department:
+                        {{ staff.employment.department }}</span>
+                    </div>
+                  </div>
+                  <div class="flex flex-wrap sm:flex-col items-center sm:items-end justify-center sm:justify-start gap-2">
+                    <Button size="small" @click="emit('back')">
+                      <template #icon>
+                        <ArrowLeftOutlined />
+                      </template>
+                      Back to List
+                    </Button>
+                    <Button size="small" type="primary" ghost @click="emit('edit', staff)">
+                      <template #icon>
+                        <EditOutlined />
+                      </template>
+                      Edit
+                    </Button>
+                    <Button v-if="isAdmin" size="small" danger type="primary" @click="emit('delete', staff)">
+                      <template #icon>
+                        <DeleteOutlined />
+                      </template>
+                      Delete
+                    </Button>
+                  </div>
                 </div>
               </div>
 
@@ -123,17 +149,21 @@
 </template>
 
 <script setup>
-import { ConfigProvider, Descriptions, Image } from 'ant-design-vue';
-import { UserOutlined, BookOutlined, FileTextOutlined } from '@ant-design/icons-vue';
+import { ConfigProvider, Descriptions, Image, Button } from 'ant-design-vue';
+import { UserOutlined, BookOutlined, FileTextOutlined, ArrowLeftOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 import { environment } from '../../environments/environment';
 
-defineProps({
+const props = defineProps({
     staff: Object,
     embedded: {
         type: Boolean,
         default: true
     }
 });
+
+const emit = defineEmits(['back', 'edit', 'delete']);
+
+const isAdmin = localStorage.getItem('role') === 'admin_hrm';
 
 const formatDate = (dateString) => {
     if (!dateString) return '';

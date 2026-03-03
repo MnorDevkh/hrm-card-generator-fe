@@ -13,13 +13,13 @@
               <p class="text-xs sm:text-sm text-gray-500 font-khmer px-2">
                 សូមពិនិត្យឯកសាររបស់លោកអ្នកជាមួយទិន្ន័យខាងក្រោម <br> ដើម្បីផ្ទៀងផ្ទាត់ភាពត្រឹមត្រូវ</p>
             </div>
-        <StaffDetail v-if="staffData" :staff="staffData" />
+        <StaffDetail v-if="staffData" :staff="staffData" @back="handleBack" @edit="handleEdit" />
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { environment } from '../../environments/environment';
 import StaffDetail from './StaffDetail.vue';
 import { CheckCircleOutlined } from '@ant-design/icons-vue';
@@ -32,8 +32,17 @@ const props = defineProps({
 });
 
 const route = useRoute();
+const router = useRouter();
 const fetchedStaff = ref(null);
 const staffData = computed(() => props.staff || fetchedStaff.value || {});
+
+const handleBack = () => {
+    router.push('/staff');
+};
+
+const handleEdit = () => {
+    router.push('/staff');
+};
 
 onMounted(async () => {
     if (!props.staff) {

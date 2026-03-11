@@ -3,7 +3,11 @@
     <div
       :class="['w-full bg-gray-50 px-2 py-4 sm:p-6 lg:p-8', embedded ? 'w-full' : 'min-h-screen flex items-center justify-center']">
       <div class="w-full">
-        <div v-if="staff">
+        <div v-if="!staff" class="bg-white rounded-xl shadow-lg p-6 flex justify-center items-center">
+          <Spin size="large" />
+        </div>
+
+        <div v-else>
           <div class="flex flex-col gap-3 sm:gap-4 lg:gap-6">
             <div
               class="bg-white rounded-lg sm:rounded-sm border border-gray-100 p-3 sm:p-4 lg:p-6 mb-3 sm:mb-4 lg:mb-6 flex flex-col sm:flex-row items-center gap-3 sm:gap-4 lg:gap-6">
@@ -149,7 +153,7 @@
 </template>
 
 <script setup>
-import { ConfigProvider, Descriptions, Image, Button } from 'ant-design-vue';
+import { ConfigProvider, Descriptions, Image, Button, Spin } from 'ant-design-vue';
 import { UserOutlined, BookOutlined, FileTextOutlined, ArrowLeftOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 import { environment } from '../../environments/environment';
 

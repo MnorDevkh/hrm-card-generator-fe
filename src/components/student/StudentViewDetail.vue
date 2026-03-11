@@ -25,7 +25,13 @@
                 </div>
             </div>
             
-            <StudentDetail :studentId="studentId" :verificationId="verificationId" :embedded="embedded" />
+            <div v-if="isLoading" class="bg-white rounded-xl shadow-lg p-6 flex justify-center items-center">
+                <Spin size="large" />
+            </div>
+
+            <Alert v-else-if="error" type="error" show-icon :message="error" />
+
+            <StudentDetail v-else :studentId="studentId" :verificationId="verificationId" :embedded="embedded" />
         </div>
     </div>
 </template>
@@ -33,14 +39,16 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { Image } from 'ant-design-vue';
-import { CheckCircleOutlined, UserOutlined } from '@ant-design/icons-vue';
+import { Spin, Alert } from 'ant-design-vue';
+import { CheckCircleOutlined } from '@ant-design/icons-vue';
 import { getStudentInfo } from '../../service/student.service';
 import { environment } from '../../environments/environment';
 import StudentDetail from './StudentDetail.vue';
 
 const route = useRoute();
 const student = ref(null);
+const isLoading = ref(false);
+const error = ref(null);
 
 const props = defineProps({
     studentId: {
@@ -63,13 +71,20 @@ onMounted(async () => {
 
     if (verificationId === 'null') verificationId = null;
 
-    if (studentId) {
-        try {
-            const response = await getStudentInfo(studentId, verificationId);
-            student.value = response;
-        } catch (err) {
-            console.error(err);
-        }
+    if (!studentId) {
+        error.value = 'Student ID is missing.';
+        return;
+    }
+
+    try {
+        isLoading.value = true;
+        const response = await getStudentInfo(studentId, verificationId);
+        student.value = response;
+    } catch (err) {
+        error.value = err.response?.data?.message || err.message || 'Failed to fetch student details.';
+        console.error(err);
+    } finally {
+        isLoading.value = false;
     }
 });
 

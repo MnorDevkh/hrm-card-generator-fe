@@ -56,28 +56,59 @@
 </template>
 <script setup>
 import { ref } from 'vue';
+import {
+    getCurrentRole,
+    ROLE_ADMIN,
+    ROLE_MANAGE_STUDENT,
+    ROLE_MANAGE_STAFF,
+    ROLE_MANAGE_LECTURER
+} from '@/utils/role';
 defineProps({
     mobileOpen: Boolean
 });
 defineEmits(['close']);
 
-const isAdmin = localStorage.getItem('role') === 'admin_hrm';
-
-const adminMenu = [
-  { label: 'Dashboard', icon: 'pi pi-home', to: '/' },
-  { label: 'Students', icon: 'pi pi-users', to: '/student' },
-  { label: 'Staff', icon: 'pi pi-id-card', to: '/staff' },
-  { label: 'Lecturers', icon: 'pi pi-briefcase', to: '/lecture' },
-  { label: 'Card Templates', icon: 'pi pi-palette', to: '/template' },
-  { label: 'Student Photos', icon: 'pi pi-image', to: '/template/student-photos' }
+const allMenuItems = [
+  {
+    label: 'Dashboard',
+    icon: 'pi pi-home',
+    to: '/',
+    roles: [ROLE_ADMIN]
+  },
+  {
+    label: 'Students',
+    icon: 'pi pi-users',
+    to: '/student',
+    roles: [ROLE_ADMIN, ROLE_MANAGE_STUDENT]
+  },
+  {
+    label: 'Staff',
+    icon: 'pi pi-id-card',
+    to: '/staff',
+    roles: [ROLE_ADMIN, ROLE_MANAGE_STAFF]
+  },
+  {
+    label: 'Lecturers',
+    icon: 'pi pi-briefcase',
+    to: '/lecture',
+    roles: [ROLE_ADMIN, ROLE_MANAGE_LECTURER]
+  },
+  {
+    label: 'Card Templates',
+    icon: 'pi pi-palette',
+    to: '/template',
+    roles: [ROLE_ADMIN]
+  },
+  {
+    label: 'Student Photos',
+    icon: 'pi pi-image',
+    to: '/template/student-photos',
+    roles: [ROLE_ADMIN]
+  }
 ];
 
-const userMenu = [
-  { label: 'Dashboard', icon: 'pi pi-home', to: '/' },
-  { label: 'Students', icon: 'pi pi-users', to: '/student' },
-  { label: 'Staff', icon: 'pi pi-id-card', to: '/staff' },
-  { label: 'Lecturers', icon: 'pi pi-briefcase', to: '/lecture' }
-];
-
-const menuItems = ref(isAdmin ? adminMenu : userMenu);
+const currentRole = getCurrentRole();
+const menuItems = ref(
+  allMenuItems.filter(item => item.roles.includes(currentRole))
+);
 </script>

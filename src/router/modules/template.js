@@ -2,24 +2,28 @@ import GenerateCardComponent from '@/components/card-generator/GenerateCardCompo
 import LecturerCardGenerator from '@/components/card-generator/LecturerCardGenerator.vue'
 import StaffCardGenerator from '@/components/card-generator/StaffCardGenerator.vue'
 import TemplateList from '@/components/template/TemplateListComponent.vue'
+import { ROLE_ADMIN } from '@/utils/role';
 
 const template = [
-  { path: '/template', component: TemplateList },
-  { path: '/generate', component: GenerateCardComponent },
+  { path: '/template', component: TemplateList, meta: { allowedRoles: [ROLE_ADMIN] } },
+  { path: '/generate', component: GenerateCardComponent, meta: { allowedRoles: [ROLE_ADMIN] } },
   {
     path: '/card-generator/lecturer',
     name: 'lecturer-card-generator',
-    component: LecturerCardGenerator
+    component: LecturerCardGenerator,
+    meta: { allowedRoles: [ROLE_ADMIN] }
   },
   {
     path: '/card-generator/staff',
     name: 'staff-card-generator',
-    component: StaffCardGenerator
+    component: StaffCardGenerator,
+    meta: { allowedRoles: [ROLE_ADMIN] }
   },
   {
     path: '/template/student-photos',
     name : 'student-photo-list',
-    component : () => import('@/components/template/StudentPhotoListComponent.vue')
+    component : () => import('@/components/template/StudentPhotoListComponent.vue'),
+    meta: { allowedRoles: [ROLE_ADMIN] }
   }
 ]
 

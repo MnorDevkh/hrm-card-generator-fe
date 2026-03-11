@@ -7,6 +7,12 @@ import template from "./modules/template";
 import home from "./modules/home";
 import DefaultLayout from '../DefaultLayout.vue';
 import BlankLayout from '@/BlankLayout.vue';
+import {
+  getCurrentRole,
+  ROLE_MANAGE_STUDENT,
+  ROLE_MANAGE_STAFF,
+  ROLE_MANAGE_LECTURER
+} from '@/utils/role';
 
 
 const appRoutes = [
@@ -55,6 +61,24 @@ router.beforeEach((to, from, next) => {
   } else if (authRequired) {
     // If not logged in and trying to access a protected page, redirect to login
     return next({ path: '/login', query: { redirect: to.fullPath } });
+  }
+  // Role-based route guard
+  const role = getCurrentRole();
+  const recordWithRoles = to.matched.find(record => Array.isArray(record.meta?.allowedRoles));
+
+  if (recordWithRoles && role) {
+    const allowedRoles = recordWithRoles.meta.allowedRoles;
+    if (!allowedRoles.includes(role)) {
+      let redirectPath = '/';
+      if (role === ROLE_MANAGE_STUDENT) {
+        redirectPath = '/student';
+      } else if (role === ROLE_MANAGE_STAFF) {
+        redirectPath = '/staff';
+      } else if (role === ROLE_MANAGE_LECTURER) {
+        redirectPath = '/lecture';
+      }
+      return next({ path: redirectPath });
+    }
   }
 
   next();

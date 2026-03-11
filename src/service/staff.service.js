@@ -1,11 +1,12 @@
 import { apiFetch } from './api';
 
-export async function getStaff(page, size, sortBy, search) {
+export async function getStaff(page, size, sortBy, search, department) {
   const params = new URLSearchParams();
   if (page !== undefined && page !== null) params.append('page', page);
   if (size !== undefined && size !== null) params.append('size', size);
   if (sortBy) params.append('sortBy', sortBy);
   if (search) params.append('search', search);
+  if (department) params.append('department', department);
 
   return apiFetch(`/staff/?${params.toString()}`);
 }

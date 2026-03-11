@@ -4,6 +4,7 @@ import student from "./modules/student";
 import staff from "./modules/staff";
 import lecture from "./modules/lecture";
 import template from "./modules/template";
+import report from "./modules/report";
 import home from "./modules/home";
 import DefaultLayout from '../DefaultLayout.vue';
 import BlankLayout from '@/BlankLayout.vue';
@@ -21,6 +22,7 @@ const appRoutes = [
   ...staff,
   ...lecture,
   ...template,
+  ...report,
 ];
 
 const routes = [

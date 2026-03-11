@@ -104,6 +104,12 @@ const allMenuItems = [
     icon: 'pi pi-image',
     to: '/template/student-photos',
     roles: [ROLE_ADMIN]
+  },
+  {
+    label: 'Reports',
+    icon: 'pi pi-chart-bar',
+    to: '/reports',
+    roles: [ROLE_ADMIN]
   }
 ];
 

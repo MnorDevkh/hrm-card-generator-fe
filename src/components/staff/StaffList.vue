@@ -7,6 +7,8 @@
         <div class="grid grid-cols-1 sm:grid-cols-none sm:grid-flow-col gap-2 w-full sm:w-auto items-center">
           <Input v-model:value="searchQuery" placeholder="Search Name or ID" allowClear @pressEnter="handleSearch"
             class="w-full sm:w-64" />
+          <Select v-model:value="selectedDepartment" placeholder="Department" allowClear @change="handleSearch"
+            class="w-full sm:w-48" :options="departmentOptions" />
           <Button type="primary" @click="handleSearch">Search</Button>
         </div>
       </div>
@@ -95,7 +97,7 @@
 <script setup>
 import { ref, onMounted, createVNode } from 'vue';
 import { useRouter } from 'vue-router';
-import { Table, Button, Card, Divider, Modal, message, ConfigProvider, Input } from 'ant-design-vue';
+import { Table, Button, Card, Divider, Modal, message, ConfigProvider, Input, Select } from 'ant-design-vue';
 import {
   PlusOutlined, ExportOutlined, FileExcelOutlined,
   DeleteOutlined, IdcardOutlined, EyeOutlined, EditOutlined, ExclamationCircleOutlined
@@ -118,6 +120,13 @@ const fileInput = ref(null);
 const isAdmin = ref(localStorage.getItem('role') === 'admin_hrm');
 
 const searchQuery = ref('');
+const selectedDepartment = ref(undefined);
+
+const departmentOptions = ref([
+  { value: 'IT', label: 'IT' },
+  { value: 'Finance', label: 'Finance' },
+  { value: 'LFI', label: 'LFI' },
+]);
 
 const pagination = ref({
   current: 1,
@@ -158,7 +167,7 @@ const handleSearch = () => {
 const loadStaff = async () => {
   loading.value = true;
   try {
-    const response = await getStaff(pagination.value.current, pagination.value.pageSize, undefined, searchQuery.value);
+    const response = await getStaff(pagination.value.current, pagination.value.pageSize, undefined, searchQuery.value, selectedDepartment.value);
     const list = Array.isArray(response) ? response : (response.data ?? response.staff ?? response.staffs ?? []);
     staffList.value = list;
     pagination.value.total = response.total ?? list.length;

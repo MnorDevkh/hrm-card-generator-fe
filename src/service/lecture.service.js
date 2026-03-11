@@ -1,11 +1,12 @@
 import { apiFetch } from './api';
 
-export async function getLecturers(page, size, sortBy, search) {
+export async function getLecturers(page, size, sortBy, search, faculty) {
   const params = new URLSearchParams();
   if (page !== undefined && page !== null) params.append('page', page);
   if (size !== undefined && size !== null) params.append('size', size);
   if (sortBy) params.append('sortBy', sortBy);
   if (search) params.append('search', search);
+  if (faculty) params.append('faculty', faculty);
 
   return apiFetch(`/lecturer/?${params.toString()}`);
 }

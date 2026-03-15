@@ -89,7 +89,7 @@
                     </div>
                     <!-- Content (Same as main grid) -->
                     <div class="absolute inset-0 flex flex-col items-center text-center card-content"
-                        style="padding-top: 100px;">
+                        style="padding-top: 105px;">
                         <div
                             class="photo-container w-[65px] h-[80px] border border-gray-300 rounded flex items-center justify-center overflow-hidden shadow bg-white">
                             <img v-if="lecturer.photo" :src="getPhotoUrl(lecturer.photo)" alt="Photo"
@@ -102,8 +102,7 @@
                         <div class="card-details flex flex-col items-center " style="margin-top: -5px;">
                             <p class="text-[14px] text-blue-900 tracking-wide mt-1 lecturer-name koh-santepheap-regular" > {{ getTitle(lecturer.gender) }} {{
                                 lecturer.name?.english }} </p>
-                            <p class="text-[12px] font-bold text-red-600 leading-none" style="margin-top: -5px;">
-                                lecturer</p>
+                         
                         </div>
                         <div class="w-[170px] text-gray-900">
                             <table class="w-full text-[10px] text-left">
@@ -114,7 +113,7 @@
                                     </tr>
                                     <tr>
                                         <td>email</td>
-                                        <td>: {{ lecturer.email || '-' }}</td>
+                                        <td :style="{ fontSize: getEmailFontSize(lecturer.email), whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }">: {{ lecturer.email || '-' }}</td>
                                     </tr>
                                     <tr>
                                         <td>Phone</td>
@@ -137,9 +136,9 @@
                             </table>
                         </div>
                     </div>
-                    <div class="absolute bottom-[29px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
+                    <div class="absolute bottom-[20px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
                         <QrcodeVue :value="`${environment.url}lecturer-identity-verification/${lecturer.id}`" :size="52"
-                            level="M" render-as="svg" class="w-13 h-13" />
+                            level="M" render-as="svg" class="w-14 h-14" />
                     </div>
                 </div>
             </div>
@@ -155,7 +154,7 @@
                         <img :src="templateUrl" class="w-[216px] h-[342px] object-cover" crossorigin="anonymous" />
                     </div>
                     <div class="absolute inset-0 flex flex-col items-center text-center card-content"
-                        style="padding-top: 100px;">
+                        style="padding-top: 105px;">
                         <!-- Photo -->
                         <div
                             class="photo-container w-[65px] h-[80px] border border-gray-300 rounded flex items-center justify-center overflow-hidden shadow bg-white ">
@@ -173,8 +172,7 @@
                         <div class="card-details flex flex-col items-center " style="margin-top: -6px;">
                             <p class="text-[14px] text-blue-900 tracking-wide mt-1 lecturer-name koh-santepheap-bold"> {{ getTitle(lecturer.gender) }} {{
                                 lecturer.name?.english }} </p>
-                            <p class="text-[12px] font-bold text-red-600 leading-none" style="margin-top: -5px;">
-                                lecturer</p>
+                            
                         </div>
 
                         <!-- Info Table -->
@@ -187,7 +185,7 @@
                                     </tr>
                                     <tr>
                                         <td>email</td>
-                                        <td>: {{ lecturer.email || '-' }}</td>
+                                        <td :style="{ fontSize: getEmailFontSize(lecturer.email), whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }">: {{ lecturer.email || '-' }}</td>
                                     </tr>
                                     <tr>
                                         <td>Phone</td>
@@ -212,9 +210,9 @@
                     </div>
 
                     <!-- QR Code -->
-                    <div class="absolute bottom-[29px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
+                    <div class="absolute bottom-[20px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
                         <QrcodeVue :value="`${environment.url}lecturer-identity-verification/${lecturer.id}`" :size="52"
-                            level="M" render-as="svg" class="w-13 h-13" />
+                            level="M" render-as="svg" class="w-14 h-14" />
                     </div>
                 </div>
             </div>
@@ -298,6 +296,14 @@ function formatDate(dateStr) {
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const year = d.getFullYear();
     return `${day}-${month}-${year}`;
+}
+
+function getEmailFontSize(email) {
+    if (!email) return '10px';
+    const len = email.length;
+    if (len <= 22) return '9px';
+    if (len <= 25) return '8px';
+    return '6px';
 }
 
 const loadData = async () => {

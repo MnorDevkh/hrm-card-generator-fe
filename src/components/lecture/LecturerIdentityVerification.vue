@@ -82,11 +82,32 @@ const submitVerification = async () => {
     if (response.ok) {
       router.push({ path: `/Lecturer-detail-view/${lecturerId.value}`, query: { verificationId: vId } });
     } else {
-      toast.add({ severity: 'error', summary: 'Verification Failed', detail: 'Invalid Card ID or National Identity', life: 3000 });
+      if (response.status === 404) {
+        // Not found, invalid credential, or QR disabled/expired
+        toast.add({
+          severity: 'error',
+          summary: 'Cannot Access',
+          detail: 'Lecturer not found, credentials invalid, or QR is disabled/expired.',
+          life: 4000
+        });
+      } else {
+        // Other API-side error (e.g. 500)
+        toast.add({
+          severity: 'error',
+          summary: 'System Error',
+          detail: 'The verification service is currently unavailable. Please try again later.',
+          life: 4000
+        });
+      }
     }
   } catch (error) {
     console.error('Verification error:', error);
-    toast.add({ severity: 'error', summary: 'System Error', detail: 'Unable to verify identity at this time.', life: 3000 });
+    toast.add({
+      severity: 'error',
+      summary: 'Network Error',
+      detail: 'Cannot connect to the verification server. Check your internet or try again later.',
+      life: 4000
+    });
   } finally {
     loading.value = false;
   }

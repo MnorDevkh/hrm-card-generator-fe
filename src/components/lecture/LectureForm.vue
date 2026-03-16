@@ -104,6 +104,26 @@
         <Textarea v-model:value="form.notes" :rows="3" />
       </div>
 
+      <!-- QR Settings (Manager) -->
+      <div class="col-span-1 md:col-span-2 mt-4" v-if="isAdmin">
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">QR Settings</h3>
+      </div>
+      <div v-if="isAdmin" class="flex flex-col gap-2">
+        <label>QR Status</label>
+        <Select v-model:value="form.qr_status" placeholder="Select QR Status">
+          <SelectOption value="active">Active</SelectOption>
+          <SelectOption value="inactive">Inactive</SelectOption>
+        </Select>
+      </div>
+      <div v-if="isAdmin" class="flex flex-col gap-2">
+        <label>QR Expiry Date</label>
+        <DatePicker
+          v-model:value="form.qr_expired_at"
+          valueFormat="YYYY-MM-DD"
+          class="w-full"
+        />
+      </div>
+
       <!-- Documents -->
       <div class="col-span-1 md:col-span-2 mt-4">
         <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Documents</h3>
@@ -150,6 +170,7 @@ const props = defineProps({
 const emit = defineEmits(['save', 'cancel']);
 
 const fileList = ref([]);
+const isAdmin = ref(localStorage.getItem('role') === 'admin_hrm');
 
 const form = ref({
   id: '',
@@ -168,7 +189,9 @@ const form = ref({
   email: '',
   notes: '',
   photo: '',
-  docs: []
+  docs: [],
+  qr_status: 'active',
+  qr_expired_at: null
 });
 
 const getPhotoUrl = (path) => {
@@ -218,6 +241,14 @@ const initForm = () => {
     } else {
       form.value.docs = [];
       fileList.value = [];
+    }
+
+    // Ensure QR fields exist when editing existing lecturer
+    if (!Object.prototype.hasOwnProperty.call(form.value, 'qr_status')) {
+      form.value.qr_status = 'active';
+    }
+    if (!Object.prototype.hasOwnProperty.call(form.value, 'qr_expired_at')) {
+      form.value.qr_expired_at = null;
     }
   }
 };

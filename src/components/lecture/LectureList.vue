@@ -143,6 +143,29 @@ const columns = [
   { title: 'Phone', dataIndex: 'phone', key: 'phone' },
   { title: 'Email', dataIndex: 'email', key: 'email' },
   { title: 'Faculty', dataIndex: 'faculty', key: 'faculty', sorter: true },
+  {
+    title: 'QR Status',
+    dataIndex: 'qr_status',
+    key: 'qr_status',
+    customRender: ({ text, record }) => {
+      const status = (text || 'active').toLowerCase();
+      const expired = record.qr_expired_at
+        ? (typeof record.qr_expired_at === 'string' && record.qr_expired_at.includes(' ')
+            ? new Date(record.qr_expired_at.split(' ')[0])
+            : new Date(record.qr_expired_at)) < new Date()
+        : false;
+      if (status !== 'active') {
+        return 'Inactive';
+      }
+      return expired ? 'Active (Expired)' : 'Active';
+    },
+  },
+  {
+    title: 'QR Expiry',
+    dataIndex: 'qr_expired_at',
+    key: 'qr_expired_at',
+    customRender: ({ text }) => text ? (typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text) : '-',
+  },
   { title: 'Actions', key: 'actions', width: 200, fixed: 'right' },
 ];
 

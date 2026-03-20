@@ -2,8 +2,12 @@ import { apiFetch } from './api';
 
 export async function getStaff(page, size, sortBy, search, department) {
   const params = new URLSearchParams();
-  if (page !== undefined && page !== null) params.append('page', page);
-  if (size !== undefined && size !== null) params.append('size', size);
+  const _page = page ?? 1;
+  const _size = size ?? 10;
+  // Backend expects `skip`/`limit` (see `GET /staff/` -> `staff_service.get_staffs(skip, limit, ...)`).
+  const skip = Math.max(0, (_page - 1) * _size);
+  params.append('skip', skip);
+  params.append('limit', _size);
   if (sortBy) params.append('sortBy', sortBy);
   if (search) params.append('search', search);
   if (department) params.append('department', department);

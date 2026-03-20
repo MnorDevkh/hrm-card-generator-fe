@@ -156,6 +156,7 @@ const rowSelection = {
 const handleTableChange = (pag) => {
   pagination.value.current = pag.current;
   pagination.value.pageSize = pag.pageSize;
+  loadStaff();
 };
 
 const handleSearch = () => {

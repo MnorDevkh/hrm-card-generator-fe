@@ -132,6 +132,7 @@ const pagination = ref({
   pageSize: 10,
   total: 0,
   showSizeChanger: true,
+  pageSizeOptions: ['10', '20','50', '100',],
 });
 
 const columns = [

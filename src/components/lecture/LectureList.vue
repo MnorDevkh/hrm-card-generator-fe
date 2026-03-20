@@ -131,6 +131,13 @@ const pagination = ref({
   pageSize: 10,
   total: 0,
   showSizeChanger: true,
+  pageSizeOptions: ['10', '20', '50', '100'],
+  // Ensure server reload happens when user changes page size.
+  onShowSizeChange: (current, size) => {
+    pagination.value.current = current;
+    pagination.value.pageSize = size;
+    loadLecturers();
+  },
 });
 
 const columns = [
@@ -178,6 +185,7 @@ const rowSelection = {
 const handleTableChange = (pag) => {
   pagination.value.current = pag.current;
   pagination.value.pageSize = pag.pageSize;
+  loadLecturers();
 };
 
 const handleSearch = () => {
@@ -191,7 +199,7 @@ const loadLecturers = async () => {
     const response = await getLecturers(pagination.value.current, pagination.value.pageSize, undefined, searchQuery.value, selectedFaculty.value);
     // Handle response structure (array or object with list)
     lecturers.value = Array.isArray(response) ? response : (response.lecturers || []);
-    pagination.value.total = lecturers.value.length;
+    pagination.value.total = response.total ?? lecturers.value.length;
     selectedRowKeys.value = [];
     selectedRows.value = [];
   } catch (error) {

@@ -9,7 +9,7 @@
           <Input v-model:value="searchQuery" placeholder="Search Name or ID" allowClear @pressEnter="handleSearch"
             class="w-full sm:w-64" />
           <Select v-model:value="selectedFaculty" placeholder="Faculty" allowClear @change="handleSearch"
-            class="w-full sm:w-48" :options="facultyOptions" />
+            class="w-full sm:w-48" :options="facultyOptions" :loading="catalogOptionsLoading" />
           <Button type="primary" @click="handleSearch">Search</Button>
         </div>
       </div>
@@ -94,7 +94,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, createVNode } from 'vue';
+import { ref, onMounted, createVNode, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { Table, Button, Card, Divider, Modal, message, ConfigProvider, Input, Select } from 'ant-design-vue';
 import {
@@ -104,6 +104,8 @@ import {
 import LectureForm from './LectureForm.vue';
 import LectureDetail from './LectureDetail.vue';
 import { getLecturers, createLecturer, updateLecturer, deleteLecturer, uploadExcel } from '../../service/lecture.service';
+import { useCatalogSelectOptions } from '../../composables/useCatalogSelectOptions';
+import { CATALOG_FACULTY } from '../../constants/catalogCategories';
 
 const lecturers = ref([]);
 const selectedRowKeys = ref([]);
@@ -121,11 +123,8 @@ const isAdmin = ref(localStorage.getItem('role') === 'admin_hrm');
 const searchQuery = ref('');
 const selectedFaculty = ref(undefined);
 
-const facultyOptions = ref([
-  { value: 'ភាសាបរទេស', label: 'មហា. ភាសាបរទេស' },
-  { value: 'ព័ត៌មានវិទ្យា', label: 'មហា. ព័ត៌មានវិទ្យា' },
-  { value: 'គ្រប់គ្រង', label: 'មហា. គ្រប់គ្រង' },
-]);
+const { optionsByCategory, loading: catalogOptionsLoading } = useCatalogSelectOptions([CATALOG_FACULTY]);
+const facultyOptions = computed(() => optionsByCategory.value[CATALOG_FACULTY] ?? []);
 
 const pagination = ref({
   current: 1,

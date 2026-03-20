@@ -110,6 +110,12 @@ const allMenuItems = [
     icon: 'pi pi-chart-bar',
     to: '/reports',
     roles: [ROLE_ADMIN]
+  },
+  {
+    label: 'List filters',
+    icon: 'pi pi-list',
+    to: '/settings/catalog',
+    roles: [ROLE_ADMIN]
   }
 ];
 

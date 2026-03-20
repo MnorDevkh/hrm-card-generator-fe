@@ -8,7 +8,7 @@
           <Input v-model:value="searchQuery" placeholder="Search Name or ID" allowClear @pressEnter="handleSearch"
             class="w-full sm:w-64" />
           <Select v-model:value="selectedDepartment" placeholder="Department" allowClear @change="handleSearch"
-            class="w-full sm:w-48" :options="departmentOptions" />
+            class="w-full sm:w-48" :options="departmentOptions" :loading="catalogOptionsLoading" />
           <Button type="primary" @click="handleSearch">Search</Button>
         </div>
       </div>
@@ -95,7 +95,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, createVNode } from 'vue';
+import { ref, onMounted, createVNode, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { Table, Button, Card, Divider, Modal, message, ConfigProvider, Input, Select } from 'ant-design-vue';
 import {
@@ -105,6 +105,8 @@ import {
 import StaffForm from './StaffForm.vue';
 import StaffDetail from './StaffDetail.vue';
 import { getStaff, getStaffById, createStaff, updateStaff, deleteStaff, uploadExcel } from '../../service/staff.service';
+import { useCatalogSelectOptions } from '../../composables/useCatalogSelectOptions';
+import { CATALOG_DEPARTMENT } from '../../constants/catalogCategories';
 
 const staffList = ref([]);
 const selectedRowKeys = ref([]);
@@ -122,11 +124,8 @@ const isAdmin = ref(localStorage.getItem('role') === 'admin_hrm');
 const searchQuery = ref('');
 const selectedDepartment = ref(undefined);
 
-const departmentOptions = ref([
-  { value: 'IT', label: 'IT' },
-  { value: 'Finance', label: 'Finance' },
-  { value: 'LFI', label: 'LFI' },
-]);
+const { optionsByCategory, loading: catalogOptionsLoading } = useCatalogSelectOptions([CATALOG_DEPARTMENT]);
+const departmentOptions = computed(() => optionsByCategory.value[CATALOG_DEPARTMENT] ?? []);
 
 const pagination = ref({
   current: 1,

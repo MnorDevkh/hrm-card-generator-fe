@@ -12,9 +12,9 @@
           <Input v-model:value="selectedBatch" placeholder="Batch" allowClear @pressEnter="handleSearch"
             class="w-full sm:w-32" />
           <Select v-model:value="selectedFaculty" placeholder="Faculty" allowClear @change="handleSearch"
-            class="w-full sm:w-48" :options="facultyOptions" />
+            class="w-full sm:w-48" :options="facultyOptions" :loading="catalogOptionsLoading" />
           <Select v-model:value="selectedStudyShift" placeholder="Shift" allowClear @change="handleSearch"
-            class="w-full sm:w-32" :options="studyShiftOptions" />
+            class="w-full sm:w-32" :options="studyShiftOptions" :loading="catalogOptionsLoading" />
           <Button type="primary" @click="handleSearch">Search</Button>
         </div>
         <Divider type="vertical" class="hidden sm:block h-8" />
@@ -103,7 +103,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, createVNode } from 'vue';
+import { ref, onMounted, createVNode, computed } from 'vue';
 import { Table, Button, Card, Divider, Modal, message, ConfigProvider, Input, Select } from 'ant-design-vue';
 import {
   EyeOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined,
@@ -114,6 +114,8 @@ import { environment } from '../../environments/environment';
 import { useRouter } from 'vue-router';
 import StudentDetail from './StudentDetail.vue';
 import StudentForm from './StudentForm.vue';
+import { useCatalogSelectOptions } from '../../composables/useCatalogSelectOptions';
+import { CATALOG_FACULTY, CATALOG_STUDY_SHIFT } from '../../constants/catalogCategories';
 
 const students = ref([]);
 const selectedRowKeys = ref([]);
@@ -140,18 +142,12 @@ const pagination = ref({
   pageSizeOptions: ['10', '20', '100', '200', '500'],
 });
 
-const facultyOptions = ref([
-  { value: 'ភាសាបរទេស', label: 'មហា. ភាសាបរទេស' },
-  { value: 'ព័ត៌មានវិទ្យា', label: 'មហា. ព័ត៌មានវិទ្យា' },
-  { value: 'គ្រប់គ្រង', label: 'មហា. គ្រប់គ្រង' },
+const { optionsByCategory, loading: catalogOptionsLoading } = useCatalogSelectOptions([
+  CATALOG_FACULTY,
+  CATALOG_STUDY_SHIFT,
 ]);
-
-const studyShiftOptions = ref([
-  { value: 'ព្រឹក', label: 'វេនព្រឹក' },
-  { value: 'រសៀល', label: 'វេនរសៀល' },
-  { value: 'ល្ងាច', label: 'វេនល្ងាច' },
-  { value: 'ចុងសប្ដាហ៍', label: 'វេនចុងសប្ដាហ៍' },
-]);
+const facultyOptions = computed(() => optionsByCategory.value[CATALOG_FACULTY] ?? []);
+const studyShiftOptions = computed(() => optionsByCategory.value[CATALOG_STUDY_SHIFT] ?? []);
 
 const columns = [
   { title: 'No', key: 'index', width: 60 },

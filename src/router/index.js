@@ -6,6 +6,7 @@ import lecture from "./modules/lecture";
 import template from "./modules/template";
 import report from "./modules/report";
 import home from "./modules/home";
+import settings from "./modules/settings";
 import DefaultLayout from '../DefaultLayout.vue';
 import BlankLayout from '@/BlankLayout.vue';
 import {
@@ -23,6 +24,7 @@ const appRoutes = [
   ...lecture,
   ...template,
   ...report,
+  ...settings,
 ];
 
 const routes = [

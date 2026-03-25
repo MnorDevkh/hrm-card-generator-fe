@@ -71,12 +71,16 @@
                   <FileTextOutlined /> Documents
                 </h3>
                 <div class="bg-white rounded-lg border border-gray-200 p-4">
-                  <div v-for="(doc, index) in lecture.docs" :key="index" class="mb-2 last:mb-0">
+                  <div v-for="(doc, index) in lecture.docs" :key="doc.file_path || index"
+                    class="mb-4 last:mb-0">
                     <a href="#" @click.prevent="downloadFile(doc.file_path)"
                       class="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-2">
                       <i class="pi pi-file"></i>
                       {{ doc.file_path ? doc.file_path.split('/').pop() : 'Document ' + (index + 1) }}
                     </a>
+                    <iframe v-if="isPdfPath(doc.file_path)" :src="getFileUrl(doc.file_path)"
+                      class="w-full min-h-[480px] sm:min-h-[560px] border border-gray-200 rounded-md mt-2"
+                      title="PDF preview" />
                   </div>
                 </div>
               </div>
@@ -136,7 +140,15 @@ const getPhotoUrl = (photo) => (photo ? `${environment.apiBaseUrl}media/image/${
 const getFileUrl = (path) => {
     if (!path) return '';
     if (path.startsWith('http')) return path;
-    return `${environment.apiBaseUrl}${path}`;
+    // Upload stores bare filename; files are served at GET /media/image/{filename}
+    if (path.startsWith('media/')) return `${environment.apiBaseUrl}${path}`;
+    return `${environment.apiBaseUrl}media/image/${path}`;
+};
+
+const isPdfPath = (path) => {
+    if (!path) return false;
+    const name = path.split('/').pop() || '';
+    return /\.pdf$/i.test(name);
 };
 
 const downloadFile = async (filePath) => {

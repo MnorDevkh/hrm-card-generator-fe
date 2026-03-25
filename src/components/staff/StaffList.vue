@@ -30,7 +30,7 @@
           Excel Import
         </Button>
         <input type="file" ref="fileInput" class="hidden" accept=".xlsx, .xls" @change="handleFileUpload" />
-        <Button v-if="isAdmin" type="primary" @click="openNew" class="w-full sm:w-auto">
+        <Button type="primary" @click="openNew" class="w-full sm:w-auto">
           <template #icon>
             <PlusOutlined />
           </template>

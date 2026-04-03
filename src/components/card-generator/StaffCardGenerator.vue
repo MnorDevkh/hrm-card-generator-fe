@@ -83,19 +83,21 @@
                     <div class="absolute inset-0 flex flex-col items-center text-center card-content"
                         style="padding-top: 100px;">
                         <div
-                            class="photo-container w-[65px] h-[80px] border border-gray-300 rounded flex items-center justify-center overflow-hidden shadow bg-white">
+                            class="photo-container w-[65px] h-[80px] border border-gray-300 rounded flex items-center justify-center overflow-hidden shadow bg-white ">
                             <img v-if="staff.identity?.photo" :src="getPhotoUrl(staff.identity.photo)" alt="Photo"
                                 class="w-full h-full object-cover" />
                             <UserOutlined v-else class="text-3xl text-gray-300" />
                         </div>
-                        <p class="card-id text-[12px] font-bold text-gray-900 tracking-wider" style="margin-top: -6px;">
-                            {{ staff.identity?.employee_id }}</p>
-                        <div class="card-details flex flex-col items-center " style="margin-top: -5px;">
-                            <p class="text-[14px] text-blue-900 tracking-wide mt-1 staff-name koh-santepheap-regular">{{ getTitle(staff.identity?.gender) }} {{ staff.identity?.en_name }}</p>
-                            <p class="text-[12px] font-bold text-red-600 leading-none" style="margin-top: -5px;">
+
+                        <p class="card-id text-[11px] font-bold text-gray-900 tracking-wider " style="margin-top: 2px;">{{ staff.identity?.employee_id || '-' }}</p>
+
+                        <div class="card-details flex flex-col items-center " style="margin-top: -2px;">
+                            <p class="text-[14px] text-blue-900 tracking-wide mt-1 staff-name koh-santepheap-bold">{{ getTitle(staff.identity?.gender) }} {{ staff.identity?.en_name }}</p>
+                            <p class="text-[12px] font-bold text-red-600 leading-none">
                                 {{ staff.employment?.position || '-' }}</p>
                         </div>
-                        <div class="w-[170px] text-gray-900">
+
+                        <div class="w-[170px] text-gray-900" style="margin-top: 5px;">
                             <table class="w-full text-[10px] text-left">
                                 <tbody>
                                     <tr>
@@ -106,22 +108,19 @@
                                         <td class="w-[50px]">DOB</td>
                                         <td>: {{ formatDate(staff.identity?.date_of_birth) }}</td>
                                     </tr>
-                                    
                                     <tr>
                                         <td>Phone</td>
                                         <td>: {{ staff.contact?.phone || '-' }}</td>
                                     </tr>
-                                    
                                     <tr>
                                         <td>Issue</td>
                                         <td>: {{ formatDate(issueDate) }}</td>
                                     </tr>
-                                   
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <div class="absolute bottom-[15px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
+                    <div class="absolute bottom-[29px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
                         <QrcodeVue :value="`${environment.url}staff-identity-verification/${staff.id}`" :size="52"
                             level="M" render-as="svg" class="w-13 h-13" />
                     </div>
@@ -179,7 +178,7 @@
                         </div>
                     </div>
 
-                    <div class="absolute bottom-[15px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
+                    <div class="absolute bottom-[29px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
                         <QrcodeVue :value="`${environment.url}staff-identity-verification/${staff.id}`" :size="52"
                             level="M" render-as="svg" class="w-13 h-13" />
                     </div>

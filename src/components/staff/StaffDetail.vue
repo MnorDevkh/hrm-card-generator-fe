@@ -124,9 +124,9 @@
                   <BookOutlined /> Salary & HR
                 </h3>
                 <Descriptions bordered :column="1" size="middle">
-                  <Descriptions.Item label="Basic Salary">{{ staff.salary?.basic_salary }}</Descriptions.Item>
-                  <Descriptions.Item label="Allowance">{{ staff.salary?.allowance }}</Descriptions.Item>
-                  <Descriptions.Item label="Payment Method">{{ staff.salary?.payment_method }}</Descriptions.Item>
+                  <Descriptions.Item v-if="canViewSalary" label="Basic Salary">{{ staff.salary?.basic_salary }}</Descriptions.Item>
+                  <Descriptions.Item v-if="canViewSalary" label="Allowance">{{ staff.salary?.allowance }}</Descriptions.Item>
+                  <Descriptions.Item v-if="canViewSalary" label="Payment Method">{{ staff.salary?.payment_method }}</Descriptions.Item>
                   <Descriptions.Item label="Performance">{{ staff.hr?.performance }}</Descriptions.Item>
                   <Descriptions.Item label="Note">{{ staff.hr?.note || '-' }}</Descriptions.Item>
                 </Descriptions>
@@ -153,9 +153,11 @@
 </template>
 
 <script setup>
+import { computed } from 'vue';
 import { ConfigProvider, Descriptions, Image, Button, Spin } from 'ant-design-vue';
 import { UserOutlined, BookOutlined, FileTextOutlined, ArrowLeftOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons-vue';
 import { environment } from '../../environments/environment';
+import { ROLE_ADMIN, ROLE_MANAGE_STAFF, getCurrentRole } from '@/utils/role';
 
 const props = defineProps({
     staff: Object,
@@ -167,7 +169,11 @@ const props = defineProps({
 
 const emit = defineEmits(['back', 'edit', 'delete']);
 
-const isAdmin = localStorage.getItem('role') === 'admin_hrm';
+const isAdmin = computed(() => getCurrentRole() === ROLE_ADMIN);
+const canViewSalary = computed(() => {
+    const r = getCurrentRole();
+    return r === ROLE_ADMIN || r === ROLE_MANAGE_STAFF;
+});
 
 const formatDate = (dateString) => {
     if (!dateString) return '';

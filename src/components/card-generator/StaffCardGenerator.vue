@@ -91,43 +91,37 @@
                         <p class="card-id text-[12px] font-bold text-gray-900 tracking-wider" style="margin-top: -6px;">
                             {{ staff.identity?.employee_id }}</p>
                         <div class="card-details flex flex-col items-center " style="margin-top: -5px;">
-                            <p class="text-[14px] text-blue-900 tracking-wide mt-1 staff-name koh-santepheap-regular"> {{ getTitle(staff.identity?.gender) }} {{
-                                staff.identity?.en_name }} </p>
+                            <p class="text-[14px] text-blue-900 tracking-wide mt-1 staff-name koh-santepheap-regular">{{ getTitle(staff.identity?.gender) }} {{ staff.identity?.en_name }}</p>
                             <p class="text-[12px] font-bold text-red-600 leading-none" style="margin-top: -5px;">
-                                staff</p>
+                                {{ staff.employment?.position || '-' }}</p>
                         </div>
                         <div class="w-[170px] text-gray-900">
                             <table class="w-full text-[10px] text-left">
                                 <tbody>
                                     <tr>
+                                        <td>email</td>
+                                        <td class="align-top whitespace-nowrap" :title="getStaffEmailRaw(staff) || undefined">: {{ formatStaffEmailForCard(staff) }}</td>
+                                    </tr>
+                                    <tr>
                                         <td class="w-[50px]">DOB</td>
                                         <td>: {{ formatDate(staff.identity?.date_of_birth) }}</td>
                                     </tr>
-                                    <tr>
-                                        <td>email</td>
-                                        <td>: {{ staff.contact?.email || '-' }}</td>
-                                    </tr>
+                                    
                                     <tr>
                                         <td>Phone</td>
                                         <td>: {{ staff.contact?.phone || '-' }}</td>
                                     </tr>
-                                    <tr>
-                                        <td>Address</td>
-                                        <td>: {{ staff.contact?.address || '-' }}</td>
-                                    </tr>
+                                    
                                     <tr>
                                         <td>Issue</td>
                                         <td>: {{ formatDate(issueDate) }}</td>
                                     </tr>
-                                    <tr>
-                                        <td>Expiry</td>
-                                        <td>: {{ formatDate(expiryDate) }}</td>
-                                    </tr>
+                                   
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                    <div class="absolute bottom-[29px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
+                    <div class="absolute bottom-[15px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
                         <QrcodeVue :value="`${environment.url}staff-identity-verification/${staff.id}`" :size="52"
                             level="M" render-as="svg" class="w-13 h-13" />
                     </div>
@@ -152,50 +146,40 @@
                             <UserOutlined v-else class="text-3xl text-gray-300" />
                         </div>
 
-                        <p class="card-id text-[11px] font-bold text-gray-900 tracking-wider ">
-                            {{ staff.identity?.employee_id || '-' }}
-                        </p>
+                        <p class="card-id text-[11px] font-bold text-gray-900 tracking-wider " style="margin-top: 2px;">{{ staff.identity?.employee_id || '-' }}</p>
 
-                        <div class="card-details flex flex-col items-center " style="margin-top: -6px;">
-                            <p class="text-[14px] text-blue-900 tracking-wide mt-1 staff-name koh-santepheap-bold"> {{ getTitle(staff.identity?.gender) }} {{
-                                staff.identity?.en_name }} </p>
-                            <p class="text-[12px] font-bold text-red-600 leading-none" style="margin-top: -5px;">
-                                staff</p>
+                        <div class="card-details flex flex-col items-center " style="margin-top: -2px;">
+                            <p class="text-[14px] text-blue-900 tracking-wide mt-1 staff-name koh-santepheap-bold">{{ getTitle(staff.identity?.gender) }} {{ staff.identity?.en_name }}</p>
+                            <p class="text-[12px] font-bold text-red-600 leading-none">
+                                {{ staff.employment?.position || '-' }}</p>
                         </div>
 
-                        <div class="w-[170px] text-gray-900">
+                        <div class="w-[170px] text-gray-900" style="margin-top: 5px;">
                             <table class="w-full text-[10px] text-left">
                                 <tbody>
+                                    <tr>
+                                        <td>email</td>
+                                        <td class="align-top whitespace-nowrap" :title="getStaffEmailRaw(staff) || undefined">: {{ formatStaffEmailForCard(staff) }}</td>
+                                    </tr>
                                     <tr>
                                         <td class="w-[50px]">DOB</td>
                                         <td>: {{ formatDate(staff.identity?.date_of_birth) }}</td>
                                     </tr>
-                                    <tr>
-                                        <td>email</td>
-                                        <td>: {{ staff.contact?.email || '-' }}</td>
-                                    </tr>
+                                   
                                     <tr>
                                         <td>Phone</td>
                                         <td>: {{ staff.contact?.phone || '-' }}</td>
                                     </tr>
                                     <tr>
-                                        <td>Address</td>
-                                        <td>: {{ staff.contact?.address || '-' }}</td>
-                                    </tr>
-                                    <tr>
                                         <td>Issue</td>
                                         <td>: {{ formatDate(issueDate) }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Expiry</td>
-                                        <td>: {{ formatDate(expiryDate) }}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    <div class="absolute bottom-[29px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
+                    <div class="absolute bottom-[15px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
                         <QrcodeVue :value="`${environment.url}staff-identity-verification/${staff.id}`" :size="52"
                             level="M" render-as="svg" class="w-13 h-13" />
                     </div>
@@ -245,6 +229,29 @@ const getPhotoUrl = (photo) => photo ? `${environment.apiBaseUrl}media/image/${p
 function getTitle(gender) {
     if (!gender) return 'Mr.';
     return (gender.toLowerCase() === 'female' || gender.toLowerCase() === 'f') ? 'Ms.' : 'Mr.';
+}
+
+function getStaffEmailRaw(staff) {
+    const raw = staff.contact?.email || staff.email || '';
+    return String(raw).trim();
+}
+
+/** One line on card; full local + @ + start of domain + … (e.g. keochuopvuthy2020@gm…). */
+function formatStaffEmailForCard(staff) {
+    const s = getStaffEmailRaw(staff);
+    if (!s) return '-';
+    const MAX = 26;
+    if (s.length <= MAX) return s;
+    const at = s.indexOf('@');
+    if (at <= 0) return `${s.slice(0, MAX - 3)}...`;
+    const local = s.slice(0, at);
+    const domain = s.slice(at + 1);
+    const head = `${local}@`;
+    const roomForDomain = MAX - head.length - 3;
+    if (roomForDomain >= 1) {
+        return `${head}${domain.slice(0, roomForDomain)}...`;
+    }
+    return `${local.slice(0, MAX - 3)}...`;
 }
 
 function parseDateString(value) {

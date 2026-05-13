@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { Button, Input, Alert, ConfigProvider } from 'ant-design-vue';
 import { login } from '../../service/auth.service';
+import { getCurrentRole, ROLE_RECEPT } from '@/utils/role';
 
 const router = useRouter();
 const route = useRoute();
@@ -18,7 +19,14 @@ const handleLogin = async () => {
   try {
     await login(email.value, password.value);
     // Redirect to the intended page or to the home page
-    router.push(route.query.redirect || '/');
+    const redirect = route.query.redirect;
+    if (redirect) {
+      router.push(redirect);
+      return;
+    }
+
+    const role = getCurrentRole();
+    router.push(role === ROLE_RECEPT ? '/receipt' : '/');
   } catch (e) {
     error.value = 'Failed to login. Please check your credentials.';
     console.error(e);

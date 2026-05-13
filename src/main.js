@@ -16,3 +16,9 @@ app.use(ConfirmationService);
 app.component('Toast', Toast);
 app.directive('ripple', Ripple);
 app.mount('#app');
+
+if (localStorage.getItem('auth_token')) {
+  import('./service/auth.service.js').then((m) =>
+    m.syncCurrentUserFromServer().catch(() => {}),
+  );
+}

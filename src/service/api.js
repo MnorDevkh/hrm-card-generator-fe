@@ -36,8 +36,12 @@ export async function apiFetch(path, options = {}) {
     // If the token is invalid, clear it and redirect to login
     if (response.status === 401) {
       localStorage.removeItem('auth_token');
+      localStorage.removeItem('role');
       // Use location.href to force a page reload, clearing any in-memory state
       window.location.href = '/login';
+    } else if (response.status === 403) {
+      // Logged in but not allowed for this resource — send home without dropping the session
+      window.location.href = '/';
     }
     throw error;
   }

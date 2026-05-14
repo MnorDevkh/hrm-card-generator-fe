@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html lang="km"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AGA Institute Payment Receipt</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts for Khmer and English -->
+<link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;700&amp;family=Moul&amp;family=Inter:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="page-setup">
+    /* A5 Landscape Dimensions: 210mm x 148mm */
+    body {
+      background-color: #e5e7eb;
+      font-family: 'Kantumruy Pro', 'Inter', sans-serif;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .a5-container {
+      width: 210mm;
+      height: 148mm;
+      background-color: #ffffff;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      position: relative;
+      padding: 10mm;
+      box-sizing: border-box;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media print {
+      body { background-color: white; }
+      .a5-container { 
+        box-shadow: none; 
+        margin: 0;
+      }
+    }
+
+    .khmer-moul { font-family: 'Moul', cursive; }
+    .dotted-line { border-bottom: 1.5px dotted #000; }
+    
+    /* Watermark styling */
+    .watermark {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0.1;
+      width: 300px;
+      z-index: 0;
+      pointer-events: none;
+    }
+  </style>
+<style data-purpose="typography-and-spacing">
+    .label-text { font-size: 0.85rem; }
+    .input-text { font-weight: 700; font-size: 0.95rem; }
+    .title-primary { font-size: 1.5rem; color: #000; }
+    .footer-text { font-size: 0.65rem; color: #333; }
+  </style>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            agaBlue: '#1a365d',
+            agaGold: '#b08d57',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body>
+<!-- BEGIN: Main Document Container -->
+<div class="a5-container relative z-10" id="receipt">
+<!-- Watermark Background -->
+<img alt="Watermark" class="watermark" data-purpose="background-watermark" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzBBCI--AgKd5OHMJeW2MjAhXMPPYb6jtN7rIlEK-BGLLO-mm3Y0JfK9lAtW29hUJl-k2lP23CQO6rfqSFhgYwsTXSFv5K2ni9-ZcpGyldXt8FIZeW95lGxu-0RQN9MDhWg3W8sb9SbIl0PER6VgWBuRvR0FqSWZD-sFmf2vNzqBqlZ3ho_XKxrWlvpOq4JAQsADwE8qAo6wMIk7OuAERBgzBmRwtoQ1MbD7S6aHVeT5Vd5eKPvTOM7wpJ1jQMwAuSvCijh1-IVSU"/>
+<!-- BEGIN: Header Section -->
+<header class="flex justify-between items-start mb-2" data-purpose="header">
+<div class="flex items-center gap-3">
+<!-- Logo Placeholder from the provided image -->
+<div class="w-16 h-16 relative">
+<img alt="AGA Logo" class="w-full h-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBzBBCI--AgKd5OHMJeW2MjAhXMPPYb6jtN7rIlEK-BGLLO-mm3Y0JfK9lAtW29hUJl-k2lP23CQO6rfqSFhgYwsTXSFv5K2ni9-ZcpGyldXt8FIZeW95lGxu-0RQN9MDhWg3W8sb9SbIl0PER6VgWBuRvR0FqSWZD-sFmf2vNzqBqlZ3ho_XKxrWlvpOq4JAQsADwE8qAo6wMIk7OuAERBgzBmRwtoQ1MbD7S6aHVeT5Vd5eKPvTOM7wpJ1jQMwAuSvCijh1-IVSU"/>
+</div>
+<div class="flex flex-col">
+<h1 class="khmer-moul text-agaBlue text-lg leading-tight">វិទ្យាស្ថានអាញ់ា</h1>
+<h2 class="font-bold text-agaBlue text-xl tracking-wider -mt-1">AGA INSTITUTE</h2>
+<div class="flex gap-6 mt-0.5">
+<div class="text-[0.6rem] text-center">
+<span class="block khmer-moul text-agaBlue">ឧត្តមភាព</span>
+<span class="block uppercase font-bold text-agaBlue tracking-tighter">Excellence</span>
+</div>
+<div class="text-[0.6rem] text-center">
+<span class="block khmer-moul text-agaBlue">គុណភាព</span>
+<span class="block uppercase font-bold text-agaBlue tracking-tighter">Quality</span>
+</div>
+</div>
+</div>
+</div>
+<div class="text-right">
+<p class="font-bold text-sm">№ AI: 22426-01</p>
+</div>
+</header>
+<!-- END: Header Section -->
+<!-- BEGIN: Title Section -->
+<section class="text-center mb-4" data-purpose="document-title">
+<h3 class="khmer-moul text-2xl mb-1">បង្កាន់ដៃទទួលប្រាក់</h3>
+<div class="flex justify-center items-center gap-2">
+<div class="h-[1px] w-12 bg-black"></div>
+<div class="rotate-45 border border-black p-0.5"></div>
+<div class="h-[1px] w-12 bg-black"></div>
+</div>
+</section>
+<!-- END: Title Section -->
+<!-- BEGIN: Form Body -->
+<main class="flex-grow space-y-3 relative z-20" data-purpose="receipt-details">
+<!-- Row 1: Name and Name English -->
+<div class="flex items-end gap-2">
+<span class="label-text whitespace-nowrap">គោត្តនាម និងនាម:</span>
+<div class="flex-grow dotted-line pb-0.5 px-2">
+<span class="khmer-moul input-text">កាន កណិកា</span>
+</div>
+<span class="label-text whitespace-nowrap ml-2">អក្សរឡាតាំង:</span>
+<div class="w-1/3 dotted-line pb-0.5 px-2 text-center">
+<span class="input-text uppercase">KAN KANIKA</span>
+</div>
+</div>
+<!-- Row 2: Gender, DOB, Phone -->
+<div class="flex items-end gap-2">
+<span class="label-text whitespace-nowrap">ភេទ:</span>
+<div class="w-16 dotted-line pb-0.5 px-2 text-center">
+<span class="input-text">ស្រី</span>
+</div>
+<span class="label-text whitespace-nowrap">ថ្ងៃ-ខែ-ឆ្នាំកំណើត :</span>
+<div class="flex-grow dotted-line pb-0.5 px-2 text-center">
+<span class="input-text">២៩ មិថុនា ២០០០</span>
+</div>
+<span class="label-text whitespace-nowrap ml-2">ទូរស័ព្ទ :</span>
+<div class="w-1/4 dotted-line pb-0.5 px-2 text-center">
+<span class="input-text">097 373 0725</span>
+</div>
+</div>
+<!-- Row 3: Faculty, Batch, Degree -->
+<div class="flex items-end gap-2">
+<span class="label-text whitespace-nowrap">មហាវិទ្យាល័យ :</span>
+<div class="flex-grow dotted-line pb-0.5 px-2 text-center">
+<span class="input-text">គ្រប់គ្រង</span>
+</div>
+<span class="label-text whitespace-nowrap">ជំនាន់ទី :</span>
+<div class="w-16 dotted-line pb-0.5 px-2 text-center">
+<span class="input-text">B06</span>
+</div>
+<span class="label-text whitespace-nowrap ml-2">ថ្នាក់ :</span>
+<span class="input-text font-bold">បរិញ្ញាបត្រជាន់ខ្ពស់</span>
+</div>
+<!-- Row 4: Amount / Purpose -->
+<div class="flex items-end gap-2">
+<span class="label-text whitespace-nowrap">ចំនួនទឹកប្រាក់ :</span>
+<div class="flex-grow dotted-line pb-0.5 px-2 text-center">
+<span class="font-bold text-sm">សម្រាប់ សេវាគណៈកម្មការណែនាំសរសេររបាយការណ៍ស្រាវជ្រាវបញ្ចប់ការសិក្សា</span>
+</div>
+</div>
+<!-- Row 5: Notes -->
+<div class="flex items-end gap-2">
+<span class="label-text whitespace-nowrap">បញ្ជាក់បន្ថែម :</span>
+<div class="flex-grow dotted-line min-h-[1.5rem]"></div>
+</div>
+<!-- Row 6: Empty Note Line -->
+<div class="dotted-line w-full min-h-[1.5rem]"></div>
+<!-- Row 7: Warning and Date Area -->
+<div class="flex justify-between items-start mt-4">
+<div class="text-red-600 flex items-start gap-1 max-w-[40%]">
+<span class="text-lg leading-none font-bold">❌</span>
+<p class="text-[0.7rem] font-bold">ទឹកប្រាក់ដែលបង់ហើយមិនអាចដកវិញបានទេ</p>
+</div>
+<div class="text-right">
+<p class="text-xs mb-1">រាជធានីភ្នំពេញ ថ្ងៃទី..................ខែ..................ឆ្នាំ..................</p>
+<p class="text-xs font-bold khmer-moul">ហត្ថលេខា និងឈ្មោះអ្នកទទួល</p>
+<div class="h-16"></div> <!-- Signature Space -->
+</div>
+</div>
+</main>
+<!-- END: Form Body -->
+<!-- BEGIN: Footer -->
+<footer class="mt-auto pt-2 border-t-2 border-blue-400" data-purpose="footer">
+<div class="flex justify-between items-center footer-text font-medium">
+<div class="flex items-center gap-1">
+<span class="khmer-moul text-[0.55rem]">អាសយដ្ឋាន:</span>
+<span>ភូមិទ្រា ៣ សង្កាត់ស្ទឹងមានជ័យទី១ ខណ្ឌមានជ័យ រាជធានីភ្នំពេញ, ទូរស័ព្ទលេខ: 068 434398 | 0966 434398 | 089 434398</span>
+</div>
+</div>
+</footer>
+<!-- END: Footer -->
+</div>
+<!-- END: Main Document Container -->
+</body></html>

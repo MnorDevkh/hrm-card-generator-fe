@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="w-full min-h-screen">
+  <div class="w-full min-h-screen justify-center items-center background-gray-500">
     <router-view />
   </div>
 </template>

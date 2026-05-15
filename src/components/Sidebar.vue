@@ -112,6 +112,12 @@ const allMenuItems = [
     roles: [ROLE_ADMIN]
   },
   {
+    label: 'Receipts',
+    icon: 'pi pi-print',
+    to: '/receipts',
+    roles: [ROLE_ADMIN]
+  },
+  {
     label: 'List filters',
     icon: 'pi pi-list',
     to: '/settings/catalog',

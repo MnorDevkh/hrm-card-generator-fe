@@ -13,6 +13,7 @@ import ReceptionLayout from '../ReceptionLayout.vue';
 import BlankLayout from '@/BlankLayout.vue';
 import {
   getCurrentRole,
+  ROLE_ADMIN,
   ROLE_MANAGE_STUDENT,
   ROLE_MANAGE_STAFF,
   ROLE_MANAGE_LECTURER,
@@ -78,6 +79,13 @@ router.beforeEach((to, from, next) => {
   }
 
   const role = getCurrentRole();
+  if (loggedIn && role === ROLE_ADMIN && to.path === '/receipt') {
+    return next({ path: '/receipts', replace: true });
+  }
+  if (loggedIn && role === ROLE_RECEPT && to.path === '/receipts') {
+    return next({ path: '/receipt', replace: true });
+  }
+
   const recordWithRoles = to.matched.find((record) =>
     Array.isArray(record.meta?.allowedRoles),
   );

@@ -45,23 +45,11 @@
             </template>
             PDF (all)
           </Button>
-          <Button :disabled="!rows.length" @click="printAll" class="w-full sm:w-auto">
-            <template #icon>
-              <PrinterOutlined />
-            </template>
-            Print all
-          </Button>
           <Button :disabled="!selectedRowKeys.length" @click="downloadPdfSelected" class="w-full sm:w-auto">
             <template #icon>
               <FilePdfOutlined />
             </template>
             PDF (selected)
-          </Button>
-          <Button :disabled="!selectedRowKeys.length" @click="printSelected" class="w-full sm:w-auto">
-            <template #icon>
-              <PrinterOutlined />
-            </template>
-            Print selected
           </Button>
         </div>
         </div>
@@ -116,11 +104,6 @@
                 <Button type="text" shape="circle" @click="downloadPdfOne(record)">
                   <template #icon>
                     <FilePdfOutlined class="text-green-600" />
-                  </template>
-                </Button>
-                <Button type="text" shape="circle" @click="printOne(record)">
-                  <template #icon>
-                    <PrinterOutlined class="text-gray-700" />
                   </template>
                 </Button>
               </div>
@@ -389,7 +372,7 @@ const rowRowSelection = computed(() => ({
 
 const rowColumns = [
   { title: 'No', key: 'index', width: 56 },
-  { title: '№ / Serial', key: 'serial_no', width: 100 },
+  { title: '№ / Serial', key: 'serial_no', width: 200 },
   { title: 'Khmer name', dataIndex: 'name_khmer', key: 'name_khmer', ellipsis: true },
   { title: 'Latin name', dataIndex: 'name_latin', key: 'name_latin', ellipsis: true },
   { title: 'Phone', dataIndex: 'phone', key: 'phone', width: 120 },

@@ -63,7 +63,7 @@
         <!-- Faculty, batch, degree -->
         <div class="rc-field-row rc-field-row--wrap">
           <span class="rc-label shrink-0 whitespace-nowrap">មហាវិទ្យាល័យ :</span>
-          <div class="rc-dotted flex min-w-0 flex-1 basis-[40%] items-end justify-center px-2 ">
+          <div class="rc-dotted flex min-w-0 basis-[24%] shrink grow-0 items-end justify-center px-2 ">
             <span class="rc-input">{{ row.faculty || '' }}</span>
           </div>
           <span class="rc-label shrink-0 whitespace-nowrap">ជំនាន់ទី :</span>
@@ -71,7 +71,9 @@
             <span class="rc-input">{{ row.batch || '' }}</span>
           </div>
           <span class="rc-label ml-2 shrink-0 whitespace-nowrap">ថ្នាក់ :</span>
-          <span class="khmer-moul rc-input font-bold">{{ row.degree_level || '' }}</span>
+          <div class="rc-dotted flex min-w-0 flex-1 basis-[32%] items-end justify-center px-2 ">
+            <span class="khmer-moul rc-input font-bold">{{ row.degree_level || '' }}</span>
+          </div>
         </div>
 
         <!-- Amount / purpose -->
@@ -100,16 +102,18 @@
         <div class="receipt-sig-block">
           <div class="receipt-sig-row">
             <div class="receipt-sig-warning">
-              <span class="receipt-sig-icon" aria-hidden="true">❌</span>
+              <span class="receipt-sig-icon" aria-hidden="true"><i class="pi pi-exclamation-triangle"></i></span>
               <p class="receipt-sig-warning-text">ទឹកប្រាក់ដែលបង់ហើយមិនអាចដកវិញបានទេ</p>
             </div>
             <div class="receipt-sig-aside">
-              <p class="receipt-sig-date">
-                រាជធានីភ្នំពេញ ថ្ងៃទី<span class="tracking-widest">..................</span>ខែ<span class="tracking-widest"
-                  >..................</span
-                >ឆ្នាំ<span class="tracking-widest">..................</span>
-              </p>
-              <p class="receipt-sig-handwriting khmer-moul">ហត្ថលេខា និងឈ្មោះអ្នកទទួល</p>
+              <div class="receipt-sig-dateline">
+                <p class="receipt-sig-date">
+                  រាជធានីភ្នំពេញ ថ្ងៃទី<span class="tracking-widest">..................</span>ខែ<span class="tracking-widest"
+                    >..................</span
+                  >ឆ្នាំ<span class="tracking-widest">..................</span>
+                </p>
+                <p class="receipt-sig-handwriting khmer-moul">ហត្ថលេខា និងឈ្មោះអ្នកទទួល</p>
+              </div>
               <div class="receipt-sig-space" aria-hidden="true"></div>
             </div>
           </div>
@@ -266,8 +270,8 @@ const paymentLine = computed(() => {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.55rem 0;
-  min-height: 1.25rem;
+  padding: 0.1rem 0;
+  min-height: 0.25rem;
   box-sizing: border-box;
 }
 
@@ -364,18 +368,32 @@ const paymentLine = computed(() => {
 }
 
 .receipt-sig-aside {
-  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   flex: 1;
   min-width: 0;
 }
 
+/* Shrink-wrap to date line width so handwriting centers under that line, not full aside */
+.receipt-sig-dateline {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  max-width: 100%;
+}
+
 .receipt-sig-date {
+  width: 100%;
+  text-align: right;
   font-size: 0.75rem;
   line-height: 1.35;
   margin: 0 0 0.4rem 0;
 }
 
 .receipt-sig-handwriting {
+  width: 100%;
+  text-align: center;
   font-size: 0.75rem;
   font-weight: 700;
   margin: 0 0 0.35rem 0;
@@ -383,6 +401,7 @@ const paymentLine = computed(() => {
 
 .receipt-sig-space {
   height: 4rem;
+  align-self: stretch;
 }
 
 .receipt-footer {

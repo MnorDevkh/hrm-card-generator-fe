@@ -3,7 +3,7 @@
     <div class="receipt-a5 relative z-10 flex flex-col overflow-hidden bg-white text-[#111]">
       <!-- Watermark -->
       <img
-        :src="receiptLogo"
+        :src="Logo"
         alt=""
         class="receipt-watermark pointer-events-none select-none"
         width="300"
@@ -13,21 +13,19 @@
 
       <header class="relative z-20 mb-2 flex justify-between items-start">
         <div class="flex items-center gap-3">
-          <div class="relative w-52 shrink-0">
+          <div class="relative w-48 shrink-0">
             <img :src="receiptLogo" alt="AGA" class="h-full w-full object-contain" />
           </div>
         </div>
         <div class="text-right">
-          <p class="text-sm font-bold">№ AI: {{ row.serial_no || '' }}</p>
+          <p class="text-sm font-bold font-weight-700">№ AI: {{ row.serial_no || '' }}</p>
         </div>
       </header>
 
       <section class="receipt-doc-title">
-        <h3 class="receipt-doc-title-text khmer-moul">បង្កាន់ដៃទទួលប្រាក់</h3>
-        <div class="receipt-doc-title-ornament" >
-          <span class="receipt-doc-title-line"></span>
-          <span class="receipt-doc-title-diamond"></span>
-          <span class="receipt-doc-title-line"></span>
+        <h3 class="receipt-doc-title-text">បង្កាន់ដៃទទួលប្រាក់</h3>
+        <div class="">
+          <span class="receipt-doc-tacteing">7</span>
         </div>
       </section>
 
@@ -35,11 +33,11 @@
         <!-- Name -->
         <div class="rc-field-row">
           <span class="rc-label shrink-0 whitespace-nowrap">គោត្តនាម និងនាម:</span>
-          <div class="rc-dotted flex min-w-0 flex-1 items-end justify-center px-2 ">
+          <div class="rc-dotted min-w-0 flex-1">
             <span class="khmer-moul rc-input">{{ row.name_khmer || '' }}</span>
           </div>
           <span class="rc-label ml-2 shrink-0 whitespace-nowrap">អក្សរឡាតាំង:</span>
-          <div class="rc-dotted flex w-1/3 min-w-[7rem] items-end justify-center px-2 ">
+          <div class="rc-dotted w-1/3 min-w-[7rem]">
             <span class="rc-input font-sans font-bold uppercase">{{ row.name_latin || '' }}</span>
           </div>
         </div>
@@ -47,15 +45,15 @@
         <!-- Gender, DOB, Phone -->
         <div class="rc-field-row">
           <span class="rc-label shrink-0 whitespace-nowrap">ភេទ:</span>
-          <div class="rc-dotted flex w-16 shrink-0 items-end justify-center px-2 ">
+          <div class="rc-dotted w-28 shrink-0">
             <span class="rc-input">{{ row.gender || '' }}</span>
           </div>
           <span class="rc-label shrink-0 whitespace-nowrap">ថ្ងៃ-ខែ-ឆ្នាំកំណើត :</span>
-          <div class="rc-dotted flex min-w-0 flex-1 items-end justify-center px-2 ">
+          <div class="rc-dotted min-w-0 flex-1">
             <span class="rc-input">{{ birthDateKhmer }}</span>
           </div>
           <span class="rc-label ml-2 shrink-0 whitespace-nowrap">ទូរស័ព្ទ :</span>
-          <div class="rc-dotted flex w-1/4 min-w-[5.5rem] items-end justify-center px-2 ">
+          <div class="rc-dotted w-1/4 min-w-[5.5rem]">
             <span class="rc-input">{{ row.phone || '' }}</span>
           </div>
         </div>
@@ -63,15 +61,15 @@
         <!-- Faculty, batch, degree -->
         <div class="rc-field-row rc-field-row--wrap">
           <span class="rc-label shrink-0 whitespace-nowrap">មហាវិទ្យាល័យ :</span>
-          <div class="rc-dotted flex min-w-0 basis-[24%] shrink grow-0 items-end justify-center px-2 ">
+          <div class="rc-dotted w-4/12 shrink-0">
             <span class="rc-input">{{ row.faculty || '' }}</span>
           </div>
           <span class="rc-label shrink-0 whitespace-nowrap">ជំនាន់ទី :</span>
-          <div class="rc-dotted flex w-16 shrink-0 items-end justify-center px-2 ">
+          <div class="rc-dotted w-28 shrink-0">
             <span class="rc-input">{{ row.batch || '' }}</span>
           </div>
           <span class="rc-label ml-2 shrink-0 whitespace-nowrap">ថ្នាក់ :</span>
-          <div class="rc-dotted flex min-w-0 flex-1 basis-[32%] items-end justify-center px-2 ">
+          <div class="min-w-0 flex-1 basis-[22%]">
             <span class="khmer-moul rc-input font-bold">{{ row.degree_level || '' }}</span>
           </div>
         </div>
@@ -79,20 +77,20 @@
         <!-- Amount / purpose -->
         <div class="rc-field-row">
           <span class="rc-label shrink-0 whitespace-nowrap">ចំនួនទឹកប្រាក់ :</span>
-          <div class="rc-dotted flex min-h-[1.25rem] min-w-0 flex-1 items-end justify-center px-2  text-center">
+          <div class="rc-dotted min-w-0 flex-1 text-center">
             <span class="rc-input">{{ row.amount || '' }}</span>
           </div>
           <span class="rc-label ml-2 shrink-0 whitespace-nowrap">សម្រាប់ :</span>
-          <div class="rc-dotted flex w-4/6 min-w-[5.5rem] items-end justify-center px-2 ">
+          <div class=" rc-dotted--start w-4/6 min-w-[5.5rem]">
             <span class="rc-input">{{ row.purpose || '' }}</span>
           </div>
         </div>
 
         <!-- Additional note -->
-        <div class="rc-field-row">
+        <div class="rc-field-row rc-field-row--note">
           <span class="rc-label shrink-0 whitespace-nowrap">បញ្ជាក់បន្ថែម :</span>
-          <div class="rc-dotted min-h-[1.5rem] min-w-0 flex-1 px-2 ">
-            <span class="rc-input text-sm">{{ row.additional_note || '' }}</span>
+          <div class="rc-dotted min-w-0 flex-1">
+            <span class="rc-input rc-input--sm">{{ row.additional_note || '' }}</span>
           </div>
         </div>
 
@@ -112,7 +110,7 @@
                     >..................</span
                   >ឆ្នាំ<span class="tracking-widest">..................</span>
                 </p>
-                <p class="receipt-sig-handwriting khmer-moul">ហត្ថលេខា និងឈ្មោះអ្នកទទួល</p>
+                <p class="receipt-sig-handwriting">ហត្ថលេខា និងឈ្មោះអ្នកទទួល</p>
               </div>
               <div class="receipt-sig-space" aria-hidden="true"></div>
             </div>
@@ -122,10 +120,9 @@
 
       <footer class="receipt-footer relative z-20 mt-auto border-t-2 border-blue-400">
         <div class="flex justify-center gap-2 text-[0.75rem]  font-medium leading-snug text-[#333]">
-          <div class="flex min-w-0 flex-1 items-center gap-1 ">
-            <span class="khmer-moul shrink-0 ">អាសយដ្ឋាន:</span>
+          <div class="flex min-w-0 flex-1 items-center gap-1  justify-center">
             <span>
-              ភូមិទ្រា ៣ សង្កាត់ស្ទឹងមានជ័យទី១ ខណ្ឌមានជ័យ រាជធានីភ្នំពេញ, ទូរស័ព្ទលេខ: 068 434398 | 0966 434398 | 089 434398
+              អាសយដ្ឋាន: ភូមិទ្រា ៣ សង្កាត់ស្ទឹងមានជ័យទី១ ខណ្ឌមានជ័យ រាជធានីភ្នំពេញ, ទូរស័ព្ទលេខ: 068 434398 | 0966 434398 | 089 434398
             </span>
           </div>
         </div>
@@ -135,8 +132,11 @@
 </template>
 
 <script setup>
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import receiptLogo from '@/assets/receiptlogo.png';
+import Logo from '@/assets/ailogo.png';
+
+const TACTEING_ORNAMENT_SIZE = '1.75rem';
 
 const props = defineProps({
   row: { type: Object, required: true },
@@ -193,16 +193,28 @@ function formatBirthDateKhmer(raw) {
 
 const birthDateKhmer = computed(() => formatBirthDateKhmer(props.row.birth_date));
 
-const paymentLine = computed(() => {
-  const amt = props.row.amount != null && props.row.amount !== '' ? String(props.row.amount).trim() : '';
-  const purpose = props.row.purpose != null && props.row.purpose !== '' ? String(props.row.purpose).trim() : '';
-  if (amt && purpose) return `${amt} — សម្រាប់ ${purpose}`;
-  if (purpose) return `សម្រាប់ ${purpose}`;
-  return amt;
+onMounted(() => {
+  if (typeof document !== 'undefined' && document.fonts?.load) {
+    document.fonts.load(`${TACTEING_ORNAMENT_SIZE} Tacteing`).catch(() => {});
+    document.fonts.load("1.5rem 'Khmer OS Muol Light'").catch(() => {});
+  }
 });
+
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'Tacteing';
+  src: url('@/assets/fonts/Tacteing.ttf') format('truetype');
+  font-display: block;
+}
+
+@font-face {
+  font-family: 'Khmer OS Muol Light';
+  src: local('Khmer OS Muol Light'), local('KhmerOSMuolLight');
+  font-display: block;
+}
+
 .receipt-page {
   display: flex;
   justify-content: center;
@@ -241,7 +253,7 @@ const paymentLine = computed(() => {
   object-fit: contain;
 }
 
-/* Title block: explicit spacing for preview + PDF (ornament needs vertical room for rotated diamond) */
+/* Title block: explicit spacing for preview + PDF (ornament needs vertical room for Tacteing glyph) */
 .receipt-doc-title {
   position: relative;
   z-index: 20;
@@ -249,7 +261,6 @@ const paymentLine = computed(() => {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 0.15rem 0 0.15rem;
   box-sizing: border-box;
 }
 
@@ -257,8 +268,9 @@ const paymentLine = computed(() => {
   display: block;
   width: fit-content;
   max-width: 100%;
-  margin: 0 auto 0.55rem;
+  margin: 0 auto 0.1rem;
   padding: 0;
+  font-family: 'Khmer OS Muol Light', 'KhmerOSMuolLight', 'Moul', 'Kantumruy Pro', 'Khmer', serif;
   font-size: 1.5rem;
   line-height: 1;
   font-weight: 400;
@@ -271,7 +283,7 @@ const paymentLine = computed(() => {
   justify-content: center;
   gap: 0.5rem;
   padding: 0.1rem 0;
-  min-height: 0.25rem;
+  min-height: 1.5rem;
   box-sizing: border-box;
 }
 
@@ -284,34 +296,62 @@ const paymentLine = computed(() => {
   flex-shrink: 0;
 }
 
-.receipt-doc-title-diamond {
+.receipt-doc-tacteing {
   display: block;
-  box-sizing: border-box;
-  width: 7px;
-  height: 7px;
-  border: 1px solid #000000;
-  background-color: #ffffff;
-  transform: rotate(45deg);
   flex-shrink: 0;
+  font-family: 'Tacteing', serif;
+  font-size: 48px;
+  font-weight: 400;
+  line-height: 1;
+  color: #000000;
+  margin-top: -1rem;
 }
 
+/* Label + dotted share one line-height so underline meets label text bottom (preview === PDF) */
 .rc-label {
-  font-size: 0.85rem;
+  display: inline-block;
+  flex-shrink: 0;
+  font-size: 14px;
+  line-height: var(--rc-line-h, 1.25rem);
+  vertical-align: baseline;
   color: #111;
 }
 
 .rc-input {
-  display: block;
-  width: fit-content;
-  max-width: 100%;
-  margin: 0 auto 0.35rem;
-  font-weight: 500;
+  display: inline;
+  margin: 0;
+  padding: 0;
+  font-weight: 700;
+  font-family: 'Kantumruy Pro', 'Inter', sans-serif;
+  font-size: 14px;
   font-size: 0.95rem;
+  line-height: var(--rc-line-h, 1.9rem);
+  vertical-align: baseline;
   color: #000;
 }
 
+.rc-input--sm {
+  font-size: 0.875rem;
+}
+
 .rc-dotted {
+  display: inline-block;
+  box-sizing: border-box;
+  min-width: 0;
+  padding: 0 0.5rem;
+  font-size: 0.85rem;
+  line-height: var(--rc-line-h, 1.25rem);
+  vertical-align: baseline;
   border-bottom: 1.5px dotted #000;
+  text-align: center;
+}
+
+.rc-dotted--start {
+  text-align: start;
+}
+
+.rc-field-row--note {
+  --rc-line-h: 1.5rem;
 }
 
 .rc-dotted-spacer {
@@ -321,10 +361,11 @@ const paymentLine = computed(() => {
 /* One vertical rhythm for form rows (avoids Tailwind space-y + pb fighting each other) */
 .rc-field-row {
   display: flex;
-  align-items: flex-end;
+  align-items: baseline;
   gap: 0.5rem;
-  padding-bottom: 0.65rem;
+  padding-bottom: 0.45rem;
   margin: 0;
+  line-height: var(--rc-line-h, 1.25rem);
 }
 
 .rc-field-row--wrap {
@@ -395,7 +436,6 @@ const paymentLine = computed(() => {
   width: 100%;
   text-align: center;
   font-size: 0.75rem;
-  font-weight: 700;
   margin: 0 0 0.35rem 0;
 }
 

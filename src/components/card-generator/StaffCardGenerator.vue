@@ -72,8 +72,8 @@
 
             <!-- Export Canvas (Hidden) -->
             <div id="canvas" v-if="exportCanvasVisible && !loading && staffList.length && templateUrl"
-                class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
-                style="position:fixed; left:-9999px; top:-9999px; width:auto; height:auto; pointer-events:none;">
+                class="grid grid-cols-1 gap-6"
+                style="position:fixed; left:-300px; top:0; width:216px; height:auto; overflow:visible; pointer-events:none;">
                 <div v-for="staff in staffList" :key="staff.id"
                     class="id-card relative rounded-xl shadow-lg border border-gray-200 overflow-hidden"
                     :data-staff-id="staff.id" style="width: 216px; height: 342px;">
@@ -91,18 +91,18 @@
 
                         <p class="card-id text-[11px] font-bold text-gray-900 tracking-wider " style="margin-top: 2px;">{{ staff.identity?.employee_id || '-' }}</p>
 
-                        <div class="card-details flex flex-col items-center " style="margin-top: -2px;">
-                            <p class="text-[14px] text-blue-900 tracking-wide mt-1 staff-name koh-santepheap-bold">{{ getTitle(staff.identity?.gender) }} {{ staff.identity?.en_name }}</p>
+                        <div class="card-details flex flex-col items-center" style="margin-top: -2px;">
+                            <p class="text-[14px] text-blue-900 tracking-wide staff-name koh-santepheap-bold" style="margin-top: 4px;">{{ getTitle(staff.identity?.gender) }} {{ staff.identity?.en_name }}</p>
                             <p class="text-[12px] font-bold text-red-600 leading-none">
                                 {{ staff.employment?.position || '-' }}</p>
                         </div>
 
-                        <div class="w-[170px] text-gray-900" style="margin-top: 5px;">
+                        <div class="w-[170px] text-gray-900 card-info-table" style="margin-top: 5px;">
                             <table class="w-full text-[10px] text-left">
                                 <tbody>
                                     <tr>
                                         <td>email</td>
-                                        <td class="align-top whitespace-nowrap" :title="getStaffEmailRaw(staff) || undefined">: {{ formatStaffEmailForCard(staff) }}</td>
+                                        <td class="align-top whitespace-nowrap">: {{ formatStaffEmailForCard(staff) }}</td>
                                     </tr>
                                     <tr>
                                         <td class="w-[50px]">DOB</td>
@@ -120,7 +120,8 @@
                             </table>
                         </div>
                     </div>
-                    <div class="absolute bottom-[29px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
+                    <div class="absolute z-10 flex items-center justify-center bg-white rounded card-qr"
+                        style="bottom: 18px; right: 20px; width: 1.5cm; height: 1.5cm; padding: 2px;">
                         <QrcodeVue :value="`${environment.url}staff-identity-verification/${staff.id}`" :size="52"
                             level="M" render-as="svg" class="w-13 h-13" />
                     </div>
@@ -178,7 +179,7 @@
                         </div>
                     </div>
 
-                    <div class="absolute bottom-[29px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
+                    <div class="absolute bottom-[29px] right-5 z-10 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
                         <QrcodeVue :value="`${environment.url}staff-identity-verification/${staff.id}`" :size="52"
                             level="M" render-as="svg" class="w-13 h-13" />
                     </div>
@@ -326,6 +327,9 @@ function applyExportColors(el) {
     const allEls = [el, ...el.querySelectorAll('*')];
 
     allEls.forEach(element => {
+        // html2canvas renders title tooltips as visible text (e.g. full email over QR)
+        element.removeAttribute('title');
+
         if (element.classList.contains('text-gray-900')) element.style.color = '#111827';
         else if (element.classList.contains('text-red-600')) element.style.color = '#DC2626';
         else if (element.classList.contains('text-blue-900')) element.style.color = '#1E3A8A';
@@ -352,8 +356,34 @@ function applyExportColors(el) {
         }
         if (element.classList.contains('staff-name')) {
             element.style.fontWeight = '900';
+            element.style.marginTop = '4px';
         }
     });
+
+    applyExportLayout(el);
+}
+
+/** Pin spacing as inline px so html2canvas matches on-screen preview. */
+function applyExportLayout(el) {
+    const cardContent = el.querySelector('.card-content');
+    if (cardContent) cardContent.style.paddingTop = '100px';
+
+    const cardId = el.querySelector('.card-id');
+    if (cardId) cardId.style.marginTop = '2px';
+
+    const cardDetails = el.querySelector('.card-details');
+    if (cardDetails) cardDetails.style.marginTop = '-2px';
+
+    const infoTable = el.querySelector('.card-info-table');
+    if (infoTable) infoTable.style.marginTop = '5px';
+
+    const qrBox = el.querySelector('.card-qr');
+    if (qrBox) {
+        qrBox.style.position = 'absolute';
+        qrBox.style.bottom = '18px';
+        qrBox.style.right = '20px';
+        qrBox.style.zIndex = '10';
+    }
 }
 
 async function showExportCanvas() {

@@ -140,6 +140,8 @@
 import { ref, watch, onMounted } from 'vue';
 import { Input, Textarea, Select, SelectOption, DatePicker, Button, ConfigProvider, Upload, message } from 'ant-design-vue';
 import { CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons-vue';
+import { environment } from '../../environments/environment';
+import { uploadImage } from '../../service/image.service';
 
 const props = defineProps({
   student: {
@@ -208,26 +210,15 @@ const initForm = () => {
 const getPhotoUrl = (path) => {
   if (!path) return '';
   if (path.startsWith('http')) return path;
-  return `https://cardsystemapi.aga-institute.edu.kh/media/image/${path}`;
+  return `${environment.apiBaseUrl}media/image/${path}`;
 };
 
 const uploadPhoto = async ({ file, onSuccess, onError }) => {
   const formData = new FormData();
   formData.append('file', file);
-  
+
   try {
-    const token = localStorage.getItem('token');
-    const response = await fetch('https://cardsystemapi.aga-institute.edu.kh/media/upload/?type_=student_photo&related_id=0', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-      body: formData
-    });
-
-    if (!response.ok) throw new Error('Upload failed');
-
-    const data = await response.json();
+    const data = await uploadImage(formData, 'student_photo');
     form.value.photo = data.filename;
     onSuccess(data);
     message.success('Photo uploaded successfully');

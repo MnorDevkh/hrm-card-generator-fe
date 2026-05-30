@@ -159,6 +159,8 @@
 import { ref, watch, onMounted } from 'vue';
 import { Input, Textarea, Select, SelectOption, DatePicker, Button, ConfigProvider, Upload, message } from 'ant-design-vue';
 import { CheckOutlined, CloseOutlined, UploadOutlined, EditOutlined } from '@ant-design/icons-vue';
+import { environment } from '../../environments/environment';
+import { uploadImage } from '../../service/image.service';
 
 const props = defineProps({
   lecture: {
@@ -197,26 +199,15 @@ const form = ref({
 const getPhotoUrl = (path) => {
   if (!path) return '';
   if (path.startsWith('http')) return path;
-  return `https://cardsystemapi.aga-institute.edu.kh/media/image/${path}`;
+  return `${environment.apiBaseUrl}media/image/${path}`;
 };
 
 const uploadPhoto = async ({ file, onSuccess, onError }) => {
   const formData = new FormData();
   formData.append('file', file);
-  
+
   try {
-    const token = localStorage.getItem('token');
-    const response = await fetch('https://cardsystemapi.aga-institute.edu.kh/media/upload/?type_=lecturers&related_id=0', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-      body: formData
-    });
-
-    if (!response.ok) throw new Error('Upload failed');
-
-    const data = await response.json();
+    const data = await uploadImage(formData, 'lecturers');
     form.value.photo = data.filename;
     onSuccess(data);
     message.success('Photo uploaded successfully');
@@ -262,30 +253,19 @@ onMounted(() => {
 const customUpload = async ({ file, onSuccess, onError }) => {
   const formData = new FormData();
   formData.append('file', file);
-  
+
   try {
-    const token = localStorage.getItem('token');
-    const response = await fetch('https://cardsystemapi.aga-institute.edu.kh/media/upload/?type_=docs&related_id=0', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-      body: formData
-    });
+    const data = await uploadImage(formData, 'docs');
 
-    if (!response.ok) throw new Error('Upload failed');
-
-    const data = await response.json();
-    
     const newDoc = {
       doc_type: data.type,
       file_path: data.filename,
       uploaded_at: data.created_at
     };
-    
+
     if (!form.value.docs) form.value.docs = [];
     form.value.docs.push(newDoc);
-    
+
     onSuccess(data, file);
     message.success(`${file.name} uploaded successfully.`);
   } catch (error) {

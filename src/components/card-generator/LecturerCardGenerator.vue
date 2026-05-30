@@ -79,7 +79,7 @@
             <!-- Export Canvas (Hidden) -->
             <div id="canvas" v-if="exportCanvasVisible && !loading && lecturers.length && templateUrl"
                 class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"
-                style="position:fixed; left:-9999px; top:-9999px; width:auto; height:auto; pointer-events:none;">
+                style="position:fixed; left:0; top:0; opacity:0; z-index:-1; width:auto; height:auto; pointer-events:none;">
                 <div v-for="lecturer in lecturers" :key="lecturer.id"
                     class="id-card relative rounded-xl shadow-lg border border-gray-200 overflow-hidden"
                     :data-lecturer-id="lecturer.id" style="width: 216px; height: 342px;">
@@ -96,24 +96,23 @@
                                 class="w-full h-full object-cover" />
                             <UserOutlined v-else class="text-3xl text-gray-300" />
                         </div>
-                        <p class="card-id text-[12px] font-bold text-gray-900 tracking-wider" style="margin-top: -6px;">
-                            {{
-                                lecturer.card_id }}</p>
-                        <div class="card-details flex flex-col items-center " style="margin-top: -5px;">
+                        <p class="card-id text-[11px] font-bold text-gray-900 tracking-wider">
+                            {{ lecturer.card_id || '-' }}</p>
+                        <div class="card-details flex flex-col items-center" style="margin-top: -6px;">
                             <p class="text-[14px] text-blue-900 tracking-wide mt-1 lecturer-name koh-santepheap-regular" > {{ getTitle(lecturer.gender) }} {{
                                 lecturer.name?.english }} </p>
                          
                         </div>
-                        <div class="w-[170px] text-gray-900">
-                            <table class="w-full text-[10px] text-left">
+                        <div class="w-[170px] text-gray-900 card-info-table">
+                            <table class="w-full text-[10px] text-left card-info-table-inner">
                                 <tbody>
                                     <tr>
                                         <td class="w-[50px]">DOB</td>
                                         <td>: {{ formatDate(lecturer.birth_date || lecturer.dob) }}</td>
                                     </tr>
-                                    <tr>
-                                        <td>email</td>
-                                        <td :style="{ fontSize: getEmailFontSize(lecturer.email), whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }">: {{ lecturer.email || '-' }}</td>
+                                    <tr >
+                                        <td class="w-[50px]">Email</td>
+                                        <td >: <span class="card-email-value" :style="getEmailValueStyle(lecturer.email)">{{ lecturer.email || '-' }}</span></td>
                                     </tr>
                                     <tr>
                                         <td>Phone</td>
@@ -136,7 +135,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="absolute bottom-[20px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
+                    <div class="absolute bottom-[10px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
                         <QrcodeVue :value="`${environment.url}lecturer-identity-verification/${lecturer.id}`" :size="52"
                             level="M" render-as="svg" class="w-14 h-14" />
                     </div>
@@ -176,16 +175,16 @@
                         </div>
 
                         <!-- Info Table -->
-                        <div class="w-[170px] text-gray-900">
-                            <table class="w-full text-[10px] text-left">
+                        <div class="w-[170px] text-gray-900 card-info-table">
+                            <table class="w-full text-[10px] text-left card-info-table-inner">
                                 <tbody>
                                     <tr>
                                         <td class="w-[50px]">DOB</td>
                                         <td>: {{ formatDate(lecturer.birth_date || lecturer.dob) }}</td>
                                     </tr>
-                                    <tr>
-                                        <td>email</td>
-                                        <td :style="{ fontSize: getEmailFontSize(lecturer.email), whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }">: {{ lecturer.email || '-' }}</td>
+                                    <tr >
+                                        <td class="w-[50px] ">Email</td>
+                                        <td >: <span :style="getEmailValueStyle(lecturer.email)">{{ lecturer.email || '-' }}</span></td>
                                     </tr>
                                     <tr>
                                         <td>Phone</td>
@@ -306,6 +305,19 @@ function getEmailFontSize(email) {
     return '6px';
 }
 
+/** Styles on inner span only — overflow on <td> causes html2canvas white blocks over text. */
+function getEmailValueStyle(email) {
+    return {
+        fontSize: getEmailFontSize(email),
+        color: '#111827',
+        backgroundColor: 'transparent',
+        display: 'inline-block',
+        maxWidth: '115px',
+        verticalAlign: 'top',
+        whiteSpace: 'nowrap',
+    };
+}
+
 const loadData = async () => {
     loading.value = true;
     try {
@@ -343,9 +355,12 @@ const loadData = async () => {
 
 function applyExportColors(el) {
     const allEls = [el, ...el.querySelectorAll('*')];
+    const textColorClasses = ['text-gray-900', 'text-red-600', 'text-blue-900', 'text-gray-300', 'text-gray-500', 'text-gray-600', 'text-gray-700'];
 
     // Map of Tailwind classes to Hex values to bypass oklch issues in html2canvas
     allEls.forEach(element => {
+        element.removeAttribute('title');
+
         // Text Colors
         if (element.classList.contains('text-gray-900')) element.style.color = '#111827';
         else if (element.classList.contains('text-red-600')) element.style.color = '#DC2626';
@@ -379,6 +394,64 @@ function applyExportColors(el) {
         if (element.classList.contains('lecturer-name')) {
             element.style.fontWeight = '900';
         }
+
+        const tag = element.tagName;
+        if ((tag === 'TD' || tag === 'TH' || tag === 'TABLE' || tag === 'SPAN') && element.closest('.card-info-table')) {
+            const hasTextColorClass = textColorClasses.some((c) => element.classList.contains(c));
+            if (!hasTextColorClass) element.style.color = '#111827';
+            if (!element.classList.contains('bg-white')) {
+                element.style.backgroundColor = 'transparent';
+            }
+        }
+    });
+
+    applyExportLayout(el);
+}
+
+/** Pin spacing as inline px so html2canvas keeps offset from top (not flush to top). */
+function applyExportLayout(el) {
+    el.style.boxShadow = 'none';
+
+    const cardContent = el.querySelector('.card-content');
+    if (cardContent) {
+        // html2canvas often ignores flex padding-top; margin on photo is reliable
+        cardContent.style.paddingTop = '0';
+    }
+
+    const photo = el.querySelector('.photo-container');
+    if (photo) photo.style.marginTop = '105px';
+
+    const cardId = el.querySelector('.card-id');
+    if (cardId) cardId.style.marginTop = '0';
+
+    const cardDetails = el.querySelector('.card-details');
+    if (cardDetails) cardDetails.style.marginTop = '-6px';
+
+    const lecturerName = el.querySelector('.lecturer-name');
+    if (lecturerName) lecturerName.style.marginTop = '4px';
+
+    const infoTable = el.querySelector('.card-info-table');
+    if (infoTable) infoTable.style.marginTop = '0';
+
+    const table = el.querySelector('.card-info-table-inner');
+    if (table) {
+        table.style.tableLayout = 'fixed';
+        table.style.width = '170px';
+        table.style.backgroundColor = 'transparent';
+    }
+
+    el.querySelectorAll('.card-info-table td, .card-info-table th').forEach((cell) => {
+        cell.style.backgroundColor = 'transparent';
+        cell.style.verticalAlign = 'top';
+        cell.style.overflow = 'visible';
+    });
+
+
+    el.querySelectorAll('.card-email-value').forEach((span) => {
+        span.style.backgroundColor = 'transparent';
+        span.style.overflow = 'visible';
+        span.style.textOverflow = 'clip';
+        span.style.color = '#111827';
     });
 }
 
@@ -422,6 +495,8 @@ async function exportCardsAsPages() {
                 backgroundColor: null,
                 useCORS: true,
                 allowTaint: true,
+                scrollX: 0,
+                scrollY: 0,
             });
             const imgData = canvas.toDataURL("image/png");
             if (i > 0) pdf.addPage([pageWidth, pageHeight], 'p');

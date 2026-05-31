@@ -91,28 +91,12 @@
         <Input v-model:value="form.employment.department" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Subject</label>
-        <Input v-model:value="form.employment.subject" />
-      </div>
-      <div class="flex flex-col gap-2">
-        <label>Employee Type</label>
-        <Input v-model:value="form.employment.employee_type" placeholder="e.g. Full-time" />
-      </div>
-      <div class="flex flex-col gap-2">
-        <label>Employment Type</label>
-        <Input v-model:value="form.employment.employment_type" placeholder="e.g. Contract" />
-      </div>
-      <div class="flex flex-col gap-2">
         <label>Date of Hire</label>
         <DatePicker v-model:value="form.employment.date_of_hire" :valueFormat="dateFormat" class="w-full" />
       </div>
       <div class="flex flex-col gap-2">
         <label>Work Shift</label>
         <Input v-model:value="form.employment.work_shift" placeholder="e.g. Full Day" />
-      </div>
-      <div class="flex flex-col gap-2">
-        <label>Supervisor</label>
-        <Input v-model:value="form.employment.supervisor" />
       </div>
       <div class="flex flex-col gap-2">
         <label>Status</label>
@@ -181,7 +165,7 @@
         <Input v-model:value="form.education.major" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Teaching Experience</label>
+        <label>Experience</label>
         <Input v-model:value="form.education.teaching_experience" />
       </div>
       <div class="flex flex-col gap-2">
@@ -261,12 +245,8 @@ const emptyContact = () => ({
 const emptyEmployment = () => ({
   position: '',
   department: '',
-  subject: '',
-  employee_type: '',
-  employment_type: '',
   date_of_hire: null,
   work_shift: '',
-  supervisor: '',
   status: 'Active'
 });
 

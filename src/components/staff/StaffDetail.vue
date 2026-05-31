@@ -95,12 +95,8 @@
                 <Descriptions bordered :column="1" size="middle">
                   <Descriptions.Item label="Position">{{ staff.employment?.position }}</Descriptions.Item>
                   <Descriptions.Item label="Department">{{ staff.employment?.department }}</Descriptions.Item>
-                  <Descriptions.Item label="Subject">{{ staff.employment?.subject || '-' }}</Descriptions.Item>
-                  <Descriptions.Item label="Employee Type">{{ staff.employment?.employee_type }}</Descriptions.Item>
-                  <Descriptions.Item label="Employment Type">{{ staff.employment?.employment_type }}</Descriptions.Item>
                   <Descriptions.Item label="Date of Hire">{{ formatDate(staff.employment?.date_of_hire) }}</Descriptions.Item>
                   <Descriptions.Item label="Work Shift">{{ staff.employment?.work_shift }}</Descriptions.Item>
-                  <Descriptions.Item label="Supervisor">{{ staff.employment?.supervisor }}</Descriptions.Item>
                   <Descriptions.Item label="Status">{{ staff.employment?.status }}</Descriptions.Item>
                 </Descriptions>
               </div>
@@ -111,7 +107,7 @@
                 <Descriptions bordered :column="1" size="middle">
                   <Descriptions.Item label="Education Level">{{ staff.education?.education_level }}</Descriptions.Item>
                   <Descriptions.Item label="Major">{{ staff.education?.major }}</Descriptions.Item>
-                  <Descriptions.Item label="Teaching Experience">{{ staff.education?.teaching_experience }}</Descriptions.Item>
+                  <Descriptions.Item label="Experience">{{ staff.education?.teaching_experience }}</Descriptions.Item>
                   <Descriptions.Item label="Skills">{{ staff.education?.skills }}</Descriptions.Item>
                   <Descriptions.Item label="Training">{{ staff.education?.training }}</Descriptions.Item>
                   <Descriptions.Item label="ID Card">{{ staff.legal?.id_card }}</Descriptions.Item>

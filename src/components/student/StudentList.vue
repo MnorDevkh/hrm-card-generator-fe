@@ -150,6 +150,13 @@ const { optionsByCategory, loading: catalogOptionsLoading } = useCatalogSelectOp
 const facultyOptions = computed(() => optionsByCategory.value[CATALOG_FACULTY] ?? []);
 const studyShiftOptions = computed(() => optionsByCategory.value[CATALOG_STUDY_SHIFT] ?? []);
 
+const formatDegreeLabel = (degree) => {
+  if (!degree) return '-';
+  if (degree === 'master') return t('student.fields.degreeMaster');
+  if (degree === 'bachelor') return t('student.fields.degreeBachelor');
+  return degree;
+};
+
 const columns = computed(() => [
   { title: t('student.fields.no'), key: 'index', width: 60 },
   { title: t('student.fields.cardId'), dataIndex: 'card_id', key: 'card_id' },
@@ -159,6 +166,18 @@ const columns = computed(() => [
   { title: t('student.fields.dateOfBirth'), dataIndex: 'birth_date', key: 'birth_date', customRender: ({ text }) => text ? (typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text) : '-' },
   { title: t('student.fields.phone'), dataIndex: 'phone', key: 'phone' },
   { title: t('student.fields.batch'), dataIndex: 'batch', key: 'batch' },
+  {
+    title: t('student.fields.currentDegree'),
+    dataIndex: 'current_degree',
+    key: 'current_degree',
+    customRender: ({ text }) => formatDegreeLabel(text),
+  },
+  {
+    title: t('student.fields.studyYear'),
+    dataIndex: 'study_year',
+    key: 'study_year',
+    customRender: ({ text }) => (text != null && text !== '' ? text : '-'),
+  },
   { title: t('student.fields.photo'), key: 'photo' },
   { title: t('common.actions'), key: 'actions', fixed: 'right', width: 150 },
 ]);

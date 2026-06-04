@@ -69,7 +69,7 @@
                   <Descriptions.Item label="វេនសិក្សា">{{ student.study_shift }}</Descriptions.Item>
                   <Descriptions.Item :label="t('student.fields.completeCredit')">{{ formatCompleteCredit(student.ischeck) }}</Descriptions.Item>
                   <Descriptions.Item :label="t('student.fields.currentDegree')">{{ formatDegree(student.current_degree) }}</Descriptions.Item>
-                  <Descriptions.Item :label="t('student.fields.studyYear')">{{ student.study_year ?? 1 }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('student.fields.studyYear')">{{ student.study_year != null && student.study_year !== '' ? student.study_year : '-' }}</Descriptions.Item>
                   <Descriptions.Item label="ជំនាន់ទី">{{ student.batch }}</Descriptions.Item>
                   <Descriptions.Item label="បញ្ចប់ការសិក្សាថ្នាក់">{{ student.education_level }}</Descriptions.Item>
                   <Descriptions.Item label="អតីតសិស្ស/និស្សិត">{{ student.high_school }}</Descriptions.Item>
@@ -238,8 +238,10 @@ const formatCompleteCredit = (ischeck) =>
   ischeck ? t('student.fields.completeCreditYes') : t('student.fields.completeCreditNo');
 
 const formatDegree = (degree) => {
+  if (!degree) return '-';
   if (degree === 'master') return t('student.fields.degreeMaster');
-  return t('student.fields.degreeBachelor');
+  if (degree === 'bachelor') return t('student.fields.degreeBachelor');
+  return degree;
 };
 const openPopup = () => {
   window.open('https://t.me/+6DdPPMitSdViMWVl', '_blank');

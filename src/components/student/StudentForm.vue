@@ -108,14 +108,14 @@
       </div>
       <div class="flex flex-col gap-2">
         <label>{{ t('student.fields.currentDegree') }}</label>
-        <Select v-model:value="form.current_degree" class="w-full">
+        <Select v-model:value="form.current_degree" allow-clear class="w-full" :placeholder="t('student.fields.currentDegree')">
           <SelectOption value="bachelor">{{ t('student.fields.degreeBachelor') }}</SelectOption>
           <SelectOption value="master">{{ t('student.fields.degreeMaster') }}</SelectOption>
         </Select>
       </div>
       <div class="flex flex-col gap-2">
         <label>{{ t('student.fields.studyYear') }}</label>
-        <Select v-model:value="form.study_year" class="w-full">
+        <Select v-model:value="form.study_year" allow-clear class="w-full" :placeholder="t('student.fields.studyYear')">
           <SelectOption :value="1">1</SelectOption>
           <SelectOption :value="2">2</SelectOption>
           <SelectOption :value="3">3</SelectOption>
@@ -201,8 +201,8 @@ const form = ref({
   photo: '',
   batch: '',
   ischeck: false,
-  current_degree: 'bachelor',
-  study_year: 1
+  current_degree: null,
+  study_year: null
 });
 
 function normalizeDateToYMD(value) {
@@ -230,10 +230,27 @@ const initForm = () => {
 
     form.value.birth_date = normalizeDateToYMD(form.value.birth_date);
     form.value.ischeck = props.student.ischeck === true;
-    form.value.current_degree = props.student.current_degree || 'bachelor';
-    form.value.study_year = props.student.study_year ?? 1;
+    form.value.current_degree = props.student.current_degree || null;
+    const year = props.student.study_year;
+    form.value.study_year = year != null && year !== '' ? Number(year) : null;
   }
 };
+
+function prepareStudentPayload(formData) {
+  const payload = JSON.parse(JSON.stringify(formData));
+  const isUpdate = !!payload.id;
+  for (const key of ['current_degree', 'study_year']) {
+    const val = payload[key];
+    if (val === null || val === undefined || val === '') {
+      if (isUpdate) {
+        payload[key] = null;
+      } else {
+        delete payload[key];
+      }
+    }
+  }
+  return payload;
+}
 
 const getPhotoUrl = (path) => {
   if (!path) return '';
@@ -263,6 +280,6 @@ onMounted(() => {
 });
 
 const save = () => {
-  emit('save', form.value);
+  emit('save', prepareStudentPayload(form.value));
 };
 </script>

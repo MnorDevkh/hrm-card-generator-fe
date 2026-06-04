@@ -4,7 +4,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <!-- Basic Info -->
       <div class="col-span-1 md:col-span-2">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Basic Information</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('student.sections.basic') }}</h3>
       </div>
 
       <!-- Profile Photo -->
@@ -23,101 +23,120 @@
       </div>
       
       <div class="flex flex-col gap-2">
-        <label>Card ID</label>
+        <label>{{ t('student.fields.cardId') }}</label>
         <Input v-model:value="form.card_id" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Identity ID</label>
+        <label>{{ t('student.fields.identityId') }}</label>
         <Input v-model:value="form.identity_id" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Name (English)</label>
+        <label>{{ t('student.fields.nameEnglish') }}</label>
         <Input v-model:value="form.name.english" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Name (Khmer)</label>
+        <label>{{ t('student.fields.nameKhmer') }}</label>
         <Input v-model:value="form.name.khmer" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Gender</label>
-        <Select v-model:value="form.gender" placeholder="Select Gender">
-          <SelectOption value="Male">Male</SelectOption>
-          <SelectOption value="Female">Female</SelectOption>
+        <label>{{ t('student.fields.gender') }}</label>
+        <Select v-model:value="form.gender" :placeholder="t('common.selectGender')">
+          <SelectOption value="Male">{{ t('common.male') }}</SelectOption>
+          <SelectOption value="Female">{{ t('common.female') }}</SelectOption>
         </Select>
       </div>
       <div class="flex flex-col gap-2">
-        <label>Date of Birth</label>
+        <label>{{ t('student.fields.dateOfBirth') }}</label>
         <DatePicker v-model:value="form.birth_date" valueFormat="YYYY-MM-DD" class="w-full" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Phone</label>
+        <label>{{ t('student.fields.phone') }}</label>
         <Input v-model:value="form.phone" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Email</label>
+        <label>{{ t('student.fields.email') }}</label>
         <Input v-model:value="form.email" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Batch</label>
+        <label>{{ t('student.fields.batch') }}</label>
         <Input v-model:value="form.batch" />
       </div>
 
       <!-- Birth Place -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Birth Place</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('student.sections.birthPlace') }}</h3>
       </div>
-      <div class="flex flex-col gap-2"><label>Province</label><Input v-model:value="form.birth_place.province" /></div>
-      <div class="flex flex-col gap-2"><label>District</label><Input v-model:value="form.birth_place.district" /></div>
-      <div class="flex flex-col gap-2"><label>Commune</label><Input v-model:value="form.birth_place.commune" /></div>
-      <div class="flex flex-col gap-2"><label>Village</label><Input v-model:value="form.birth_place.village" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.province') }}</label><Input v-model:value="form.birth_place.province" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.district') }}</label><Input v-model:value="form.birth_place.district" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.commune') }}</label><Input v-model:value="form.birth_place.commune" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.village') }}</label><Input v-model:value="form.birth_place.village" /></div>
 
       <!-- Current Address -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Current Address</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('student.sections.currentAddress') }}</h3>
       </div>
-      <div class="flex flex-col gap-2"><label>Province</label><Input v-model:value="form.current_address.province" /></div>
-      <div class="flex flex-col gap-2"><label>District</label><Input v-model:value="form.current_address.district" /></div>
-      <div class="flex flex-col gap-2"><label>Commune</label><Input v-model:value="form.current_address.commune" /></div>
-      <div class="flex flex-col gap-2"><label>Village</label><Input v-model:value="form.current_address.village" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.province') }}</label><Input v-model:value="form.current_address.province" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.district') }}</label><Input v-model:value="form.current_address.district" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.commune') }}</label><Input v-model:value="form.current_address.commune" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.village') }}</label><Input v-model:value="form.current_address.village" /></div>
 
       <!-- Guardian -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Guardian</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('student.sections.guardian') }}</h3>
       </div>
-      <div class="flex flex-col gap-2"><label>Guardian Name</label><Input v-model:value="form.guardian.name" /></div>
-      <div class="flex flex-col gap-2"><label>Guardian Phone</label><Input v-model:value="form.guardian.phone" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.guardianName') }}</label><Input v-model:value="form.guardian.name" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.guardianPhone') }}</label><Input v-model:value="form.guardian.phone" /></div>
 
       <!-- Education -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Education Background</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('student.sections.education') }}</h3>
       </div>
-      <div class="flex flex-col gap-2"><label>High School</label><Input v-model:value="form.high_school" /></div>
-      <div class="flex flex-col gap-2"><label>BacII Year</label><Input v-model:value="form.bacII_year" /></div>
-      <div class="flex flex-col gap-2"><label>BacII Code</label><Input v-model:value="form.bacII_code" /></div>
-      <div class="flex flex-col gap-2"><label>BacII Result</label><Input v-model:value="form.bacII_result" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.highSchool') }}</label><Input v-model:value="form.high_school" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.bacIIYear') }}</label><Input v-model:value="form.bacII_year" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.bacIICode') }}</label><Input v-model:value="form.bacII_code" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.bacIIResult') }}</label><Input v-model:value="form.bacII_result" /></div>
 
       <!-- University -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">University Info</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('student.sections.university') }}</h3>
       </div>
-      <div class="flex flex-col gap-2"><label>Faculty</label><Input v-model:value="form.faculty" /></div>
-      <div class="flex flex-col gap-2"><label>Major</label><Input v-model:value="form.major" /></div>
-      <div class="flex flex-col gap-2"><label>Study Shift</label><Input v-model:value="form.study_shift" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.faculty') }}</label><Input v-model:value="form.faculty" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.major') }}</label><Input v-model:value="form.major" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.studyShift') }}</label><Input v-model:value="form.study_shift" /></div>
+      <div class="flex flex-col gap-2 justify-end">
+        <Checkbox v-model:checked="form.ischeck">{{ t('student.fields.completeCredit') }}</Checkbox>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label>{{ t('student.fields.currentDegree') }}</label>
+        <Select v-model:value="form.current_degree" class="w-full">
+          <SelectOption value="bachelor">{{ t('student.fields.degreeBachelor') }}</SelectOption>
+          <SelectOption value="master">{{ t('student.fields.degreeMaster') }}</SelectOption>
+        </Select>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label>{{ t('student.fields.studyYear') }}</label>
+        <Select v-model:value="form.study_year" class="w-full">
+          <SelectOption :value="1">1</SelectOption>
+          <SelectOption :value="2">2</SelectOption>
+          <SelectOption :value="3">3</SelectOption>
+          <SelectOption :value="4">4</SelectOption>
+        </Select>
+      </div>
 
       <!-- Scholarship -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Scholarship</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('student.sections.scholarship') }}</h3>
       </div>
-      <div class="flex flex-col gap-2"><label>Type</label><Input v-model:value="form.scholarship_type" /></div>
-      <div class="flex flex-col gap-2"><label>Card ID</label><Input v-model:value="form.scholarship_card_id" /></div>
-      <div class="flex flex-col gap-2"><label>Scholarship By</label><Input v-model:value="form.scholarship_by" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.type') }}</label><Input v-model:value="form.scholarship_type" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.cardId') }}</label><Input v-model:value="form.scholarship_card_id" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.scholarshipBy') }}</label><Input v-model:value="form.scholarship_by" /></div>
 
       <!-- Other -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Other</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('student.sections.other') }}</h3>
       </div>
       <div class="col-span-1 md:col-span-2 flex flex-col gap-2">
-        <label>Notes</label>
+        <label>{{ t('student.fields.notes') }}</label>
         <Textarea v-model:value="form.notes" :rows="3" />
       </div>
     </div>
@@ -125,11 +144,11 @@
     <div class="flex justify-end gap-2 mt-6 pt-4 border-t">
       <Button @click="$emit('cancel')">
         <template #icon><CloseOutlined /></template>
-        Cancel
+        {{ t('common.cancel') }}
       </Button>
       <Button type="primary" @click="save">
         <template #icon><CheckOutlined /></template>
-        Save
+        {{ t('common.save') }}
       </Button>
     </div>
   </div>
@@ -138,10 +157,13 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import { Input, Textarea, Select, SelectOption, DatePicker, Button, ConfigProvider, Upload, message } from 'ant-design-vue';
+import { useI18n } from 'vue-i18n';
+import { Input, Textarea, Select, SelectOption, DatePicker, Button, ConfigProvider, Upload, Checkbox, message } from 'ant-design-vue';
 import { CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { environment } from '../../environments/environment';
 import { uploadImage } from '../../service/image.service';
+
+const { t } = useI18n();
 
 const props = defineProps({
   student: {
@@ -177,7 +199,10 @@ const form = ref({
   email: '',
   notes: '',
   photo: '',
-  batch: ''
+  batch: '',
+  ischeck: false,
+  current_degree: 'bachelor',
+  study_year: 1
 });
 
 function normalizeDateToYMD(value) {
@@ -204,6 +229,9 @@ const initForm = () => {
     };
 
     form.value.birth_date = normalizeDateToYMD(form.value.birth_date);
+    form.value.ischeck = props.student.ischeck === true;
+    form.value.current_degree = props.student.current_degree || 'bachelor';
+    form.value.study_year = props.student.study_year ?? 1;
   }
 };
 
@@ -221,10 +249,10 @@ const uploadPhoto = async ({ file, onSuccess, onError }) => {
     const data = await uploadImage(formData, 'student_photo');
     form.value.photo = data.filename;
     onSuccess(data);
-    message.success('Photo uploaded successfully');
+    message.success(t('student.photoUploaded'));
   } catch (error) {
     onError(error);
-    message.error('Failed to upload photo');
+    message.error(t('student.photoUploadFailed'));
   }
 };
 

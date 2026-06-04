@@ -4,18 +4,17 @@
       <input type="file" ref="fileInput" @change="onFileSelected" style="display: none"
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
       <div class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl shadow-md">
-        <p class="text-xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">បញ្ជីឈ្មោះនិស្សិត
-        </p>
+        <p class="text-xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">{{ t('student.listTitle') }}</p>
         <div class="grid grid-cols-1 sm:grid-cols-none sm:grid-flow-col gap-2 w-full sm:w-auto items-center">
-          <Input v-model:value="searchQuery" placeholder="Search Name or ID" allowClear @pressEnter="handleSearch"
+          <Input v-model:value="searchQuery" :placeholder="t('student.searchPlaceholder')" allowClear @pressEnter="handleSearch"
             class="w-full sm:w-64" />
-          <Input v-model:value="selectedBatch" placeholder="Batch" allowClear @pressEnter="handleSearch"
+          <Input v-model:value="selectedBatch" :placeholder="t('student.batch')" allowClear @pressEnter="handleSearch"
             class="w-full sm:w-32" />
-          <Select v-model:value="selectedFaculty" placeholder="Faculty" allowClear @change="handleSearch"
+          <Select v-model:value="selectedFaculty" :placeholder="t('student.faculty')" allowClear @change="handleSearch"
             class="w-full sm:w-48" :options="facultyOptions" :loading="catalogOptionsLoading" />
-          <Select v-model:value="selectedStudyShift" placeholder="Shift" allowClear @change="handleSearch"
+          <Select v-model:value="selectedStudyShift" :placeholder="t('student.shift')" allowClear @change="handleSearch"
             class="w-full sm:w-32" :options="studyShiftOptions" :loading="catalogOptionsLoading" />
-          <Button type="primary" @click="handleSearch">Search</Button>
+          <Button type="primary" @click="handleSearch">{{ t('common.search') }}</Button>
         </div>
         <Divider type="vertical" class="hidden sm:block h-8" />
         <div class="card flex flex-col sm:flex-row sm:flex-wrap justify-end gap-4 w-full sm:w-auto">
@@ -23,27 +22,27 @@
             <template #icon>
               <ExportOutlined />
             </template>
-            Export Card
+            {{ t('staff.exportCard') }}
           </Button>
           <Button v-if="isAdmin" type="primary" ghost @click="importFromExcel" :loading="isUploading"
             class="w-full sm:w-auto">
             <template #icon>
               <FileExcelOutlined />
             </template>
-            Excel Import
+            {{ t('staff.excelImport') }}
           </Button>
           <Button v-if="isAdmin" type="primary" @click="openNew" class="w-full sm:w-auto">
             <template #icon>
               <PlusOutlined />
             </template>
-            Add New
+            {{ t('common.addNew') }}
           </Button>
           <Button v-if="isAdmin" danger type="primary" class="w-full sm:w-auto" :disabled="!selectedRowKeys.length"
             @click="confirmBulkDelete">
             <template #icon>
               <DeleteOutlined />
             </template>
-            Delete
+            {{ t('common.delete') }}
           </Button>
         </div>
       </div>
@@ -58,7 +57,7 @@
             <template v-else-if="column.key === 'photo'">
               <img v-if="record.photo" :src="`${environment.apiBaseUrl}media/image/${record.photo}`" alt="photo"
                 class="w-10 h-10 rounded-[5x] object-cover" />
-              <span v-else class="text-gray-400">No Photo</span>
+              <span v-else class="text-gray-400">{{ t('student.noPhoto') }}</span>
             </template>
             <template v-else-if="column.key === 'actions'">
               <div class="flex gap-2">
@@ -84,7 +83,7 @@
       </Card>
 
       <!-- View Student Dialog -->
-      <Modal v-model:open="viewDialogVisible" title="Student Details" :footer="null" destroyOnClose
+      <Modal v-model:open="viewDialogVisible" :title="t('student.details')" :footer="null" destroyOnClose
         width="min(1400px, 98vw)" style="top: 20px">
         <StudentDetail v-if="selectedStudent" :studentId="selectedStudent.id"
           :verificationId="selectedStudent.card_id || selectedStudent.identity_id" :embedded="true" />
@@ -92,7 +91,7 @@
 
       <!-- Edit Student Dialog -->
       <Modal v-model:open="editDialogVisible"
-        :title="selectedStudent && selectedStudent.id ? 'Edit Student' : 'New Student'" width="80%" :footer="null"
+        :title="selectedStudent && selectedStudent.id ? t('student.editStudent') : t('student.newStudent')" width="80%" :footer="null"
         destroyOnClose>
         <StudentForm v-if="editDialogVisible" :student="selectedStudent" @save="saveStudent"
           @cancel="editDialogVisible = false" />
@@ -104,6 +103,7 @@
 
 <script setup>
 import { ref, onMounted, createVNode, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { Table, Button, Card, Divider, Modal, message, ConfigProvider, Input, Select } from 'ant-design-vue';
 import {
   EyeOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined,
@@ -117,6 +117,7 @@ import StudentForm from './StudentForm.vue';
 import { useCatalogSelectOptions } from '../../composables/useCatalogSelectOptions';
 import { CATALOG_FACULTY, CATALOG_STUDY_SHIFT } from '../../constants/catalogCategories';
 
+const { t } = useI18n();
 const students = ref([]);
 const selectedRowKeys = ref([]);
 const selectedRows = ref([]);
@@ -149,18 +150,18 @@ const { optionsByCategory, loading: catalogOptionsLoading } = useCatalogSelectOp
 const facultyOptions = computed(() => optionsByCategory.value[CATALOG_FACULTY] ?? []);
 const studyShiftOptions = computed(() => optionsByCategory.value[CATALOG_STUDY_SHIFT] ?? []);
 
-const columns = [
-  { title: 'No', key: 'index', width: 60 },
-  { title: 'Card ID', dataIndex: 'card_id', key: 'card_id' },
-  { title: 'Name (EN)', dataIndex: ['name', 'english'], key: 'name_en' },
-  { title: 'Name (KH)', dataIndex: ['name', 'khmer'], key: 'name_kh' },
-  { title: 'Gender', dataIndex: 'gender', key: 'gender' },
-  { title: 'Date of Birth', dataIndex: 'birth_date', key: 'birth_date', customRender: ({ text }) => text ? (typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text) : '-' },
-  { title: 'Phone', dataIndex: 'phone', key: 'phone' },
-  { title: 'Batch', dataIndex: 'batch', key: 'batch' },
-  { title: 'Photo', key: 'photo' },
-  { title: 'Actions', key: 'actions', fixed: 'right', width: 150 },
-];
+const columns = computed(() => [
+  { title: t('student.fields.no'), key: 'index', width: 60 },
+  { title: t('student.fields.cardId'), dataIndex: 'card_id', key: 'card_id' },
+  { title: t('staff.fields.nameEn'), dataIndex: ['name', 'english'], key: 'name_en' },
+  { title: t('staff.fields.nameKh'), dataIndex: ['name', 'khmer'], key: 'name_kh' },
+  { title: t('student.fields.gender'), dataIndex: 'gender', key: 'gender' },
+  { title: t('student.fields.dateOfBirth'), dataIndex: 'birth_date', key: 'birth_date', customRender: ({ text }) => text ? (typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text) : '-' },
+  { title: t('student.fields.phone'), dataIndex: 'phone', key: 'phone' },
+  { title: t('student.fields.batch'), dataIndex: 'batch', key: 'batch' },
+  { title: t('student.fields.photo'), key: 'photo' },
+  { title: t('common.actions'), key: 'actions', fixed: 'right', width: 150 },
+]);
 
 const rowSelection = {
   onChange: (keys, rows) => {
@@ -191,7 +192,7 @@ const loadStudents = async () => {
     pagination.value.total = response.total;
   } catch (error) {
     console.error('Failed to load students', error);
-    message.error('Failed to load students');
+    message.error(t('student.loadFailed'));
   } finally {
     loading.value = false;
   }
@@ -211,11 +212,11 @@ const onFileSelected = async (event) => {
 
   try {
     await uploadExcel(formData);
-    message.success('Students imported successfully');
+    message.success(t('student.importSuccess'));
     loadStudents(); // Refresh the list
   } catch (error) {
     console.error('Error uploading Excel file:', error);
-    message.error('Failed to import students');
+    message.error(t('student.importFailed'));
   } finally {
     isUploading.value = false;
     event.target.value = ''; // Reset file input
@@ -224,7 +225,7 @@ const onFileSelected = async (event) => {
 
 const exportCard = () => {
   if (selectedRows.value.length === 0) {
-    message.warning('Please select at least one student to export.');
+    message.warning(t('student.selectToExport'));
     return;
   }
   const ids = selectedRows.value.map(s => s.id);
@@ -250,55 +251,56 @@ const saveStudent = async (studentData) => {
   try {
     if (studentData.id) {
       await updateStudent(studentData.id, studentData);
-      message.success('Student Updated');
+      message.success(t('student.updated'));
     } else {
       await createStudent(studentData);
-      message.success('Student Created');
+      message.success(t('student.created'));
     }
     editDialogVisible.value = false;
     loadStudents();
   } catch (error) {
-    message.error('Failed to save student');
+    message.error(t('student.saveFailed'));
   }
 };
 
 const confirmBulkDelete = () => {
   Modal.confirm({
-    title: `Are you sure you want to delete ${selectedRowKeys.value.length} students?`,
+    title: t('student.bulkDeleteConfirm', { count: selectedRowKeys.value.length }),
     icon: createVNode(ExclamationCircleOutlined),
-    content: 'This action cannot be undone.',
-    okText: 'Yes',
+    content: t('common.cannotUndo'),
+    okText: t('common.yes'),
     okType: 'danger',
-    cancelText: 'No',
+    cancelText: t('common.no'),
     async onOk() {
       try {
         await Promise.all(selectedRowKeys.value.map(id => deleteStudent(id)));
-        message.success('Selected students deleted successfully');
+        message.success(t('student.bulkDeleted'));
         selectedRowKeys.value = [];
         selectedRows.value = [];
         loadStudents();
       } catch (error) {
-        message.error('Failed to delete selected students');
+        message.error(t('student.bulkDeleteFailed'));
       }
     },
   });
 };
 
 const requireConfirmation = (student) => {
+  const name = student.name?.english || student.name?.khmer || '';
   Modal.confirm({
-    title: `Are you sure you want to delete ${student.name.english}?`,
+    title: t('student.deleteConfirm', { name }),
     icon: createVNode(ExclamationCircleOutlined),
-    content: 'This action cannot be undone.',
-    okText: 'Yes',
+    content: t('common.cannotUndo'),
+    okText: t('common.yes'),
     okType: 'danger',
-    cancelText: 'No',
+    cancelText: t('common.no'),
     async onOk() {
       try {
         await deleteStudent(student.id);
-        message.success('Student deleted');
+        message.success(t('student.deleted'));
         loadStudents();
       } catch (error) {
-        message.error('Failed to delete student');
+        message.error(t('student.deleteFailed'));
       }
     },
   });

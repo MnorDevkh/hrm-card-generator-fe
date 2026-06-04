@@ -5,8 +5,8 @@
         <div class="flex items-center gap-3">
           <img alt="Logo" src="@/assets/ailogo.png" class="w-9 h-9" />
           <div class="flex flex-col leading-tight">
-            <div class="text-base font-semibold text-gray-900">Reception</div>
-            <div class="text-xs text-gray-500">Receipt generator</div>
+            <div class="text-base font-semibold text-gray-900">{{ t('reception.title') }}</div>
+            <div class="text-xs text-gray-500">{{ t('reception.subtitle') }}</div>
           </div>
         </div>
 
@@ -17,9 +17,10 @@
               class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100"
               active-class="bg-blue-50 text-blue-700"
             >
-              Receipts
+              {{ t('nav.receipts') }}
             </RouterLink>
           </nav>
+          <LanguageSwitcher />
           <AccountMenu />
         </div>
       </div>
@@ -32,5 +33,9 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n';
 import AccountMenu from './components/AccountMenu.vue';
+import LanguageSwitcher from './components/LanguageSwitcher.vue';
+
+const { t } = useI18n();
 </script>

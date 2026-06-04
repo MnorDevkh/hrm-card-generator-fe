@@ -26,10 +26,10 @@
                   lecture.name?.khmer }}</h2>
                 <div class="flex flex-wrap gap-1 sm:gap-2 justify-center sm:justify-start">
                   <span
-                    class="px-2 sm:px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs sm:text-sm font-medium border border-blue-100">ID:
+                    class="px-2 sm:px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs sm:text-sm font-medium border border-blue-100">{{ t('lecturer.fields.id') }}:
                     {{ lecture.card_id }}</span>
                   <span v-if="lecture.faculty"
-                    class="px-2 sm:px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-xs sm:text-sm font-medium border border-purple-100">Faculty:
+                    class="px-2 sm:px-3 py-1 bg-purple-50 text-purple-700 rounded-full text-xs sm:text-sm font-medium border border-purple-100">{{ t('lecturer.fields.faculty') }}:
                     {{ lecture.faculty }}</span>
                 </div>
               </div>
@@ -38,37 +38,37 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800">
-                  <UserOutlined /> Personal Information
+                  <UserOutlined /> {{ t('lecturer.sections.personal') }}
                 </h3>
                 <Descriptions bordered :column="1" size="middle">
-                  <Descriptions.Item label="Name (Khmer)">{{ lecture.name?.khmer }}</Descriptions.Item>
-                  <Descriptions.Item label="Name (English)">{{ lecture.name?.english }}</Descriptions.Item>
-                  <Descriptions.Item label="Card ID">{{ lecture.card_id }}</Descriptions.Item>
-                  <Descriptions.Item label="Identity ID">{{ lecture.identity_id }}</Descriptions.Item>
-                  <Descriptions.Item label="Gender">{{ lecture.gender }}</Descriptions.Item>
-                  <Descriptions.Item label="Nationality">{{ lecture.nationality }}</Descriptions.Item>
-                  <Descriptions.Item label="Date of Birth">{{ formatDate(lecture.birth_date) }}</Descriptions.Item>
-                  <Descriptions.Item label="Birth Place">{{ formatAddress(lecture.birth_place) }}</Descriptions.Item>
-                  <Descriptions.Item label="Current Address">{{ formatAddress(lecture.current_address) }}
+                  <Descriptions.Item :label="t('lecturer.fields.nameKhmer')">{{ lecture.name?.khmer }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('lecturer.fields.nameEnglish')">{{ lecture.name?.english }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('lecturer.fields.cardId')">{{ lecture.card_id }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('lecturer.fields.identityId')">{{ lecture.identity_id }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('lecturer.fields.gender')">{{ lecture.gender }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('lecturer.fields.nationality')">{{ lecture.nationality }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('lecturer.fields.dateOfBirth')">{{ formatDate(lecture.birth_date) }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('lecturer.fields.birthPlace')">{{ formatAddress(lecture.birth_place) }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('lecturer.fields.currentAddress')">{{ formatAddress(lecture.current_address) }}
                   </Descriptions.Item>
                 </Descriptions>
               </div>
               <div>
                 <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800">
-                  <BookOutlined /> Professional Information
+                  <BookOutlined /> {{ t('lecturer.sections.professional') }}
                 </h3>
                 <Descriptions bordered :column="1" size="middle">
-                  <Descriptions.Item label="Faculty">{{ lecture.faculty }}</Descriptions.Item>
-                  <Descriptions.Item label="Major">{{ lecture.major }}</Descriptions.Item>
-                  <Descriptions.Item label="Education">{{ formatEducation(lecture.education) }}</Descriptions.Item>
-                  <Descriptions.Item label="Phone">{{ lecture.phone }}</Descriptions.Item>
-                  <Descriptions.Item label="Email">{{ lecture.email }}</Descriptions.Item>
-                  <Descriptions.Item label="Notes">{{ lecture.notes || '-' }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('lecturer.fields.faculty')">{{ lecture.faculty }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('lecturer.fields.major')">{{ lecture.major }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('lecturer.fields.education')">{{ formatEducation(lecture.education) }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('lecturer.fields.phone')">{{ lecture.phone }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('lecturer.fields.email')">{{ lecture.email }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('lecturer.fields.notes')">{{ lecture.notes || '-' }}</Descriptions.Item>
                 </Descriptions>
               </div>
               <div v-if="lecture.docs && lecture.docs.length" class="md:col-span-2">
                 <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800">
-                  <FileTextOutlined /> Documents
+                  <FileTextOutlined /> {{ t('lecturer.sections.documents') }}
                 </h3>
                 <div class="bg-white rounded-lg border border-gray-200 p-4">
                   <div v-for="(doc, index) in lecture.docs" :key="doc.file_path || index"
@@ -76,11 +76,11 @@
                     <a href="#" @click.prevent="downloadFile(doc.file_path)"
                       class="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-2">
                       <i class="pi pi-file"></i>
-                      {{ doc.file_path ? doc.file_path.split('/').pop() : 'Document ' + (index + 1) }}
+                      {{ doc.file_path ? doc.file_path.split('/').pop() : t('lecturer.fields.documentN', { n: index + 1 }) }}
                     </a>
                     <iframe v-if="isPdfPath(doc.file_path)" :src="getFileUrl(doc.file_path)"
                       class="w-full min-h-[480px] sm:min-h-[560px] border border-gray-200 rounded-md mt-2"
-                      title="PDF preview" />
+                      :title="t('lecturer.pdfPreview')" />
                   </div>
                 </div>
               </div>
@@ -108,7 +108,10 @@
 <script setup>
 import { ConfigProvider, Descriptions, Image, Spin } from 'ant-design-vue';
 import { UserOutlined, BookOutlined, FileTextOutlined } from '@ant-design/icons-vue';
+import { useI18n } from 'vue-i18n';
 import { environment } from '../../environments/environment';
+
+const { t } = useI18n();
 
 defineProps({
     lecture: Object,

@@ -3,14 +3,13 @@
     <div class="p-4 sm:p-6 lg:p-8 space-y-4">
       <div
         class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl shadow-md">
-        <p class="text-xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">Lecturer
-          List</p>
+        <p class="text-xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">{{ t('lecturer.listTitle') }}</p>
         <div class="grid grid-cols-1 sm:grid-cols-none sm:grid-flow-col gap-2 w-full sm:w-auto items-center">
-          <Input v-model:value="searchQuery" placeholder="Search Name or ID" allowClear @pressEnter="handleSearch"
+          <Input v-model:value="searchQuery" :placeholder="t('lecturer.searchPlaceholder')" allowClear @pressEnter="handleSearch"
             class="w-full sm:w-64" />
-          <Select v-model:value="selectedFaculty" placeholder="Faculty" allowClear @change="handleSearch"
+          <Select v-model:value="selectedFaculty" :placeholder="t('lecturer.faculty')" allowClear @change="handleSearch"
             class="w-full sm:w-48" :options="facultyOptions" :loading="catalogOptionsLoading" />
-          <Button type="primary" @click="handleSearch">Search</Button>
+          <Button type="primary" @click="handleSearch">{{ t('common.search') }}</Button>
         </div>
       </div>
 
@@ -21,27 +20,28 @@
           <template #icon>
             <ExportOutlined />
           </template>
-          Export Card
+          {{ t('staff.exportCard') }}
         </Button>
         <Button v-if="isAdmin" type="primary" ghost @click="importFromExcel" :loading="isUploading"
           class="w-full sm:w-auto">
           <template #icon>
             <FileExcelOutlined />
           </template>
-          Excel Import
+          {{ t('staff.excelImport') }}
         </Button>
         <input type="file" ref="fileInput" class="hidden" accept=".xlsx, .xls" @change="handleFileUpload" />
         <Button v-if="isAdmin" type="primary" @click="openNew" class="w-full sm:w-auto">
           <template #icon>
             <PlusOutlined />
           </template>
-          Add New
+          {{ t('common.addNew') }}
         </Button>
-        <Button v-if="isAdmin" danger type="primary" class="w-full sm:w-auto" :disabled="!selectedRowKeys.length">
+        <Button v-if="isAdmin" danger type="primary" class="w-full sm:w-auto" :disabled="!selectedRowKeys.length"
+          @click="confirmDelete">
           <template #icon>
             <DeleteOutlined />
           </template>
-          Delete
+          {{ t('common.delete') }}
         </Button>
       </div>
 
@@ -78,13 +78,13 @@
       </Card>
 
       <!-- View Dialog -->
-      <Modal v-model:open="viewDialogVisible" title="Lecturer Details" :footer="null" destroyOnClose
+      <Modal v-model:open="viewDialogVisible" :title="t('lecturer.details')" :footer="null" destroyOnClose
         width="min(1000px, 98vw)">
         <LectureDetail v-if="selectedLecturer" :lecture="selectedLecturer" />
       </Modal>
 
       <!-- Edit/New Dialog -->
-      <Modal v-model:open="editDialogVisible" :title="selectedLecturer?.id ? 'Edit Lecturer' : 'New Lecturer'"
+      <Modal v-model:open="editDialogVisible" :title="selectedLecturer?.id ? t('lecturer.editLecturer') : t('lecturer.newLecturer')"
         :footer="null" destroyOnClose width="min(800px, 98vw)">
         <LectureForm v-if="editDialogVisible" :lecture="selectedLecturer" @save="saveLecturer"
           @cancel="editDialogVisible = false" />
@@ -96,6 +96,7 @@
 <script setup>
 import { ref, onMounted, createVNode, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { Table, Button, Card, Divider, Modal, message, ConfigProvider, Input, Select } from 'ant-design-vue';
 import {
   PlusOutlined, ReloadOutlined, ExportOutlined, FileExcelOutlined,
@@ -107,6 +108,7 @@ import { getLecturers, createLecturer, updateLecturer, deleteLecturer, uploadExc
 import { useCatalogSelectOptions } from '../../composables/useCatalogSelectOptions';
 import { CATALOG_FACULTY } from '../../constants/catalogCategories';
 
+const { t } = useI18n();
 const lecturers = ref([]);
 const selectedRowKeys = ref([]);
 const selectedRows = ref([]);
@@ -140,17 +142,17 @@ const pagination = ref({
   },
 });
 
-const columns = [
-  { title: 'ID', dataIndex: 'identity_id', key: 'identity_id', sorter: true },
-  { title: 'Name (KH)', dataIndex: ['name', 'khmer'], key: 'name_kh', sorter: true },
-  { title: 'Name (EN)', dataIndex: ['name', 'english'], key: 'name_en', sorter: true },
-  { title: 'Gender', dataIndex: 'gender', key: 'gender', sorter: true },
-  { title: 'Date of Birth', dataIndex: 'birth_date', key: 'birth_date', sorter: true, customRender: ({ text }) => text ? (typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text) : '-' },
-  { title: 'Phone', dataIndex: 'phone', key: 'phone' },
-  { title: 'Email', dataIndex: 'email', key: 'email' },
-  { title: 'Faculty', dataIndex: 'faculty', key: 'faculty', sorter: true },
+const columns = computed(() => [
+  { title: t('lecturer.fields.id'), dataIndex: 'identity_id', key: 'identity_id', sorter: true },
+  { title: t('lecturer.fields.nameKhmer'), dataIndex: ['name', 'khmer'], key: 'name_kh', sorter: true },
+  { title: t('lecturer.fields.nameEnglish'), dataIndex: ['name', 'english'], key: 'name_en', sorter: true },
+  { title: t('lecturer.fields.gender'), dataIndex: 'gender', key: 'gender', sorter: true },
+  { title: t('lecturer.fields.dateOfBirth'), dataIndex: 'birth_date', key: 'birth_date', sorter: true, customRender: ({ text }) => text ? (typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text) : '-' },
+  { title: t('lecturer.fields.phone'), dataIndex: 'phone', key: 'phone' },
+  { title: t('lecturer.fields.email'), dataIndex: 'email', key: 'email' },
+  { title: t('lecturer.fields.faculty'), dataIndex: 'faculty', key: 'faculty', sorter: true },
   {
-    title: 'QR Status',
+    title: t('lecturer.qrStatus'),
     dataIndex: 'qr_status',
     key: 'qr_status',
     customRender: ({ text, record }) => {
@@ -161,19 +163,19 @@ const columns = [
             : new Date(record.qr_expired_at)) < new Date()
         : false;
       if (status !== 'active') {
-        return 'Inactive';
+        return t('lecturer.qrInactive');
       }
-      return expired ? 'Active (Expired)' : 'Active';
+      return expired ? t('lecturer.qrActiveExpired') : t('lecturer.qrActive');
     },
   },
   {
-    title: 'QR Expiry',
+    title: t('lecturer.qrExpiry'),
     dataIndex: 'qr_expired_at',
     key: 'qr_expired_at',
     customRender: ({ text }) => text ? (typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text) : '-',
   },
-  { title: 'Actions', key: 'actions', width: 200, fixed: 'right' },
-];
+  { title: t('common.actions'), key: 'actions', width: 200, fixed: 'right' },
+]);
 
 const rowSelection = {
   onChange: (keys, rows) => {
@@ -204,7 +206,7 @@ const loadLecturers = async () => {
     selectedRows.value = [];
   } catch (error) {
     console.error("Failed to load lecturers", error);
-    message.error('Failed to load lecturers');
+    message.error(t('lecturer.loadFailed'));
   } finally {
     loading.value = false;
   }
@@ -232,7 +234,7 @@ const generateCard = (lecture) => {
 
 const exportCard = () => {
   if (selectedRows.value.length === 0) {
-    message.warning('Please select lecturers to export');
+    message.warning(t('lecturer.selectToExport'));
     return;
   }
   const ids = selectedRows.value.map(l => l.id);
@@ -253,11 +255,11 @@ const handleFileUpload = async (event) => {
   isUploading.value = true;
   try {
     await uploadExcel(formData);
-    message.success('Lecturers imported successfully');
+    message.success(t('lecturer.importSuccess'));
     loadLecturers();
   } catch (error) {
     console.error('Upload failed:', error);
-    message.error('Failed to import lecturers');
+    message.error(t('lecturer.importFailed'));
   } finally {
     isUploading.value = false;
     event.target.value = '';
@@ -268,33 +270,34 @@ const saveLecturer = async (lectureData) => {
   try {
     if (lectureData.id) {
       await updateLecturer(lectureData.id, lectureData);
-      message.success('Lecturer Updated');
+      message.success(t('lecturer.updated'));
     } else {
       await createLecturer(lectureData);
-      message.success('Lecturer Created');
+      message.success(t('lecturer.created'));
     }
     editDialogVisible.value = false;
     loadLecturers();
   } catch (error) {
-    message.error('Failed to save lecturer');
+    message.error(t('lecturer.saveFailed'));
   }
 };
 
 const confirmDelete = (lecture) => {
+  const name = lecture.name?.english || lecture.name?.khmer || t('lecturer.thisLecturer');
   Modal.confirm({
-    title: `Are you sure you want to delete ${lecture.name?.english || lecture.name?.khmer}?`,
+    title: t('lecturer.deleteConfirm', { name }),
     icon: createVNode(ExclamationCircleOutlined),
-    content: 'This action cannot be undone.',
-    okText: 'Yes',
+    content: t('common.cannotUndo'),
+    okText: t('common.yes'),
     okType: 'danger',
-    cancelText: 'No',
+    cancelText: t('common.no'),
     async onOk() {
       try {
         await deleteLecturer(lecture.id);
-        message.success('Lecturer deleted');
+        message.success(t('lecturer.deleted'));
         loadLecturers();
       } catch (error) {
-        message.error('Failed to delete lecturer');
+        message.error(t('lecturer.deleteFailed'));
       }
     },
   });

@@ -6,7 +6,7 @@
       <div class="p-8">
         <div class="text-center mb-8">
           <div class="inline-block">
-            <img src="@/assets/ailogo.png" alt="Logo" class="animated-logo h-24 w-auto mx-auto mb-3 block" />
+            <img src="@/assets/ailogo.png" :alt="t('verify.logoAlt')" class="animated-logo h-24 w-auto mx-auto mb-3 block" />
           </div>
           <h2 class="text-2xl font-bold text-gray-900 dark:text-white">សូមធ្វើការផ្ទៀងផ្ទាត់ទិន្នន័យ</h2>
           <p class="text-gray-500 dark:text-gray-400 mt-2 text-sm">
@@ -25,7 +25,7 @@
               <i class="pi pi-id-card absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
               <input type="text" id="verification_id" v-model="verificationId"
                 class="uppercase w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-all outline-none"
-                placeholder="Enter Card ID or National ID" />
+                :placeholder="t('verify.placeholder')" />
             </div>
           </div>
 
@@ -48,8 +48,10 @@
 <script setup>
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useToast } from 'primevue/usetoast';
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
@@ -63,7 +65,7 @@ const submitVerification = () => {
   if (studentId.value && vId) {
     router.push({ path: `/students-detail/${studentId.value}`, query: { verificationId: vId } });
   } else {
-    toast.add({ severity: 'warn', summary: 'Input Required', detail: 'Please enter your Card ID or National Identity', life: 3000 });
+    toast.add({ severity: 'warn', summary: t('verify.inputRequired'), detail: t('verify.enterCardId'), life: 3000 });
   }
 };
 </script>

@@ -19,104 +19,104 @@
 
       <!-- Basic Info -->
       <div class="col-span-1 md:col-span-2">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Basic Information</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('lecturer.sections.basic') }}</h3>
       </div>
       
       <div class="flex flex-col gap-2">
-        <label>Card ID</label>
+        <label>{{ t('lecturer.fields.cardId') }}</label>
         <Input v-model:value="form.card_id" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Identity ID</label>
+        <label>{{ t('lecturer.fields.identityId') }}</label>
         <Input v-model:value="form.identity_id" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Nationality</label>
+        <label>{{ t('lecturer.fields.nationality') }}</label>
         <Input v-model:value="form.nationality" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Name (English)</label>
+        <label>{{ t('lecturer.fields.nameEnglish') }}</label>
         <Input v-model:value="form.name.english" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Name (Khmer)</label>
+        <label>{{ t('lecturer.fields.nameKhmer') }}</label>
         <Input v-model:value="form.name.khmer" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Gender</label>
-        <Select v-model:value="form.gender" placeholder="Select Gender">
-          <SelectOption value="Male">Male</SelectOption>
-          <SelectOption value="Female">Female</SelectOption>
+        <label>{{ t('lecturer.fields.gender') }}</label>
+        <Select v-model:value="form.gender" :placeholder="t('common.selectGender')">
+          <SelectOption value="Male">{{ t('common.male') }}</SelectOption>
+          <SelectOption value="Female">{{ t('common.female') }}</SelectOption>
         </Select>
       </div>
       <div class="flex flex-col gap-2">
-        <label>Date of Birth</label>
+        <label>{{ t('lecturer.fields.dateOfBirth') }}</label>
         <DatePicker v-model:value="form.birth_date" valueFormat="YYYY-MM-DD" class="w-full" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Phone</label>
+        <label>{{ t('lecturer.fields.phone') }}</label>
         <Input v-model:value="form.phone" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Email</label>
+        <label>{{ t('lecturer.fields.email') }}</label>
         <Input v-model:value="form.email" />
       </div>
 
       <!-- Birth Place -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Birth Place</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('lecturer.sections.birthPlace') }}</h3>
       </div>
-      <div class="flex flex-col gap-2"><label>Province</label><Input v-model:value="form.birth_place.province" /></div>
-      <div class="flex flex-col gap-2"><label>District</label><Input v-model:value="form.birth_place.district" /></div>
-      <div class="flex flex-col gap-2"><label>Commune</label><Input v-model:value="form.birth_place.commune" /></div>
-      <div class="flex flex-col gap-2"><label>Village</label><Input v-model:value="form.birth_place.village" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.province') }}</label><Input v-model:value="form.birth_place.province" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.district') }}</label><Input v-model:value="form.birth_place.district" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.commune') }}</label><Input v-model:value="form.birth_place.commune" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.village') }}</label><Input v-model:value="form.birth_place.village" /></div>
 
       <!-- Current Address -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Current Address</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('lecturer.sections.currentAddress') }}</h3>
       </div>
-      <div class="flex flex-col gap-2"><label>Province</label><Input v-model:value="form.current_address.province" /></div>
-      <div class="flex flex-col gap-2"><label>District</label><Input v-model:value="form.current_address.district" /></div>
-      <div class="flex flex-col gap-2"><label>Commune</label><Input v-model:value="form.current_address.commune" /></div>
-      <div class="flex flex-col gap-2"><label>Village</label><Input v-model:value="form.current_address.village" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.province') }}</label><Input v-model:value="form.current_address.province" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.district') }}</label><Input v-model:value="form.current_address.district" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.commune') }}</label><Input v-model:value="form.current_address.commune" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('student.fields.village') }}</label><Input v-model:value="form.current_address.village" /></div>
 
       <!-- Education -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Education</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('lecturer.sections.education') }}</h3>
       </div>
-      <div class="flex flex-col gap-2"><label>Level</label><Input v-model:value="form.education.level" /></div>
-      <div class="flex flex-col gap-2"><label>Year</label><Input v-model:value="form.education.year" /></div>
-      <div class="col-span-1 md:col-span-2 flex flex-col gap-2"><label>Training Institution</label><Input v-model:value="form.education.training_institution" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('lecturer.fields.level') }}</label><Input v-model:value="form.education.level" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('lecturer.fields.year') }}</label><Input v-model:value="form.education.year" /></div>
+      <div class="col-span-1 md:col-span-2 flex flex-col gap-2"><label>{{ t('lecturer.fields.trainingInstitution') }}</label><Input v-model:value="form.education.training_institution" /></div>
 
       <!-- Academic Info -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Academic Information</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('lecturer.sections.academic') }}</h3>
       </div>
-      <div class="flex flex-col gap-2"><label>Faculty</label><Input v-model:value="form.faculty" /></div>
-      <div class="flex flex-col gap-2"><label>Major</label><Input v-model:value="form.major" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('lecturer.fields.faculty') }}</label><Input v-model:value="form.faculty" /></div>
+      <div class="flex flex-col gap-2"><label>{{ t('lecturer.fields.major') }}</label><Input v-model:value="form.major" /></div>
 
       <!-- Other -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Other</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('lecturer.sections.other') }}</h3>
       </div>
       <div class="col-span-1 md:col-span-2 flex flex-col gap-2">
-        <label>Notes</label>
+        <label>{{ t('lecturer.fields.notes') }}</label>
         <Textarea v-model:value="form.notes" :rows="3" />
       </div>
 
       <!-- QR Settings (Manager) -->
       <div class="col-span-1 md:col-span-2 mt-4" v-if="isAdmin">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">QR Settings</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('lecturer.sections.qrSettings') }}</h3>
       </div>
       <div v-if="isAdmin" class="flex flex-col gap-2">
-        <label>QR Status</label>
-        <Select v-model:value="form.qr_status" placeholder="Select QR Status">
-          <SelectOption value="active">Active</SelectOption>
-          <SelectOption value="inactive">Inactive</SelectOption>
+        <label>{{ t('lecturer.fields.qrStatus') }}</label>
+        <Select v-model:value="form.qr_status" :placeholder="t('lecturer.selectQrStatus')">
+          <SelectOption value="active">{{ t('common.active') }}</SelectOption>
+          <SelectOption value="inactive">{{ t('common.inactive') }}</SelectOption>
         </Select>
       </div>
       <div v-if="isAdmin" class="flex flex-col gap-2">
-        <label>QR Expiry Date</label>
+        <label>{{ t('lecturer.fields.qrExpiryDate') }}</label>
         <DatePicker
           v-model:value="form.qr_expired_at"
           valueFormat="YYYY-MM-DD"
@@ -126,7 +126,7 @@
 
       <!-- Documents -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Documents</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('lecturer.sections.documents') }}</h3>
         <Upload
           v-model:file-list="fileList"
           :customRequest="customUpload"
@@ -135,7 +135,7 @@
         >
           <Button>
             <UploadOutlined />
-            Upload Document
+            {{ t('lecturer.uploadDocument') }}
           </Button>
         </Upload>
       </div>
@@ -144,11 +144,11 @@
     <div class="flex justify-end gap-2 mt-6 pt-4 border-t">
       <Button @click="$emit('cancel')">
         <template #icon><CloseOutlined /></template>
-        Cancel
+        {{ t('common.cancel') }}
       </Button>
       <Button type="primary" @click="save">
         <template #icon><CheckOutlined /></template>
-        Save
+        {{ t('common.save') }}
       </Button>
     </div>
   </div>
@@ -157,10 +157,13 @@
 
 <script setup>
 import { ref, watch, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { Input, Textarea, Select, SelectOption, DatePicker, Button, ConfigProvider, Upload, message } from 'ant-design-vue';
 import { CheckOutlined, CloseOutlined, UploadOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { environment } from '../../environments/environment';
 import { uploadImage } from '../../service/image.service';
+
+const { t } = useI18n();
 
 const props = defineProps({
   lecture: {
@@ -210,10 +213,10 @@ const uploadPhoto = async ({ file, onSuccess, onError }) => {
     const data = await uploadImage(formData, 'lecturers');
     form.value.photo = data.filename;
     onSuccess(data);
-    message.success('Photo uploaded successfully');
+    message.success(t('lecturer.photoUploaded'));
   } catch (error) {
     onError(error);
-    message.error('Failed to upload photo');
+    message.error(t('lecturer.photoUploadFailed'));
   }
 };
 
@@ -267,10 +270,10 @@ const customUpload = async ({ file, onSuccess, onError }) => {
     form.value.docs.push(newDoc);
 
     onSuccess(data, file);
-    message.success(`${file.name} uploaded successfully.`);
+    message.success(t('lecturer.fileUploaded', { filename: file.name }));
   } catch (error) {
     onError(error);
-    message.error(`${file.name} upload failed.`);
+    message.error(t('lecturer.fileUploadFailed', { filename: file.name }));
   }
 };
 

@@ -3,13 +3,13 @@
     <div class="p-4 sm:p-6 lg:p-8 space-y-4">
       <div
         class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl shadow-md">
-        <p class="text-xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">Staff List</p>
+        <p class="text-xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">{{ t('staff.listTitle') }}</p>
         <div class="grid grid-cols-1 sm:grid-cols-none sm:grid-flow-col gap-2 w-full sm:w-auto items-center">
-          <Input v-model:value="searchQuery" placeholder="Search Name or ID" allowClear @pressEnter="handleSearch"
+          <Input v-model:value="searchQuery" :placeholder="t('staff.searchPlaceholder')" allowClear @pressEnter="handleSearch"
             class="w-full sm:w-64" />
-          <Select v-model:value="selectedDepartment" placeholder="Department" allowClear @change="handleSearch"
+          <Select v-model:value="selectedDepartment" :placeholder="t('staff.department')" allowClear @change="handleSearch"
             class="w-full sm:w-48" :options="departmentOptions" :loading="catalogOptionsLoading" />
-          <Button type="primary" @click="handleSearch">Search</Button>
+          <Button type="primary" @click="handleSearch">{{ t('common.search') }}</Button>
         </div>
       </div>
 
@@ -20,28 +20,28 @@
           <template #icon>
             <ExportOutlined />
           </template>
-          Export Card
+          {{ t('staff.exportCard') }}
         </Button>
         <Button v-if="isAdmin" type="primary" ghost @click="importFromExcel" :loading="isUploading"
           class="w-full sm:w-auto">
           <template #icon>
             <FileExcelOutlined />
           </template>
-          Excel Import
+          {{ t('staff.excelImport') }}
         </Button>
         <input type="file" ref="fileInput" class="hidden" accept=".xlsx, .xls" @change="handleFileUpload" />
         <Button type="primary" @click="openNew" class="w-full sm:w-auto">
           <template #icon>
             <PlusOutlined />
           </template>
-          Add New
+          {{ t('common.addNew') }}
         </Button>
         <Button v-if="isAdmin" danger type="primary" class="w-full sm:w-auto" :disabled="!selectedRowKeys.length"
           @click="confirmBulkDelete">
           <template #icon>
             <DeleteOutlined />
           </template>
-          Delete
+          {{ t('common.delete') }}
         </Button>
       </div>
 
@@ -78,14 +78,14 @@
       </Card>
 
       <!-- View Dialog -->
-      <Modal v-model:open="viewDialogVisible" title="Staff Details" :footer="null" destroyOnClose
+      <Modal v-model:open="viewDialogVisible" :title="t('staff.details')" :footer="null" destroyOnClose
         width="min(1000px, 98vw)">
         <StaffDetail v-if="selectedStaff" :staff="selectedStaff" @back="viewDialogVisible = false"
           @edit="handleDetailEdit" @delete="handleDetailDelete" />
       </Modal>
 
       <!-- Edit/New Dialog -->
-      <Modal v-model:open="editDialogVisible" :title="selectedStaff?.id ? 'Edit Staff' : 'New Staff'"
+      <Modal v-model:open="editDialogVisible" :title="selectedStaff?.id ? t('staff.editStaff') : t('staff.newStaff')"
         :footer="null" destroyOnClose width="min(800px, 98vw)">
         <StaffForm v-if="editDialogVisible" :staff="selectedStaff" @save="saveStaff"
           @cancel="editDialogVisible = false" />
@@ -97,6 +97,7 @@
 <script setup>
 import { ref, onMounted, createVNode, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { Table, Button, Card, Divider, Modal, message, ConfigProvider, Input, Select } from 'ant-design-vue';
 import {
   PlusOutlined, ExportOutlined, FileExcelOutlined,
@@ -108,6 +109,7 @@ import { getStaff, getStaffById, createStaff, updateStaff, deleteStaff, uploadEx
 import { useCatalogSelectOptions } from '../../composables/useCatalogSelectOptions';
 import { CATALOG_DEPARTMENT } from '../../constants/catalogCategories';
 
+const { t } = useI18n();
 const staffList = ref([]);
 const selectedRowKeys = ref([]);
 const selectedRows = ref([]);
@@ -135,17 +137,17 @@ const pagination = ref({
   pageSizeOptions: ['10', '20','50', '100',],
 });
 
-const columns = [
-  { title: 'ID', dataIndex: ['identity', 'employee_id'], key: 'employee_id', sorter: true },
-  { title: 'Name (KH)', dataIndex: ['identity', 'kh_name'], key: 'name_kh', sorter: true },
-  { title: 'Name (EN)', dataIndex: ['identity', 'en_name'], key: 'name_en', sorter: true },
-  { title: 'Gender', dataIndex: ['identity', 'gender'], key: 'gender', sorter: true },
-  { title: 'Date of Birth', dataIndex: ['identity', 'date_of_birth'], key: 'date_of_birth', sorter: true, customRender: ({ text }) => text ? (typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text) : '-' },
-  { title: 'Phone', dataIndex: ['contact', 'phone'], key: 'phone' },
-  { title: 'Email', dataIndex: ['contact', 'email'], key: 'email' },
-  { title: 'Department', dataIndex: ['employment', 'department'], key: 'department', sorter: true },
-  { title: 'Actions', key: 'actions', width: 200, fixed: 'right' },
-];
+const columns = computed(() => [
+  { title: t('staff.fields.id'), dataIndex: ['identity', 'employee_id'], key: 'employee_id', sorter: true },
+  { title: t('staff.fields.nameKh'), dataIndex: ['identity', 'kh_name'], key: 'name_kh', sorter: true },
+  { title: t('staff.fields.nameEn'), dataIndex: ['identity', 'en_name'], key: 'name_en', sorter: true },
+  { title: t('staff.fields.gender'), dataIndex: ['identity', 'gender'], key: 'gender', sorter: true },
+  { title: t('staff.fields.dateOfBirth'), dataIndex: ['identity', 'date_of_birth'], key: 'date_of_birth', sorter: true, customRender: ({ text }) => text ? (typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text) : '-' },
+  { title: t('staff.fields.phone'), dataIndex: ['contact', 'phone'], key: 'phone' },
+  { title: t('staff.fields.email'), dataIndex: ['contact', 'email'], key: 'email' },
+  { title: t('staff.fields.department'), dataIndex: ['employment', 'department'], key: 'department', sorter: true },
+  { title: t('common.actions'), key: 'actions', width: 200, fixed: 'right' },
+]);
 
 const rowSelection = {
   onChange: (keys, rows) => {
@@ -176,7 +178,7 @@ const loadStaff = async () => {
     selectedRows.value = [];
   } catch (error) {
     console.error("Failed to load staff", error);
-    message.error('Failed to load staff');
+    message.error(t('staff.loadFailed'));
   } finally {
     loading.value = false;
   }
@@ -214,7 +216,7 @@ const generateCard = (staff) => {
 
 const exportCard = () => {
   if (selectedRows.value.length === 0) {
-    message.warning('Please select staff to export');
+    message.warning(t('staff.selectToExport'));
     return;
   }
   const ids = selectedRows.value.map(s => s.id);
@@ -235,11 +237,11 @@ const handleFileUpload = async (event) => {
   isUploading.value = true;
   try {
     await uploadExcel(formData);
-    message.success('Staff imported successfully');
+    message.success(t('staff.importSuccess'));
     loadStaff();
   } catch (error) {
     console.error('Upload failed:', error);
-    message.error('Failed to import staff');
+    message.error(t('staff.importFailed'));
   } finally {
     isUploading.value = false;
     event.target.value = '';
@@ -250,15 +252,15 @@ const saveStaff = async (staffData) => {
   try {
     if (staffData.id) {
       await updateStaff(staffData.id, staffData);
-      message.success('Staff Updated');
+      message.success(t('staff.updated'));
     } else {
       await createStaff(staffData);
-      message.success('Staff Created');
+      message.success(t('staff.created'));
     }
     editDialogVisible.value = false;
     loadStaff();
   } catch (error) {
-    message.error('Failed to save staff');
+    message.error(t('staff.saveFailed'));
   }
 };
 
@@ -273,21 +275,21 @@ const handleDetailDelete = (staff) => {
 };
 
 const confirmDelete = (staff) => {
-  const name = staff.identity?.en_name || staff.identity?.kh_name || 'this staff';
+  const name = staff.identity?.en_name || staff.identity?.kh_name || t('staff.thisStaff');
   Modal.confirm({
-    title: `Are you sure you want to delete ${name}?`,
+    title: t('staff.deleteConfirm', { name }),
     icon: createVNode(ExclamationCircleOutlined),
-    content: 'This action cannot be undone.',
-    okText: 'Yes',
+    content: t('common.cannotUndo'),
+    okText: t('common.yes'),
     okType: 'danger',
-    cancelText: 'No',
+    cancelText: t('common.no'),
     async onOk() {
       try {
         await deleteStaff(staff.id);
-        message.success('Staff deleted');
+        message.success(t('staff.deleted'));
         loadStaff();
       } catch (error) {
-        message.error('Failed to delete staff');
+        message.error(t('staff.deleteFailed'));
       }
     },
   });
@@ -296,21 +298,21 @@ const confirmDelete = (staff) => {
 const confirmBulkDelete = () => {
   if (selectedRows.value.length === 0) return;
   Modal.confirm({
-    title: `Are you sure you want to delete ${selectedRows.value.length} staff member(s)?`,
+    title: t('staff.bulkDeleteConfirm', { count: selectedRows.value.length }),
     icon: createVNode(ExclamationCircleOutlined),
-    content: 'This action cannot be undone.',
-    okText: 'Yes',
+    content: t('common.cannotUndo'),
+    okText: t('common.yes'),
     okType: 'danger',
-    cancelText: 'No',
+    cancelText: t('common.no'),
     async onOk() {
       try {
         for (const s of selectedRows.value) {
           await deleteStaff(s.id);
         }
-        message.success('Staff deleted');
+        message.success(t('staff.deleted'));
         loadStaff();
       } catch (error) {
-        message.error('Failed to delete staff');
+        message.error(t('staff.deleteFailed'));
       }
     },
   });

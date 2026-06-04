@@ -2,12 +2,12 @@
     <input type="file" ref="fileInput" @change="onFileSelected" style="display: none" accept="image/*" />
     <div class="container mx-auto p-4 md:p-8">
         <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">Certificate Templates</h2>
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">{{ t('template.certTitle') }}</h2>
             <Button type="primary" @click="triggerFileUpload" :loading="isUploading">
                 <template #icon>
                     <UploadOutlined />
                 </template>
-                Upload Template
+                {{ t('template.uploadTemplate') }}
             </Button>
         </div>
 
@@ -16,7 +16,7 @@
                 class="shadow-lg transition-shadow duration-300 rounded-lg overflow-hidden">
                 <template #cover>
                     <div class="h-90% w-96 overflow-hidden bg-gray-100 dark:bg-gray-700">
-                        <img alt="template header" :src="getImageUrl(template.filename)"
+                        <img :alt="t('template.headerAlt')" :src="getImageUrl(template.filename)"
                             class="w-full h-full object-contain" />
                     </div>
                 </template>
@@ -26,7 +26,7 @@
                             <template #icon>
                                 <CheckOutlined />
                             </template>
-                            Use Template
+                            {{ t('template.useTemplate') }}
                         </Button>
                         <Button danger @click="confirmDelete(template)">
                             <template #icon>
@@ -44,11 +44,13 @@
 <script setup>
 import { ref, onMounted, computed, createVNode } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { Button, Card, Modal, message } from 'ant-design-vue';
 import { UploadOutlined, CheckOutlined, DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons-vue';
 import { getImagesByType, uploadImage, deleteImage } from '../../service/image.service';
 import { environment } from '../../environments/environment';
 
+const { t } = useI18n();
 const templates = ref([]);
 const router = useRouter();
 const route = useRoute();
@@ -85,11 +87,11 @@ const onFileSelected = async (event) => {
 
     try {
         await uploadImage(formData, 'template');
-        message.success('Template uploaded successfully');
+        message.success(t('template.uploadSuccess'));
         await loadTemplates(); // Refresh the list
     } catch (error) {
         console.error('Error uploading template:', error);
-        message.error('Failed to upload template');
+        message.error(t('template.uploadFailed'));
     } finally {
         isUploading.value = false;
         event.target.value = ''; // Reset file input
@@ -121,19 +123,19 @@ const useTemplate = (templateId) => {
 
 const confirmDelete = (template) => {
     Modal.confirm({
-        title: 'Delete Confirmation',
+        title: t('template.deleteConfirmTitle'),
         icon: createVNode(ExclamationCircleOutlined),
-        content: 'Are you sure you want to delete this template?',
-        okText: 'Yes',
+        content: t('template.deleteConfirm'),
+        okText: t('common.yes'),
         okType: 'danger',
-        cancelText: 'No',
+        cancelText: t('common.no'),
         async onOk() {
             try {
                 await deleteImage(template.id);
-                message.success('Template deleted');
+                message.success(t('template.deleted'));
                 loadTemplates();
             } catch (error) {
-                message.error('Failed to delete template');
+                message.error(t('template.deleteFailed'));
             }
         }
     });

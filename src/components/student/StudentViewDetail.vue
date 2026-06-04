@@ -39,6 +39,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { Spin, Alert } from 'ant-design-vue';
 import { CheckCircleOutlined } from '@ant-design/icons-vue';
 import { getStudentInfo } from '../../service/student.service';
@@ -72,7 +73,7 @@ onMounted(async () => {
     if (verificationId === 'null') verificationId = null;
 
     if (!studentId) {
-        error.value = 'Student ID is missing.';
+        error.value = t('student.idOnlyMissing');
         return;
     }
 
@@ -81,7 +82,7 @@ onMounted(async () => {
         const response = await getStudentInfo(studentId, verificationId);
         student.value = response;
     } catch (err) {
-        error.value = err.response?.data?.message || err.message || 'Failed to fetch student details.';
+        error.value = err.response?.data?.message || err.message || t('student.fetchFailed');
         console.error(err);
     } finally {
         isLoading.value = false;

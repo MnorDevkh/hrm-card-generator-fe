@@ -9,27 +9,27 @@
             <template #icon>
               <FilePdfOutlined />
             </template>
-            Export Grid
+            {{ t('template.exportGrid') }}
           </Button>
           <Button type="primary" ghost @click="exportCardsAsPages" :loading="isExportingPages">
             <template #icon>
               <CopyOutlined />
             </template>
-            Export Pages
+            {{ t('template.exportPages') }}
           </Button>
         </div>
 
         <div class="flex flex-wrap gap-4 items-center">
           <div class="flex flex-col">
-            <label for="issueDate" class="font-bold block mb-2 text-sm">Issue</label>
+            <label for="issueDate" class="font-bold block mb-2 text-sm">{{ t('template.issue') }}</label>
             <DatePicker v-model:value="issueDate" valueFormat="YYYY-MM-DD" class="w-40" />
           </div>
           <div class="flex flex-col">
-            <label for="expiryDate" class="font-bold block mb-2 text-sm">Expiry</label>
+            <label for="expiryDate" class="font-bold block mb-2 text-sm">{{ t('template.expiry') }}</label>
             <DatePicker v-model:value="expiryDate" valueFormat="YYYY-MM-DD" class="w-40" />
           </div>
           <div class="flex flex-col">
-            <label for="year" class="font-bold block mb-2 text-sm">Year</label>
+            <label for="year" class="font-bold block mb-2 text-sm">{{ t('template.year') }}</label>
             <Input v-model:value="year" class="w-24" />
           </div>
         </div>
@@ -39,12 +39,12 @@
 
       <!-- Export Progress Modal -->
       <Modal v-model:open="isExportingPages" :footer="null" :closable="false" :maskClosable="false"
-        title="Exporting Pages" centered>
+        :title="t('template.exportingPages')" centered>
         <div class="flex flex-col items-center justify-center p-6 gap-4">
           <Progress type="circle" :percent="exportProgress" />
           <div class="text-center">
-            <p class="font-semibold text-lg">Processing...</p>
-            <p class="text-gray-500">Card {{ currentCardIndex }} of {{ totalCards }}</p>
+            <p class="font-semibold text-lg">{{ t('template.processing') }}</p>
+            <p class="text-gray-500">{{ t('template.cardProgress', { current: currentCardIndex, total: totalCards }) }}</p>
           </div>
         </div>
       </Modal>
@@ -217,8 +217,7 @@
         </div>
       </div>
 
-      <div v-if="!isLoading && (!students.length || !templateImageUrl)" class="text-center text-gray-500 mt-8">No
-        students or template loaded.</div>
+      <div v-if="!isLoading && (!students.length || !templateImageUrl)" class="text-center text-gray-500 mt-8">{{ t('template.noStudentsLoaded') }}</div>
     </div>
   </div>
 </template>
@@ -226,6 +225,7 @@
 <script setup>
 import { ref, onMounted, computed, nextTick } from 'vue';
 import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { getStudentsByIds } from '../../service/student.service';
 import { getfileByid } from '../../service/image.service';
 import { environment } from '../../environments/environment';
@@ -235,6 +235,7 @@ import QrcodeVue from 'qrcode.vue';
 import { Button, Input, DatePicker, Divider, Skeleton, message, Modal, Progress } from 'ant-design-vue';
 import { FilePdfOutlined, CopyOutlined, UserOutlined } from '@ant-design/icons-vue';
 
+const { t } = useI18n();
 const route = useRoute();
 const students = ref([]);
 const template = ref(null);
@@ -414,10 +415,10 @@ async function exportCardsAsPages() {
     }
 
     pdf.save("StudentCards_Pages.pdf");
-    message.success("Exported All Pages");
+    message.success(t('template.exportedAllPages'));
   } catch (error) {
     console.error("Export error:", error);
-    message.error("Export failed: " + error.message);
+    message.error(t('template.exportFailed', { error: error.message }));
   } finally {
     exportCanvasVisible.value = false;
     isExportingPages.value = false;
@@ -448,10 +449,10 @@ async function exportCards() {
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
     pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
     pdf.save('StudentCards_Grid.pdf');
-    message.success('Grid Exported');
+    message.success(t('template.gridExported'));
   } catch (err) {
     console.error('Grid export error:', err);
-    message.error("Export failed: " + err.message);
+    message.error(t('template.exportFailed', { error: err.message }));
   } finally {
     exportCanvasVisible.value = false;
     isExporting.value = false;

@@ -19,174 +19,174 @@
 
       <!-- Identity -->
       <div class="col-span-1 md:col-span-2">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Identity</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('staff.sections.identity') }}</h3>
       </div>
       <div class="flex flex-col gap-2">
-        <label>Employee ID</label>
+        <label>{{ t('staff.fields.employeeId') }}</label>
         <Input v-model:value="form.identity.employee_id" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Name (English)</label>
+        <label>{{ t('staff.fields.nameEnglish') }}</label>
         <Input v-model:value="form.identity.en_name" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Name (Khmer)</label>
+        <label>{{ t('staff.fields.nameKhmer') }}</label>
         <Input v-model:value="form.identity.kh_name" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Gender</label>
-        <Select v-model:value="form.identity.gender" placeholder="Select Gender">
-          <SelectOption value="Male">Male</SelectOption>
-          <SelectOption value="Female">Female</SelectOption>
+        <label>{{ t('staff.fields.gender') }}</label>
+        <Select v-model:value="form.identity.gender" :placeholder="t('common.selectGender')">
+          <SelectOption value="Male">{{ t('common.male') }}</SelectOption>
+          <SelectOption value="Female">{{ t('common.female') }}</SelectOption>
         </Select>
       </div>
       <div class="flex flex-col gap-2">
-        <label>Date of Birth</label>
+        <label>{{ t('staff.fields.dateOfBirth') }}</label>
         <DatePicker v-model:value="form.identity.date_of_birth" :valueFormat="dateFormat" class="w-full" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Nationality</label>
+        <label>{{ t('staff.fields.nationality') }}</label>
         <Input v-model:value="form.identity.nationality" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Nationality ID</label>
-        <Input v-model:value="form.identity.nationality_id" placeholder="ID reference" />
+        <label>{{ t('staff.fields.nationalityId') }}</label>
+        <Input v-model:value="form.identity.nationality_id" :placeholder="t('staff.fields.nationalityIdPlaceholder')" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Marital Status</label>
-        <Input v-model:value="form.identity.marital_status" placeholder="e.g. Single, Married" />
+        <label>{{ t('staff.fields.maritalStatus') }}</label>
+        <Input v-model:value="form.identity.marital_status" :placeholder="t('staff.fields.maritalStatusPlaceholder')" />
       </div>
 
       <!-- Contact -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Contact</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('staff.sections.contact') }}</h3>
       </div>
       <div class="flex flex-col gap-2">
-        <label>Phone</label>
+        <label>{{ t('staff.fields.phone') }}</label>
         <Input v-model:value="form.contact.phone" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Email</label>
+        <label>{{ t('staff.fields.email') }}</label>
         <Input v-model:value="form.contact.email" />
       </div>
       <div class="flex flex-col gap-2 md:col-span-2">
-        <label>Address</label>
+        <label>{{ t('staff.fields.address') }}</label>
         <Input v-model:value="form.contact.address" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Emergency Contact</label>
+        <label>{{ t('staff.fields.emergencyContact') }}</label>
         <Input v-model:value="form.contact.emergency_contact" />
       </div>
 
       <!-- Employment -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Employment</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('staff.sections.employment') }}</h3>
       </div>
       <div class="flex flex-col gap-2">
-        <label>Position</label>
+        <label>{{ t('staff.fields.position') }}</label>
         <Input v-model:value="form.employment.position" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Department</label>
+        <label>{{ t('staff.fields.department') }}</label>
         <Input v-model:value="form.employment.department" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Date of Hire</label>
+        <label>{{ t('staff.fields.dateOfHire') }}</label>
         <DatePicker v-model:value="form.employment.date_of_hire" :valueFormat="dateFormat" class="w-full" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Work Shift</label>
-        <Input v-model:value="form.employment.work_shift" placeholder="e.g. Full Day" />
+        <label>{{ t('staff.fields.workShift') }}</label>
+        <Input v-model:value="form.employment.work_shift" :placeholder="t('staff.fields.workShiftPlaceholder')" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Status</label>
-        <Select v-model:value="form.employment.status" placeholder="Select Status">
-          <SelectOption value="Active">Active</SelectOption>
-          <SelectOption value="Inactive">Inactive</SelectOption>
+        <label>{{ t('staff.fields.status') }}</label>
+        <Select v-model:value="form.employment.status" :placeholder="t('common.selectStatus')">
+          <SelectOption value="Active">{{ t('common.active') }}</SelectOption>
+          <SelectOption value="Inactive">{{ t('common.inactive') }}</SelectOption>
         </Select>
       </div>
 
       <!-- Salary -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Salary</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('staff.sections.salary') }}</h3>
       </div>
       <div class="flex flex-col gap-2">
-        <label>Basic Salary</label>
+        <label>{{ t('staff.fields.basicSalary') }}</label>
         <InputNumber v-model:value="form.salary.basic_salary" :min="0" class="w-full" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Allowance</label>
+        <label>{{ t('staff.fields.allowance') }}</label>
         <InputNumber v-model:value="form.salary.allowance" :min="0" class="w-full" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Overtime Rate</label>
+        <label>{{ t('staff.fields.overtimeRate') }}</label>
         <InputNumber v-model:value="form.salary.overtime_rate" :min="0" class="w-full" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Payment Method</label>
-        <Input v-model:value="form.salary.payment_method" placeholder="e.g. Cash, Bank" />
+        <label>{{ t('staff.fields.paymentMethod') }}</label>
+        <Input v-model:value="form.salary.payment_method" :placeholder="t('staff.fields.paymentMethodPlaceholder')" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Bank Account</label>
+        <label>{{ t('staff.fields.bankAccount') }}</label>
         <Input v-model:value="form.salary.bank_account" />
       </div>
 
       <!-- Legal -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Legal</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('staff.sections.legal') }}</h3>
       </div>
       <div class="flex flex-col gap-2">
-        <label>ID Card</label>
+        <label>{{ t('staff.fields.idCard') }}</label>
         <Input v-model:value="form.legal.id_card" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Contract No</label>
+        <label>{{ t('staff.fields.contractNo') }}</label>
         <Input v-model:value="form.legal.contract_no" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Contract Start</label>
+        <label>{{ t('staff.fields.contractStart') }}</label>
         <DatePicker v-model:value="form.legal.contract_start" :valueFormat="dateFormat" class="w-full" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Contract End</label>
+        <label>{{ t('staff.fields.contractEnd') }}</label>
         <DatePicker v-model:value="form.legal.contract_end" :valueFormat="dateFormat" class="w-full" />
       </div>
 
       <!-- Education -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">Education</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('staff.sections.education') }}</h3>
       </div>
       <div class="flex flex-col gap-2">
-        <label>Education Level</label>
-        <Input v-model:value="form.education.education_level" placeholder="e.g. Bachelor" />
+        <label>{{ t('staff.fields.educationLevel') }}</label>
+        <Input v-model:value="form.education.education_level" :placeholder="t('staff.fields.educationLevelPlaceholder')" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Major</label>
+        <label>{{ t('staff.fields.major') }}</label>
         <Input v-model:value="form.education.major" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Experience</label>
+        <label>{{ t('staff.fields.experience') }}</label>
         <Input v-model:value="form.education.teaching_experience" />
       </div>
       <div class="flex flex-col gap-2">
-        <label>Skills</label>
+        <label>{{ t('staff.fields.skills') }}</label>
         <Input v-model:value="form.education.skills" />
       </div>
       <div class="flex flex-col gap-2 md:col-span-2">
-        <label>Training</label>
+        <label>{{ t('staff.fields.training') }}</label>
         <Input v-model:value="form.education.training" />
       </div>
 
       <!-- HR -->
       <div class="col-span-1 md:col-span-2 mt-4">
-        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">HR</h3>
+        <h3 class="text-lg font-bold text-gray-700 dark:text-gray-200 border-b pb-2 mb-4">{{ t('staff.sections.hr') }}</h3>
       </div>
       <div class="flex flex-col gap-2">
-        <label>Performance</label>
-        <Input v-model:value="form.hr.performance" placeholder="e.g. Good" />
+        <label>{{ t('staff.fields.performance') }}</label>
+        <Input v-model:value="form.hr.performance" :placeholder="t('staff.fields.performancePlaceholder')" />
       </div>
       <div class="col-span-1 md:col-span-2 flex flex-col gap-2">
-        <label>Note</label>
+        <label>{{ t('staff.fields.note') }}</label>
         <Textarea v-model:value="form.hr.note" :rows="3" />
       </div>
     </div>
@@ -194,11 +194,11 @@
     <div class="flex justify-end gap-2 mt-6 pt-4 border-t">
       <Button @click="$emit('cancel')">
         <template #icon><CloseOutlined /></template>
-        Cancel
+        {{ t('common.cancel') }}
       </Button>
       <Button type="primary" @click="save">
         <template #icon><CheckOutlined /></template>
-        Save
+        {{ t('common.save') }}
       </Button>
     </div>
   </div>
@@ -207,11 +207,13 @@
 
 <script setup>
 import { ref, watch, onMounted, nextTick } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { Input, InputNumber, Textarea, Select, SelectOption, DatePicker, Button, ConfigProvider, Upload, message } from 'ant-design-vue';
 import { CheckOutlined, CloseOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { environment } from '../../environments/environment';
 import { uploadImage } from '../../service/image.service';
 
+const { t } = useI18n();
 const dateFormat = 'YYYY-MM-DD';
 
 const props = defineProps({
@@ -303,10 +305,10 @@ const uploadPhoto = async ({ file, onSuccess, onError }) => {
     const data = await uploadImage(formData, 'lecturers');
     form.value.identity.photo = data.filename || data.file_path || data.name || '';
     onSuccess(data);
-    message.success('Photo uploaded successfully');
+    message.success(t('staff.photoUploaded'));
   } catch (error) {
     onError(error);
-    message.error('Failed to upload photo');
+    message.error(t('staff.photoUploadFailed'));
   }
 };
 

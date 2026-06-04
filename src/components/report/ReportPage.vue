@@ -2,15 +2,15 @@
   <ConfigProvider :theme="{ token: { fontFamily: 'inherit' } }">
     <div class="p-4 sm:p-6 lg:p-8 space-y-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h1 class="text-2xl font-bold text-gray-900">Reports</h1>
+        <h1 class="text-2xl font-bold text-gray-900">{{ t('report.title') }}</h1>
         <div class="flex gap-2">
           <Button @click="loadReport" :loading="loading">
             <template #icon><ReloadOutlined /></template>
-            Refresh
+            {{ t('report.refresh') }}
           </Button>
           <Button type="primary" @click="printReport">
             <template #icon><PrinterOutlined /></template>
-            Print Report
+            {{ t('report.print') }}
           </Button>
         </div>
       </div>
@@ -21,7 +21,7 @@
 
       <div v-if="loading" class="text-center py-12 text-gray-500">
         <i class="pi pi-spin pi-spinner text-3xl mb-3 block"></i>
-        Loading report data...
+        {{ t('report.loading') }}
       </div>
 
       <div v-else id="report-content" class="space-y-6">
@@ -42,7 +42,7 @@
 
         <!-- Breakdown Charts -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <Card title="Students by Faculty" :bordered="false" class="shadow-sm">
+          <Card :title="t('report.studentsByFaculty')" :bordered="false" class="shadow-sm">
             <div v-if="studentsByFaculty.length" class="space-y-2">
               <div v-for="item in studentsByFaculty" :key="item.label" class="flex items-center gap-3">
                 <span class="w-24 text-sm text-gray-600 truncate">{{ item.label }}</span>
@@ -52,10 +52,10 @@
                 <span class="w-10 text-right text-sm font-medium text-gray-800">{{ item.value }}</span>
               </div>
             </div>
-            <div v-else class="text-sm text-gray-400">No data</div>
+            <div v-else class="text-sm text-gray-400">{{ t('report.noData') }}</div>
           </Card>
 
-          <Card title="Staff by Department" :bordered="false" class="shadow-sm">
+          <Card :title="t('report.staffByDepartment')" :bordered="false" class="shadow-sm">
             <div v-if="staffByDept.length" class="space-y-2">
               <div v-for="item in staffByDept" :key="item.label" class="flex items-center gap-3">
                 <span class="w-24 text-sm text-gray-600 truncate">{{ item.label }}</span>
@@ -65,10 +65,10 @@
                 <span class="w-10 text-right text-sm font-medium text-gray-800">{{ item.value }}</span>
               </div>
             </div>
-            <div v-else class="text-sm text-gray-400">No data</div>
+            <div v-else class="text-sm text-gray-400">{{ t('report.noData') }}</div>
           </Card>
 
-          <Card title="Lecturers by Faculty" :bordered="false" class="shadow-sm">
+          <Card :title="t('report.lecturersByFaculty')" :bordered="false" class="shadow-sm">
             <div v-if="lecturersByFaculty.length" class="space-y-2">
               <div v-for="item in lecturersByFaculty" :key="item.label" class="flex items-center gap-3">
                 <span class="w-24 text-sm text-gray-600 truncate">{{ item.label }}</span>
@@ -78,14 +78,14 @@
                 <span class="w-10 text-right text-sm font-medium text-gray-800">{{ item.value }}</span>
               </div>
             </div>
-            <div v-else class="text-sm text-gray-400">No data</div>
+            <div v-else class="text-sm text-gray-400">{{ t('report.noData') }}</div>
           </Card>
         </div>
 
         <!-- Students Table -->
-        <Card title="Students" :bordered="false" class="shadow-sm">
+        <Card :title="t('report.students')" :bordered="false" class="shadow-sm">
           <template #extra>
-            <span class="text-sm text-gray-500">{{ studentItems.length }} of {{ studentTotal }} shown</span>
+            <span class="text-sm text-gray-500">{{ t('report.shownOf', { shown: studentItems.length, total: studentTotal }) }}</span>
           </template>
           <Table
             :dataSource="studentItems"
@@ -98,9 +98,9 @@
         </Card>
 
         <!-- Staff Table -->
-        <Card title="Staff" :bordered="false" class="shadow-sm">
+        <Card :title="t('report.staff')" :bordered="false" class="shadow-sm">
           <template #extra>
-            <span class="text-sm text-gray-500">{{ staffItems.length }} of {{ staffTotal }} shown</span>
+            <span class="text-sm text-gray-500">{{ t('report.shownOf', { shown: staffItems.length, total: staffTotal }) }}</span>
           </template>
           <Table
             :dataSource="staffItems"
@@ -113,9 +113,9 @@
         </Card>
 
         <!-- Lecturers Table -->
-        <Card title="Lecturers" :bordered="false" class="shadow-sm">
+        <Card :title="t('report.lecturers')" :bordered="false" class="shadow-sm">
           <template #extra>
-            <span class="text-sm text-gray-500">{{ lecturerItems.length }} of {{ lecturerTotal }} shown</span>
+            <span class="text-sm text-gray-500">{{ t('report.shownOf', { shown: lecturerItems.length, total: lecturerTotal }) }}</span>
           </template>
           <Table
             :dataSource="lecturerItems"
@@ -132,20 +132,29 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { Table, Card, Button, ConfigProvider } from 'ant-design-vue';
 import { ReloadOutlined, PrinterOutlined } from '@ant-design/icons-vue';
 import { getStudents } from '@/service/student.service';
 import { getStaff } from '@/service/staff.service';
 import { getLecturers } from '@/service/lecture.service';
 
+const { t } = useI18n();
+
 const loading = ref(false);
 const error = ref('');
 
-const summaryStats = ref([
-  { label: 'Total Students', value: '—', icon: 'pi pi-users', bgColor: 'bg-blue-500' },
-  { label: 'Total Staff', value: '—', icon: 'pi pi-id-card', bgColor: 'bg-green-500' },
-  { label: 'Lecturers', value: '—', icon: 'pi pi-briefcase', bgColor: 'bg-purple-500' },
+const summaryValues = ref({
+  students: '—',
+  staff: '—',
+  lecturers: '—',
+});
+
+const summaryStats = computed(() => [
+  { label: t('report.totalStudents'), value: summaryValues.value.students, icon: 'pi pi-users', bgColor: 'bg-blue-500' },
+  { label: t('report.totalStaff'), value: summaryValues.value.staff, icon: 'pi pi-id-card', bgColor: 'bg-green-500' },
+  { label: t('report.lecturers'), value: summaryValues.value.lecturers, icon: 'pi pi-briefcase', bgColor: 'bg-purple-500' },
 ]);
 
 const studentItems = ref([]);
@@ -160,32 +169,32 @@ const studentsByFaculty = ref([]);
 const staffByDept = ref([]);
 const lecturersByFaculty = ref([]);
 
-const studentColumns = [
-  { title: 'Card ID', dataIndex: 'card_id', key: 'card_id', width: 120 },
-  { title: 'Name (EN)', dataIndex: ['name', 'english'], key: 'name_en' },
-  { title: 'Name (KH)', dataIndex: ['name', 'khmer'], key: 'name_kh' },
-  { title: 'Gender', dataIndex: 'gender', key: 'gender', width: 80 },
-  { title: 'Batch', dataIndex: 'batch', key: 'batch', width: 100 },
-  { title: 'Faculty', dataIndex: 'faculty', key: 'faculty' },
-];
+const studentColumns = computed(() => [
+  { title: t('student.fields.cardId'), dataIndex: 'card_id', key: 'card_id', width: 120 },
+  { title: t('staff.fields.nameEn'), dataIndex: ['name', 'english'], key: 'name_en' },
+  { title: t('staff.fields.nameKh'), dataIndex: ['name', 'khmer'], key: 'name_kh' },
+  { title: t('student.fields.gender'), dataIndex: 'gender', key: 'gender', width: 80 },
+  { title: t('student.fields.batch'), dataIndex: 'batch', key: 'batch', width: 100 },
+  { title: t('student.fields.faculty'), dataIndex: 'faculty', key: 'faculty' },
+]);
 
-const staffColumns = [
-  { title: 'Employee ID', dataIndex: ['identity', 'employee_id'], key: 'employee_id', width: 120 },
-  { title: 'Name (EN)', dataIndex: ['identity', 'en_name'], key: 'en_name' },
-  { title: 'Name (KH)', dataIndex: ['identity', 'kh_name'], key: 'kh_name' },
-  { title: 'Gender', dataIndex: ['identity', 'gender'], key: 'gender', width: 80 },
-  { title: 'Department', dataIndex: ['employment', 'department'], key: 'department' },
-  { title: 'Phone', dataIndex: ['contact', 'phone'], key: 'phone', width: 130 },
-];
+const staffColumns = computed(() => [
+  { title: t('staff.fields.employeeId'), dataIndex: ['identity', 'employee_id'], key: 'employee_id', width: 120 },
+  { title: t('staff.fields.nameEn'), dataIndex: ['identity', 'en_name'], key: 'en_name' },
+  { title: t('staff.fields.nameKh'), dataIndex: ['identity', 'kh_name'], key: 'kh_name' },
+  { title: t('staff.fields.gender'), dataIndex: ['identity', 'gender'], key: 'gender', width: 80 },
+  { title: t('staff.fields.department'), dataIndex: ['employment', 'department'], key: 'department' },
+  { title: t('staff.fields.phone'), dataIndex: ['contact', 'phone'], key: 'phone', width: 130 },
+]);
 
-const lecturerColumns = [
-  { title: 'ID', dataIndex: 'identity_id', key: 'identity_id', width: 120 },
-  { title: 'Name (EN)', dataIndex: ['name', 'english'], key: 'name_en' },
-  { title: 'Name (KH)', dataIndex: ['name', 'khmer'], key: 'name_kh' },
-  { title: 'Gender', dataIndex: 'gender', key: 'gender', width: 80 },
-  { title: 'Faculty', dataIndex: 'faculty', key: 'faculty' },
-  { title: 'Phone', dataIndex: 'phone', key: 'phone', width: 130 },
-];
+const lecturerColumns = computed(() => [
+  { title: t('lecturer.fields.id'), dataIndex: 'identity_id', key: 'identity_id', width: 120 },
+  { title: t('staff.fields.nameEn'), dataIndex: ['name', 'english'], key: 'name_en' },
+  { title: t('staff.fields.nameKh'), dataIndex: ['name', 'khmer'], key: 'name_kh' },
+  { title: t('lecturer.fields.gender'), dataIndex: 'gender', key: 'gender', width: 80 },
+  { title: t('lecturer.fields.faculty'), dataIndex: 'faculty', key: 'faculty' },
+  { title: t('lecturer.fields.phone'), dataIndex: 'phone', key: 'phone', width: 130 },
+]);
 
 function extractItems(response) {
   if (Array.isArray(response)) return response;
@@ -205,10 +214,11 @@ function extractTotal(response, items) {
 }
 
 function groupBy(items, accessor) {
+  const unknown = t('report.unknown');
   const getValue = typeof accessor === 'function' ? accessor : (item) => item[accessor];
   const counts = {};
   for (const item of items) {
-    const val = getValue(item) || 'Unknown';
+    const val = getValue(item) || unknown;
     counts[val] = (counts[val] || 0) + 1;
   }
   return Object.entries(counts)
@@ -233,12 +243,12 @@ const loadReport = async () => {
 
   const failed = [studentsRes, staffRes, lecturersRes].filter((r) => r.status === 'rejected');
   if (failed.length === 3) {
-    error.value = 'Failed to load report data. Please try again later.';
+    error.value = t('report.loadFailed');
     loading.value = false;
     return;
   }
   if (failed.length > 0) {
-    error.value = `Some data could not be loaded (${failed.length}/3 requests failed).`;
+    error.value = t('report.partialFailed', { n: failed.length });
   }
 
   const studentsData = studentsRes.status === 'fulfilled' ? studentsRes.value : null;
@@ -257,13 +267,12 @@ const loadReport = async () => {
   staffTotal.value = extractTotal(staffData, staff);
   lecturerTotal.value = extractTotal(lecturersData, lecturers);
 
-  summaryStats.value = [
-    { label: 'Total Students', value: studentsData ? studentTotal.value : '—', icon: 'pi pi-users', bgColor: 'bg-blue-500' },
-    { label: 'Total Staff', value: staffData ? staffTotal.value : '—', icon: 'pi pi-id-card', bgColor: 'bg-green-500' },
-    { label: 'Lecturers', value: lecturersData ? lecturerTotal.value : '—', icon: 'pi pi-briefcase', bgColor: 'bg-purple-500' },
-  ];
+  summaryValues.value = {
+    students: studentsData ? studentTotal.value : '—',
+    staff: staffData ? staffTotal.value : '—',
+    lecturers: lecturersData ? lecturerTotal.value : '—',
+  };
 
-  // Get accurate per-faculty totals via the API's faculty filter
   const faculties = [...new Set(students.map((s) => s.faculty).filter(Boolean))];
   const facultyResults = await Promise.allSettled(
     faculties.map((f) => getStudents(0, 1, null, null, f))

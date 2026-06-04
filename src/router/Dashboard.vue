@@ -5,10 +5,10 @@
     </div>
 
     <div v-if="loading" class="mb-4 text-sm text-gray-500">
-      Loading dashboard data...
+      {{ t('dashboard.loading') }}
     </div>
 
-    <h2 class="text-2xl font-bold mb-6 text-gray-800">Dashboard Overview</h2>
+    <h2 class="text-2xl font-bold mb-6 text-gray-800">{{ t('dashboard.overview') }}</h2>
     
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -26,14 +26,14 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 pt-6">
       <!-- Recent Activity -->
       <div class="bg-white rounded-lg shadow-md p-6 lg:col-span-1">
-        <h3 class="text-lg font-semibold mb-4 text-gray-800">Recent Activity</h3>
+        <h3 class="text-lg font-semibold mb-4 text-gray-800">{{ t('dashboard.recentActivity') }}</h3>
         <ul class="space-y-4">
           <li v-for="activity in activities" :key="activity.id" class="flex items-start border-b border-gray-100 last:border-0 pb-3 last:pb-0">
             <div class="bg-blue-100 p-2 rounded-full mr-3">
               <i class="pi pi-bell text-blue-600 text-sm"></i>
             </div>
             <div>
-              <p class="text-sm text-gray-800 font-medium">{{ activity.message }}</p>
+              <p class="text-sm text-gray-800 font-medium">{{ t(activity.messageKey, { name: activity.name }) }}</p>
               <p class="text-xs text-gray-500 mt-1">{{ activity.time }}</p>
             </div>
           </li>
@@ -44,22 +44,22 @@
         <!-- Charts -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <StatsBarChart
-            title="Students by Faculty"
+            :title="t('dashboard.studentsByFaculty')"
             :items="studentsByFaculty"
           />
           <StatsBarChart
-            title="Staff by Department"
+            :title="t('dashboard.staffByDepartment')"
             :items="staffByDepartment"
           />
         </div>
 
         <!-- Quick Actions -->
         <div class="bg-white rounded-lg shadow-md p-6">
-          <h3 class="text-lg font-semibold mb-4 text-gray-800">Quick Actions</h3>
+          <h3 class="text-lg font-semibold mb-4 text-gray-800">{{ t('dashboard.quickActions') }}</h3>
           <div class="grid grid-cols-2 gap-4">
             <button
               v-for="action in quickActions"
-              :key="action.label"
+              :key="action.route"
               @click="handleQuickAction(action)"
               class="flex flex-col items-center justify-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
@@ -74,8 +74,9 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import StatsBarChart from '@/components/dashboard/StatsBarChart.vue';
 import { getStudents } from '@/service/student.service';
 import { getStaff } from '@/service/staff.service';
@@ -83,26 +84,34 @@ import { getLecturers } from '@/service/lecture.service';
 import { getImagesByType } from '@/service/image.service';
 
 const router = useRouter();
+const { t } = useI18n();
 
 const loading = ref(true);
 const error = ref('');
 
-const stats = ref([
-  { label: 'Total Students', value: '—', icon: 'pi pi-users', bgColor: 'bg-blue-500' },
-  { label: 'Total Staff', value: '—', icon: 'pi pi-id-card', bgColor: 'bg-green-500' },
-  { label: 'Lecturers', value: '—', icon: 'pi pi-briefcase', bgColor: 'bg-purple-500' },
-  { label: 'Templates', value: '—', icon: 'pi pi-palette', bgColor: 'bg-orange-500' },
+const statValues = ref({
+  students: '—',
+  staff: '—',
+  lecturers: '—',
+  templates: '—',
+});
+
+const stats = computed(() => [
+  { label: t('dashboard.totalStudents'), value: statValues.value.students, icon: 'pi pi-users', bgColor: 'bg-blue-500' },
+  { label: t('dashboard.totalStaff'), value: statValues.value.staff, icon: 'pi pi-id-card', bgColor: 'bg-green-500' },
+  { label: t('dashboard.lecturers'), value: statValues.value.lecturers, icon: 'pi pi-briefcase', bgColor: 'bg-purple-500' },
+  { label: t('dashboard.templates'), value: statValues.value.templates, icon: 'pi pi-palette', bgColor: 'bg-orange-500' },
 ]);
 
 const activities = ref([]);
 const studentsByFaculty = ref([]);
 const staffByDepartment = ref([]);
 
-const quickActions = ref([
-  { label: 'Add Student', icon: 'pi pi-user-plus', route: '/students/add' },
-  { label: 'Create ID Card', icon: 'pi pi-id-card', route: '/card-generator' },
-  { label: 'View Reports', icon: 'pi pi-chart-bar', route: '/reports' },
-  { label: 'Settings', icon: 'pi pi-cog', route: '/settings' }
+const quickActions = computed(() => [
+  { label: t('dashboard.addStudent'), icon: 'pi pi-user-plus', route: '/students/add' },
+  { label: t('dashboard.createIdCard'), icon: 'pi pi-id-card', route: '/card-generator' },
+  { label: t('dashboard.viewReports'), icon: 'pi pi-chart-bar', route: '/reports' },
+  { label: t('dashboard.settings'), icon: 'pi pi-cog', route: '/settings' },
 ]);
 
 function extractItems(response) {
@@ -123,10 +132,11 @@ function extractTotal(response) {
 }
 
 function groupBy(items, accessor) {
+  const unknown = t('dashboard.unknown');
   const getValue = typeof accessor === 'function' ? accessor : (item) => item[accessor];
   const counts = {};
   for (const item of items) {
-    const val = getValue(item) || 'Unknown';
+    const val = getValue(item) || unknown;
     counts[val] = (counts[val] || 0) + 1;
   }
   return Object.entries(counts).map(([label, value]) => ({ label, value }));
@@ -139,7 +149,8 @@ function buildActivities(students, staffList, lecturers) {
     const name = s.name?.english || s.name?.khmer || s.card_id || `Student #${s.id || ''}`;
     entries.push({
       id: `student-${s.id || Math.random()}`,
-      message: `Student registered: ${name}`,
+      messageKey: 'dashboard.activityStudent',
+      name,
       time: s.created_at || s.createdAt || s.batch || '',
       _sort: s.created_at || s.createdAt || '',
     });
@@ -149,7 +160,8 @@ function buildActivities(students, staffList, lecturers) {
     const name = st.identity?.en_name || st.identity?.kh_name || st.identity?.employee_id || `Staff #${st.id || ''}`;
     entries.push({
       id: `staff-${st.id || Math.random()}`,
-      message: `Staff added: ${name}`,
+      messageKey: 'dashboard.activityStaff',
+      name,
       time: st.created_at || st.createdAt || '',
       _sort: st.created_at || st.createdAt || '',
     });
@@ -159,7 +171,8 @@ function buildActivities(students, staffList, lecturers) {
     const name = l.name?.english || l.name?.khmer || l.identity_id || `Lecturer #${l.id || ''}`;
     entries.push({
       id: `lecturer-${l.id || Math.random()}`,
-      message: `Lecturer added: ${name}`,
+      messageKey: 'dashboard.activityLecturer',
+      name,
       time: l.created_at || l.createdAt || '',
       _sort: l.created_at || l.createdAt || '',
     });
@@ -190,12 +203,12 @@ const loadDashboard = async () => {
     (r) => r.status === 'rejected'
   );
   if (failed.length === 4) {
-    error.value = 'Failed to load dashboard data. Please try again later.';
+    error.value = t('dashboard.loadFailed');
     loading.value = false;
     return;
   }
   if (failed.length > 0) {
-    error.value = `Some data could not be loaded (${failed.length}/4 requests failed).`;
+    error.value = t('dashboard.partialFailed', { n: failed.length });
   }
 
   const studentsData = studentsRes.status === 'fulfilled' ? studentsRes.value : null;
@@ -208,16 +221,15 @@ const loadDashboard = async () => {
   const lecturerItems = extractItems(lecturersData);
   const templateItems = extractItems(templatesData);
 
-  stats.value = [
-    { label: 'Total Students', value: studentsData != null ? extractTotal(studentsData) : '—', icon: 'pi pi-users', bgColor: 'bg-blue-500' },
-    { label: 'Total Staff', value: staffData != null ? extractTotal(staffData) : '—', icon: 'pi pi-id-card', bgColor: 'bg-green-500' },
-    { label: 'Lecturers', value: lecturersData != null ? extractTotal(lecturersData) : '—', icon: 'pi pi-briefcase', bgColor: 'bg-purple-500' },
-    { label: 'Templates', value: templatesData != null ? templateItems.length : '—', icon: 'pi pi-palette', bgColor: 'bg-orange-500' },
-  ];
+  statValues.value = {
+    students: studentsData != null ? extractTotal(studentsData) : '—',
+    staff: staffData != null ? extractTotal(staffData) : '—',
+    lecturers: lecturersData != null ? extractTotal(lecturersData) : '—',
+    templates: templatesData != null ? templateItems.length : '—',
+  };
 
   activities.value = buildActivities(studentItems, staffItems, lecturerItems);
 
-  // Get accurate per-faculty totals via the API's faculty filter
   const faculties = [...new Set(studentItems.map((s) => s.faculty).filter(Boolean))];
   const facultyResults = await Promise.allSettled(
     faculties.map((f) => getStudents(0, 1, null, null, f))

@@ -9,19 +9,22 @@
       <!-- Logo/Title (Visible on mobile, or always if you prefer) -->
       <div class="flex items-center gap-3 md:hidden">
         <img alt="Logo" src="@/assets/ailogo.png" class="w-8 h-8" />
-        <span class="text-lg font-semibold text-gray-800 dark:text-white">HRM System</span>
+        <span class="text-lg font-semibold text-gray-800 dark:text-white">{{ t('app.title') }}</span>
       </div>
     </div>
 
-    <!-- Right Side (User Profile, etc.) - Placeholder -->
     <div class="flex items-center gap-4">
-      <!-- Add user dropdown or other actions here -->
+      <LanguageSwitcher />
       <AccountMenu />
     </div>
   </header>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n';
 import AccountMenu from './AccountMenu.vue';
+import LanguageSwitcher from './LanguageSwitcher.vue';
+
+const { t } = useI18n();
 defineEmits(['toggle']);
 </script>

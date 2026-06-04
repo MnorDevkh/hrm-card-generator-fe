@@ -39,6 +39,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { Spin, Alert } from 'ant-design-vue';
 import { environment } from '../../environments/environment';
 import LectureDetail from './LectureDetail.vue';
@@ -51,6 +52,7 @@ const props = defineProps({
     }
 });
 
+const { t } = useI18n();
 const route = useRoute();
 const fetchedLecture = ref(null);
 const isLoading = ref(false);
@@ -63,7 +65,7 @@ onMounted(async () => {
         const verificationId = route.query.verificationId;
 
         if (!id || !verificationId) {
-            error.value = 'Lecturer ID or Verification ID is missing.';
+            error.value = t('lecturer.idMissing');
             return;
         }
 
@@ -73,10 +75,10 @@ onMounted(async () => {
             if (response.ok) {
                 fetchedLecture.value = await response.json();
             } else {
-                error.value = 'Failed to fetch lecturer details.';
+                error.value = t('lecturer.fetchFailed');
             }
         } catch (e) {
-            error.value = e.message || 'Failed to fetch lecturer details.';
+            error.value = e.message || t('lecturer.fetchFailed');
             console.error(e);
         } finally {
             isLoading.value = false;

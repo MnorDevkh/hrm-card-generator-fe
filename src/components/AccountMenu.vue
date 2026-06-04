@@ -31,7 +31,7 @@
                     <template #icon>
                         <LogoutOutlined />
                     </template>
-                    Sign Out
+                    {{ t('auth.signOut') }}
                 </Menu.Item>
             </Menu>
         </template>
@@ -41,10 +41,12 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { Dropdown, Menu, Avatar } from 'ant-design-vue';
-import { UserOutlined, SettingOutlined, LogoutOutlined, DownOutlined } from '@ant-design/icons-vue';
+import { UserOutlined, LogoutOutlined, DownOutlined } from '@ant-design/icons-vue';
 
 const router = useRouter();
+const { t } = useI18n();
 const username = ref('User');
 const role = ref('');
 

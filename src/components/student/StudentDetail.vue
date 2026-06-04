@@ -67,6 +67,9 @@
                   <Descriptions.Item label="មហាវិទ្យាល័យ">{{ student.faculty }}</Descriptions.Item>
                   <Descriptions.Item label="មុខជំនាញ">{{ student.major }}</Descriptions.Item>
                   <Descriptions.Item label="វេនសិក្សា">{{ student.study_shift }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('student.fields.completeCredit')">{{ formatCompleteCredit(student.ischeck) }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('student.fields.currentDegree')">{{ formatDegree(student.current_degree) }}</Descriptions.Item>
+                  <Descriptions.Item :label="t('student.fields.studyYear')">{{ student.study_year ?? 1 }}</Descriptions.Item>
                   <Descriptions.Item label="ជំនាន់ទី">{{ student.batch }}</Descriptions.Item>
                   <Descriptions.Item label="បញ្ចប់ការសិក្សាថ្នាក់">{{ student.education_level }}</Descriptions.Item>
                   <Descriptions.Item label="អតីតសិស្ស/និស្សិត">{{ student.high_school }}</Descriptions.Item>
@@ -117,11 +120,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { Spin, Alert, Card, Descriptions, Image, ConfigProvider } from 'ant-design-vue';
 import { UserOutlined, BookOutlined, TeamOutlined, StarOutlined, CheckCircleOutlined } from '@ant-design/icons-vue';
 import { getStudentInfo } from '../../service/student.service';
 import { environment } from '../../environments/environment';
 
+const { t } = useI18n();
 const route = useRoute();
 const student = ref(null);
 const isLoading = ref(true);
@@ -149,7 +154,7 @@ onMounted(async () => {
   if (verificationId === 'null') verificationId = null;
 
   if (!studentId || !verificationId) {
-    if (!props.embedded) error.value = 'Student ID or Verification ID is missing.';
+    if (!props.embedded) error.value = t('student.idMissing');
     isLoading.value = false;
     return;
   }
@@ -159,7 +164,7 @@ onMounted(async () => {
     const response = await getStudentInfo(studentId, verificationId);
     student.value = response;
   } catch (err) {
-    error.value = err.response?.data?.message || err.message || 'Failed to fetch student details.';
+    error.value = err.response?.data?.message || err.message || t('student.fetchFailed');
     console.error(err);
   } finally {
     isLoading.value = false;
@@ -227,6 +232,14 @@ const formatAddress = (addr) => {
   if (!addr) return '-';
   const parts = [addr.village, addr.commune, addr.district, addr.province];
   return parts.filter(Boolean).join(', ') || '-';
+};
+
+const formatCompleteCredit = (ischeck) =>
+  ischeck ? t('student.fields.completeCreditYes') : t('student.fields.completeCreditNo');
+
+const formatDegree = (degree) => {
+  if (degree === 'master') return t('student.fields.degreeMaster');
+  return t('student.fields.degreeBachelor');
 };
 const openPopup = () => {
   window.open('https://t.me/+6DdPPMitSdViMWVl', '_blank');

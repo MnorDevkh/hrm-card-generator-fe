@@ -13,20 +13,20 @@
       <div class="card flex flex-col gap-4 bg-white p-4 rounded-xl shadow-md">
         <div class="flex flex-col lg:flex-row justify-between items-center gap-4">
         <div class="w-full lg:w-auto text-center lg:text-left">
-          <p class="text-xl font-bold text-gray-900">Receipts from Excel</p>
+          <p class="text-xl font-bold text-gray-900">{{ t('receipt.excelTitle') }}</p>
           <p class="text-sm text-gray-500 mt-1">
-            Select a file below or use Excel import, then Save to backend to store the batch.
+            {{ t('receipt.excelHint') }}
           </p>
         </div>
         <div class="grid grid-cols-1 sm:grid-flow-col gap-2 w-full lg:w-auto items-center">
           <Input
             v-model:value="rowSearchDraft"
-            placeholder="Search name, phone, or serial"
+            :placeholder="t('receipt.searchRows')"
             allow-clear
             class="w-full sm:w-64"
             @pressEnter="handleRowSearch"
           />
-          <Button type="primary" @click="handleRowSearch">Search</Button>
+          <Button type="primary" @click="handleRowSearch">{{ t('common.search') }}</Button>
         </div>
         <Divider type="vertical" class="hidden lg:block h-8" />
         <div class="card flex flex-col sm:flex-row sm:flex-wrap justify-end gap-2 w-full lg:w-auto">
@@ -34,22 +34,22 @@
             <template #icon>
               <FileExcelOutlined />
             </template>
-            Excel import
+            {{ t('receipt.excelImport') }}
           </Button>
           <Button type="primary" :disabled="!selectedFile || saving" :loading="saving" @click="saveToBackend" class="w-full sm:w-auto">
-            Save to backend
+            {{ t('receipt.saveToBackend') }}
           </Button>
           <Button :disabled="!rows.length" @click="downloadPdfAll(rows)" class="w-full sm:w-auto">
             <template #icon>
               <FilePdfOutlined />
             </template>
-            PDF (all)
+            {{ t('receipt.pdfAll') }}
           </Button>
           <Button :disabled="!selectedRowKeys.length" @click="downloadPdfSelected" class="w-full sm:w-auto">
             <template #icon>
               <FilePdfOutlined />
             </template>
-            PDF (selected)
+            {{ t('receipt.pdfSelected') }}
           </Button>
         </div>
         </div>
@@ -64,9 +64,9 @@
           <p class="ant-upload-drag-icon">
             <InboxOutlined />
           </p>
-          <p class="ant-upload-text">Click or drag Excel / CSV here to parse</p>
+          <p class="ant-upload-text">{{ t('receipt.uploadText') }}</p>
           <p class="ant-upload-hint">
-            .xlsx, .xls, or .csv — columns include serial_no, name_khmer, name_latin, phone, amount, purpose, …
+            {{ t('receipt.uploadHint') }}
           </p>
         </UploadDragger>
       </div>
@@ -114,21 +114,21 @@
 
       <!-- Saved batches toolbar -->
       <div class="card flex flex-col lg:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl shadow-md">
-        <p class="text-xl font-bold text-gray-900 w-full lg:w-auto text-center lg:text-left">Saved uploads</p>
+        <p class="text-xl font-bold text-gray-900 w-full lg:w-auto text-center lg:text-left">{{ t('receipt.savedUploads') }}</p>
         <div class="grid grid-cols-1 sm:grid-flow-col gap-2 w-full lg:w-auto items-center">
           <Input
             v-model:value="batchSearchDraft"
-            placeholder="Search by filename…"
+            :placeholder="t('receipt.searchFilename')"
             allow-clear
             class="w-full sm:w-64"
             @pressEnter="handleBatchSearch"
           />
-          <Button type="primary" @click="handleBatchSearch">Search</Button>
+          <Button type="primary" @click="handleBatchSearch">{{ t('common.search') }}</Button>
           <Button :loading="batchesLoading" @click="loadBatches">
             <template #icon>
               <ReloadOutlined />
             </template>
-            Refresh
+            {{ t('receipt.refresh') }}
           </Button>
         </div>
         <Divider type="vertical" class="hidden lg:block h-8" />
@@ -136,7 +136,7 @@
           <template #icon>
             <FilePdfOutlined />
           </template>
-          Download PDF (selected)
+          {{ t('receipt.downloadPdfSelected') }}
         </Button>
       </div>
 
@@ -170,7 +170,7 @@
         </Table>
       </Card>
 
-      <Modal v-model:open="previewOpen" :footer="null" title="Receipt preview" width="80vw" centered>
+      <Modal v-model:open="previewOpen" :footer="null" :title="t('receipt.preview')" width="80vw" centered>
         <div class="overflow-auto">
           <div class="preview-sheet mx-auto">
             <ReceiptDocument v-if="previewRow" :row="previewRowForDoc" />
@@ -183,14 +183,14 @@
         :footer="null"
         :closable="false"
         :maskClosable="false"
-        title="Exporting PDF"
+        :title="t('receipt.exportingPdf')"
         centered
       >
         <div class="flex flex-col items-center justify-center p-6 gap-4">
           <Progress type="circle" :percent="exportProgress" />
           <div class="text-center">
-            <p class="font-semibold text-lg">Processing…</p>
-            <p class="text-gray-500">Page {{ currentExportIndex }} of {{ totalExportPages }}</p>
+            <p class="font-semibold text-lg">{{ t('receipt.processing') }}</p>
+            <p class="text-gray-500">{{ t('receipt.pageProgress', { current: currentExportIndex, total: totalExportPages }) }}</p>
           </div>
         </div>
       </Modal>
@@ -212,6 +212,7 @@
 
 <script setup>
 import { ref, nextTick, computed, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 import {
   Alert,
   Button,
@@ -238,6 +239,8 @@ import ReceiptDocument from './ReceiptDocument.vue';
 import { getReceiptBatch, listReceiptBatches, parseReceiptExcel, uploadReceiptExcel } from '@/service/receipt.service';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+
+const { t } = useI18n();
 
 const receiptAccept =
   '.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv';
@@ -370,16 +373,16 @@ const rowRowSelection = computed(() => ({
   },
 }));
 
-const rowColumns = [
-  { title: 'No', key: 'index', width: 56 },
-  { title: '№ / Serial', key: 'serial_no', width: 200 },
-  { title: 'Khmer name', dataIndex: 'name_khmer', key: 'name_khmer', ellipsis: true },
-  { title: 'Latin name', dataIndex: 'name_latin', key: 'name_latin', ellipsis: true },
-  { title: 'Phone', dataIndex: 'phone', key: 'phone', width: 120 },
-  { title: 'Amount', dataIndex: 'amount', key: 'amount', width: 90 },
-  { title: 'Purpose', dataIndex: 'purpose', key: 'purpose', ellipsis: true },
-  { title: 'Actions', key: 'actions', fixed: 'right', width: 132 },
-];
+const rowColumns = computed(() => [
+  { title: t('receipt.no'), key: 'index', width: 56 },
+  { title: t('receipt.serial'), key: 'serial_no', width: 200 },
+  { title: t('receipt.khmerName'), dataIndex: 'name_khmer', key: 'name_khmer', ellipsis: true },
+  { title: t('receipt.latinName'), dataIndex: 'name_latin', key: 'name_latin', ellipsis: true },
+  { title: t('receipt.phone'), dataIndex: 'phone', key: 'phone', width: 120 },
+  { title: t('receipt.amount'), dataIndex: 'amount', key: 'amount', width: 90 },
+  { title: t('receipt.purpose'), dataIndex: 'purpose', key: 'purpose', ellipsis: true },
+  { title: t('common.actions'), key: 'actions', fixed: 'right', width: 132 },
+]);
 
 const batchTablePagination = computed(() => ({
   current: batchPagination.value.current,
@@ -397,12 +400,12 @@ const batchRowSelection = computed(() => ({
   },
 }));
 
-const batchColumns = [
-  { title: 'Filename', dataIndex: 'filename', key: 'filename', ellipsis: true },
-  { title: 'Rows', dataIndex: 'row_count', key: 'row_count', width: 80 },
-  { title: 'Uploaded', key: 'uploaded_at', width: 200 },
-  { title: 'Actions', key: 'actions', fixed: 'right', width: 72 },
-];
+const batchColumns = computed(() => [
+  { title: t('receipt.filename'), dataIndex: 'filename', key: 'filename', ellipsis: true },
+  { title: t('receipt.rows'), dataIndex: 'row_count', key: 'row_count', width: 80 },
+  { title: t('receipt.uploaded'), key: 'uploaded_at', width: 200 },
+  { title: t('common.actions'), key: 'actions', fixed: 'right', width: 72 },
+]);
 
 function handleRowsTableChange(pag) {
   rowsPagination.value.current = pag.current;
@@ -449,7 +452,7 @@ async function parseReceiptFile(file) {
     clearRowSelection();
     rowsPagination.value.current = 1;
   } catch (err) {
-    error.value = err?.message || 'Failed to parse Excel.';
+    error.value = err?.message || t('receipt.parseFailed');
     rows.value = [];
     clearRowSelection();
   } finally {
@@ -477,11 +480,11 @@ async function saveToBackend() {
   saving.value = true;
   try {
     const saved = await uploadReceiptExcel(selectedFile.value);
-    message.success(`Saved: ${saved?.filename || 'receipt batch'}`);
+    message.success(t('receipt.saved', { filename: saved?.filename || 'receipt batch' }));
     await loadBatches();
   } catch (err) {
     console.error(err);
-    message.error('Failed to save to backend');
+    message.error(t('receipt.saveFailed'));
   } finally {
     saving.value = false;
   }
@@ -504,7 +507,7 @@ function getSelectedReceiptRows() {
 function printSelected() {
   const list = getSelectedReceiptRows();
   if (!list.length) {
-    message.warning('Select at least one row.');
+    message.warning(t('receipt.selectRow'));
     return;
   }
   rowsToPrint.value = list.map((r) => stripRowId(r));
@@ -621,10 +624,10 @@ async function downloadPdfOne(r) {
 
     const serial = row?.serial_no ? `-${_fileSafeName(row.serial_no)}` : '';
     pdf.save(`receipt${serial}.pdf`);
-    message.success('PDF downloaded');
+    message.success(t('receipt.pdfDownloaded'));
   } catch (err) {
     console.error(err);
-    message.error('Failed to export PDF');
+    message.error(t('receipt.pdfExportFailed'));
   } finally {
     hideExportRoot();
     isExportingPdf.value = false;
@@ -665,10 +668,10 @@ async function downloadPdfAll(exportRowsRefOrArray) {
     }
 
     pdf.save(`receipts-${new Date().toISOString().slice(0, 10)}.pdf`);
-    message.success('PDF downloaded');
+    message.success(t('receipt.pdfDownloaded'));
   } catch (err) {
     console.error(err);
-    message.error('Failed to export PDF');
+    message.error(t('receipt.pdfExportFailed'));
   } finally {
     hideExportRoot();
     isExportingPdf.value = false;
@@ -678,7 +681,7 @@ async function downloadPdfAll(exportRowsRefOrArray) {
 function downloadPdfSelected() {
   const list = getSelectedReceiptRows();
   if (!list.length) {
-    message.warning('Select at least one row.');
+    message.warning(t('receipt.selectRow'));
     return;
   }
   downloadPdfAll(list);
@@ -707,7 +710,7 @@ async function loadBatches() {
     batchPagination.value.total = total;
   } catch (err) {
     console.error(err);
-    batchesError.value = err?.message || 'Failed to load saved uploads.';
+    batchesError.value = err?.message || t('receipt.uploadsLoadFailed');
     batches.value = [];
     batchPagination.value.total = 0;
   } finally {
@@ -722,10 +725,10 @@ async function loadBatchIntoTable(batchId) {
     rows.value = assignIdsToRows(list);
     clearRowSelection();
     rowsPagination.value.current = 1;
-    message.success('Loaded batch');
+    message.success(t('receipt.batchLoaded'));
   } catch (err) {
     console.error(err);
-    message.error('Failed to load batch');
+    message.error(t('receipt.batchLoadFailed'));
   }
 }
 
@@ -737,7 +740,7 @@ async function downloadSelectedBatchesPdf() {
     await downloadPdfAll(allRows);
   } catch (err) {
     console.error(err);
-    message.error('Failed to export selected batches');
+    message.error(t('receipt.batchExportFailed'));
   }
 }
 

@@ -17,7 +17,7 @@
           <!-- Verification ID Input -->
           <div class="p-5">
             <label for="verification_id" class="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
-              Card ID / National Identity
+              {{ t('verify.cardIdLabel') }}
             </label>
             <div class="relative">
               <i class="pi pi-id-card absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
@@ -26,7 +26,7 @@
                 id="verification_id"
                 v-model="verificationId"
                 class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white transition-all outline-none"
-                placeholder="Enter Card ID or National ID"
+                :placeholder="t('verify.placeholder')"
               />
             </div>
           </div>
@@ -37,13 +37,13 @@
             class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white font-bold py-3 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:transform-none"
           >
             <i :class="loading ? 'pi pi-spin pi-spinner' : 'pi pi-check-circle'"></i>
-            {{ loading ? 'Verifying...' : 'Verify Identity' }}
+            {{ loading ? t('verify.verifying') : t('verify.verifyIdentity') }}
           </button>
         </form>
       </div>
       <div class="bg-gray-50 dark:bg-gray-700/50 px-8 py-4 text-center">
         <p class="text-xs text-gray-500 dark:text-gray-400">
-          Secure Verification System
+          {{ t('verify.secureSystem') }}
         </p>
       </div>
     </div>
@@ -53,9 +53,11 @@
 <script setup>
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 import { useToast } from 'primevue/usetoast';
 import { environment } from '../../environments/environment';
 
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
@@ -68,7 +70,7 @@ const submitVerification = async () => {
   const vId = verificationId.value.trim();
 
   if (!lecturerId.value || !vId) {
-    toast.add({ severity: 'warn', summary: 'Input Required', detail: 'Please enter your Card ID or National Identity', life: 3000 });
+    toast.add({ severity: 'warn', summary: t('verify.inputRequired'), detail: t('verify.enterCardId'), life: 3000 });
     return;
   }
 
@@ -86,16 +88,16 @@ const submitVerification = async () => {
         // Not found, invalid credential, or QR disabled/expired
         toast.add({
           severity: 'error',
-          summary: 'Cannot Access',
-          detail: 'Lecturer not found, credentials invalid, or QR is disabled/expired.',
+          summary: t('verify.cannotAccess'),
+          detail: t('verify.lecturerInvalid'),
           life: 4000
         });
       } else {
         // Other API-side error (e.g. 500)
         toast.add({
           severity: 'error',
-          summary: 'System Error',
-          detail: 'The verification service is currently unavailable. Please try again later.',
+          summary: t('verify.systemError'),
+          detail: t('verify.serviceUnavailable'),
           life: 4000
         });
       }
@@ -104,8 +106,8 @@ const submitVerification = async () => {
     console.error('Verification error:', error);
     toast.add({
       severity: 'error',
-      summary: 'Network Error',
-      detail: 'Cannot connect to the verification server. Check your internet or try again later.',
+      summary: t('verify.networkError'),
+      detail: t('verify.cannotConnect'),
       life: 4000
     });
   } finally {

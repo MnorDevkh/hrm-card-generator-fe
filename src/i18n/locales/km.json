@@ -45,7 +45,9 @@
     "cannotUndo": "សកម្មភាពនេះមិនអាចត្រឡប់វិញបានទេ។",
     "language": "ភាសា",
     "english": "English",
-    "khmer": "ខ្មែរ"
+    "khmer": "ខ្មែរ",
+    "clearFilters": "លុបតម្រង",
+    "filtersActive": "តម្រង {count} សកម្ម"
   },
   "staff": {
     "listTitle": "បញ្ជីបុគ្គលិក",

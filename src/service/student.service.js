@@ -1,11 +1,24 @@
 import { apiFetch } from './api';
 
-export async function getStudents(skip, limit, search, batch, faculty, study_shift) {
+export async function getStudents(
+  skip,
+  limit,
+  search,
+  batch,
+  faculty,
+  study_shift,
+  ischeck,
+  current_degree,
+  study_year,
+) {
   const params = new URLSearchParams({ skip, limit });
   if (batch) params.append('batch', batch);
   if (search) params.append('search', search);
   if (faculty) params.append('faculty', faculty);
   if (study_shift) params.append('study_shift', study_shift);
+  if (ischeck === true || ischeck === false) params.append('ischeck', String(ischeck));
+  if (current_degree) params.append('current_degree', current_degree);
+  if (study_year != null && study_year !== '') params.append('study_year', String(study_year));
   return apiFetch(`/students/?${params}`);
 }
 

@@ -45,7 +45,9 @@
     "cannotUndo": "This action cannot be undone.",
     "language": "Language",
     "english": "English",
-    "khmer": "ខ្មែរ"
+    "khmer": "ខ្មែរ",
+    "clearFilters": "Clear filters",
+    "filtersActive": "{count} filters active"
   },
   "staff": {
     "listTitle": "Staff List",

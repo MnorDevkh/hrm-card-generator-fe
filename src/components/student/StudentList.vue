@@ -3,50 +3,91 @@
     <div class="p-4 sm:p-6 lg:p-8 space-y-4">
       <input type="file" ref="fileInput" @change="onFileSelected" style="display: none"
         accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" />
-      <div class="card flex flex-col sm:flex-row justify-between items-center gap-4 bg-white p-4 rounded-xl shadow-md">
-        <p class="text-xl font-bold text-gray-900 w-full sm:w-auto text-center sm:text-left">{{ t('student.listTitle') }}</p>
-        <div class="grid grid-cols-1 sm:grid-cols-none sm:grid-flow-col gap-2 w-full sm:w-auto items-center">
-          <Input v-model:value="searchQuery" :placeholder="t('student.searchPlaceholder')" allowClear @pressEnter="handleSearch"
-            class="w-full sm:w-64" />
-          <Input v-model:value="selectedBatch" :placeholder="t('student.batch')" allowClear @pressEnter="handleSearch"
-            class="w-full sm:w-32" />
-          <Select v-model:value="selectedFaculty" :placeholder="t('student.faculty')" allowClear @change="handleSearch"
-            class="w-full sm:w-48" :options="facultyOptions" :loading="catalogOptionsLoading" />
-          <Select v-model:value="selectedStudyShift" :placeholder="t('student.shift')" allowClear @change="handleSearch"
-            class="w-full sm:w-32" :options="studyShiftOptions" :loading="catalogOptionsLoading" />
-          <Button type="primary" @click="handleSearch">{{ t('common.search') }}</Button>
-        </div>
-        <Divider type="vertical" class="hidden sm:block h-8" />
-        <div class="card flex flex-col sm:flex-row sm:flex-wrap justify-end gap-4 w-full sm:w-auto">
-          <Button v-if="isAdmin" @click="exportCard" class="w-full sm:w-auto">
-            <template #icon>
-              <ExportOutlined />
-            </template>
-            {{ t('staff.exportCard') }}
-          </Button>
-          <Button v-if="isAdmin" type="primary" ghost @click="importFromExcel" :loading="isUploading"
-            class="w-full sm:w-auto">
-            <template #icon>
-              <FileExcelOutlined />
-            </template>
-            {{ t('staff.excelImport') }}
-          </Button>
-          <Button v-if="isAdmin" type="primary" @click="openNew" class="w-full sm:w-auto">
-            <template #icon>
-              <PlusOutlined />
-            </template>
-            {{ t('common.addNew') }}
-          </Button>
-          <Button v-if="isAdmin" danger type="primary" class="w-full sm:w-auto" :disabled="!selectedRowKeys.length"
-            @click="confirmBulkDelete">
-            <template #icon>
-              <DeleteOutlined />
-            </template>
-            {{ t('common.delete') }}
-          </Button>
+      <div class="card bg-white p-4 rounded-xl shadow-md space-y-4">
+        <p class="text-xl font-bold text-gray-900 text-center sm:text-left">{{ t('student.listTitle') }}</p>
+        <div class="border-t border-gray-100 pt-4 space-y-4">
+          <p class="text-sm font-medium text-gray-700">{{ t('nav.listFilters') }}</p>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">{{ t('student.searchPlaceholder') }}</label>
+              <Input v-model:value="searchQuery" :placeholder="t('student.searchPlaceholder')" allowClear
+                class="w-full" @pressEnter="handleSearch" />
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">{{ t('student.batch') }}</label>
+              <Input v-model:value="selectedBatch" :placeholder="t('student.batch')" allowClear class="w-full"
+                @pressEnter="handleSearch" />
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">{{ t('student.faculty') }}</label>
+              <Select v-model:value="selectedFaculty" :placeholder="t('student.faculty')" allowClear class="w-full"
+                :options="facultyOptions" :loading="catalogOptionsLoading" @change="handleSearch" />
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">{{ t('student.shift') }}</label>
+              <Select v-model:value="selectedStudyShift" :placeholder="t('student.shift')" allowClear class="w-full"
+                :options="studyShiftOptions" :loading="catalogOptionsLoading" @change="handleSearch" />
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">{{ t('student.fields.currentDegree') }}</label>
+              <Select v-model:value="selectedDegree" :placeholder="t('student.fields.currentDegree')" allowClear
+                class="w-full" :options="degreeFilterOptions" @change="handleSearch" />
+            </div>
+            <div>
+              <label class="block text-sm text-gray-600 mb-1">{{ t('student.fields.studyYear') }}</label>
+              <Select v-model:value="selectedStudyYear" :placeholder="t('student.fields.studyYear')" allowClear
+                class="w-full" :options="studyYearFilterOptions" @change="handleSearch" />
+            </div>
+            <div class="flex flex-col justify-end">
+              <label class="block text-sm text-gray-600 mb-1">{{ t('student.fields.completeCredit') }}</label>
+              <Checkbox :checked="filterCompleteCredit === true" @change="onCompleteCreditFilterChange">
+                {{ completeCreditFilterLabel }}
+              </Checkbox>
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2">
+            <span v-if="activeFilterCount > 0" class="text-sm text-gray-500">
+              {{ t('common.filtersActive', { count: activeFilterCount }) }}
+            </span>
+            <span v-else class="hidden sm:block" />
+            <div class="flex flex-wrap gap-2 justify-end">
+              <Button @click="clearFilters">{{ t('common.clearFilters') }}</Button>
+              <Button type="primary" @click="handleSearch">{{ t('common.search') }}</Button>
+            </div>
+          </div>
         </div>
       </div>
+
       <Divider />
+
+      <div class="flex flex-col sm:flex-row sm:flex-wrap justify-end gap-4 w-full sm:w-auto mb-4">
+        <Button v-if="isAdmin" @click="exportCard" class="w-full sm:w-auto">
+          <template #icon>
+            <ExportOutlined />
+          </template>
+          {{ t('staff.exportCard') }}
+        </Button>
+        <Button v-if="isAdmin" type="primary" ghost @click="importFromExcel" :loading="isUploading"
+          class="w-full sm:w-auto">
+          <template #icon>
+            <FileExcelOutlined />
+          </template>
+          {{ t('staff.excelImport') }}
+        </Button>
+        <Button v-if="isAdmin" type="primary" @click="openNew" class="w-full sm:w-auto">
+          <template #icon>
+            <PlusOutlined />
+          </template>
+          {{ t('common.addNew') }}
+        </Button>
+        <Button v-if="isAdmin" danger type="primary" class="w-full sm:w-auto" :disabled="!selectedRowKeys.length"
+          @click="confirmBulkDelete">
+          <template #icon>
+            <DeleteOutlined />
+          </template>
+          {{ t('common.delete') }}
+        </Button>
+      </div>
       <Card :bordered="false" class="shadow-sm">
         <Table :dataSource="students" :columns="columns" :pagination="pagination" :row-selection="rowSelection"
           :loading="loading" @change="handleTableChange" rowKey="id" :scroll="{ x: 1200 }">
@@ -104,7 +145,7 @@
 <script setup>
 import { ref, onMounted, createVNode, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Table, Button, Card, Divider, Modal, message, ConfigProvider, Input, Select } from 'ant-design-vue';
+import { Table, Button, Card, Divider, Modal, message, ConfigProvider, Input, Select, Checkbox } from 'ant-design-vue';
 import {
   EyeOutlined, EditOutlined, DeleteOutlined, ExclamationCircleOutlined,
   UploadOutlined, PlusOutlined, FileExcelOutlined, ExportOutlined
@@ -128,7 +169,60 @@ const searchQuery = ref('');
 const selectedBatch = ref('');
 const selectedFaculty = ref(undefined);
 const selectedStudyShift = ref(undefined);
+/** undefined = all students, true = complete credit only */
+const filterCompleteCredit = ref(undefined);
+const selectedDegree = ref(undefined);
+const selectedStudyYear = ref(undefined);
 const router = useRouter();
+
+const completeCreditFilterLabel = computed(() =>
+  filterCompleteCredit.value === true
+    ? t('student.filterCompleteCreditYes')
+    : t('student.filterAll'),
+);
+
+const onCompleteCreditFilterChange = (e) => {
+  filterCompleteCredit.value = e.target.checked ? true : undefined;
+  handleSearch();
+};
+
+const activeFilterCount = computed(() => {
+  let count = 0;
+  if (searchQuery.value?.trim()) count += 1;
+  if (selectedBatch.value?.trim()) count += 1;
+  if (selectedFaculty.value != null && selectedFaculty.value !== '') count += 1;
+  if (selectedStudyShift.value != null && selectedStudyShift.value !== '') count += 1;
+  if (selectedDegree.value != null && selectedDegree.value !== '') count += 1;
+  if (selectedStudyYear.value != null && selectedStudyYear.value !== '') count += 1;
+  if (filterCompleteCredit.value === true) count += 1;
+  return count;
+});
+
+const resetFilters = () => {
+  searchQuery.value = '';
+  selectedBatch.value = '';
+  selectedFaculty.value = undefined;
+  selectedStudyShift.value = undefined;
+  selectedDegree.value = undefined;
+  selectedStudyYear.value = undefined;
+  filterCompleteCredit.value = undefined;
+};
+
+const clearFilters = () => {
+  resetFilters();
+  handleSearch();
+};
+
+const degreeFilterOptions = computed(() => [
+  { label: t('student.fields.degreeBachelor'), value: 'bachelor' },
+  { label: t('student.fields.degreeMaster'), value: 'master' },
+]);
+const studyYearFilterOptions = computed(() => [
+  { label: '1', value: 1 },
+  { label: '2', value: 2 },
+  { label: '3', value: 3 },
+  { label: '4', value: 4 },
+]);
 
 const viewDialogVisible = ref(false);
 const editDialogVisible = ref(false);
@@ -206,7 +300,17 @@ const loadStudents = async () => {
   const limit = pagination.value.pageSize;
 
   try {
-    const response = await getStudents(offset, limit, searchQuery.value, selectedBatch.value, selectedFaculty.value, selectedStudyShift.value);
+    const response = await getStudents(
+      offset,
+      limit,
+      searchQuery.value,
+      selectedBatch.value,
+      selectedFaculty.value,
+      selectedStudyShift.value,
+      filterCompleteCredit.value,
+      selectedDegree.value,
+      selectedStudyYear.value,
+    );
     students.value = response.students;
     pagination.value.total = response.total;
   } catch (error) {

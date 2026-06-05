@@ -117,7 +117,11 @@ const useTemplate = (templateId) => {
     } else if (type.value === 'staff') {
         router.push({ path: '/card-generator/staff', query: { templateId, ids: JSON.stringify(studentIds.value), type: 'staff' } });
     } else {
-        router.push({ path: '/generate', query: { templateId, ids: JSON.stringify(studentIds.value) } });
+        const query = { templateId, ids: JSON.stringify(studentIds.value) };
+        if (route.query.study_year != null && route.query.study_year !== '') {
+            query.study_year = route.query.study_year;
+        }
+        router.push({ path: '/generate', query });
     }
 };
 

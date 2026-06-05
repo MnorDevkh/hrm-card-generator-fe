@@ -242,7 +242,7 @@ const template = ref(null);
 const templateId = ref(null);
 
 const issueDate = ref(new Date().toISOString().split('T')[0]);
-const expiryDate = ref(new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0]);
+const expiryDate = ref(`${new Date().getFullYear()}-12-12`);
 const year = ref(new Date().getFullYear().toString());
 const isExportingPages = ref(false);
 const isExporting = ref(false);
@@ -272,6 +272,19 @@ const templateImageUrl = computed(() =>
 
 const getPhotoUrl = (photo) =>
   photo ? `${environment.apiBaseUrl}media/image/${photo}` : '';
+
+function resolveStudyYear() {
+  const fromQuery = route.query?.study_year;
+  if (fromQuery != null && fromQuery !== '') return String(fromQuery);
+
+  const student = students.value.find((s) => s?.study_year != null && s?.study_year !== '');
+  return student ? String(student.study_year) : null;
+}
+
+function applyStudyYearDefault() {
+  const resolved = resolveStudyYear();
+  if (resolved != null) year.value = resolved;
+}
 
 function parseDateString(value) {
   if (!value && value !== 0) return null;
@@ -468,6 +481,9 @@ onMounted(async () => {
 
     const promises = [];
 
+    // Prefer route.query.study_year, then fall back to loaded student data (if any).
+    applyStudyYearDefault();
+
     if (templateId.value) {
       promises.push(getfileByid(templateId.value).then(data => {
         template.value = data;
@@ -477,6 +493,7 @@ onMounted(async () => {
     if (studentIds.length > 0) {
       promises.push(getStudentsByIds(studentIds).then(data => {
         students.value = data;
+        applyStudyYearDefault();
       }).catch(err => console.error('Student fetch error:', err)));
     }
 

@@ -352,11 +352,7 @@ const exportCard = () => {
     return;
   }
   const ids = selectedRows.value.map(s => s.id);
-  const query = { ids: JSON.stringify(ids) };
-  if (selectedStudyYear.value != null && selectedStudyYear.value !== '') {
-    query.study_year = String(selectedStudyYear.value);
-  }
-  router.push({ path: '/template', query });
+  router.push({ path: '/template', query: { ids: JSON.stringify(ids) } });
 };
 
 const viewStudent = (student) => {

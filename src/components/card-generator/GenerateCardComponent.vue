@@ -121,7 +121,7 @@
                   </tr>
                   <tr>
                     <td>Year</td>
-                    <td>: {{ year || '-' }}</td>
+                    <td>: {{ formatStudyYear(student.study_year) }}</td>
                   </tr>
                   <tr>
                     <td>Issue</td>
@@ -193,7 +193,7 @@
                   </tr>
                   <tr>
                     <td>Year</td>
-                    <td>: {{ year || '-' }}</td>
+                    <td>: {{ formatStudyYear(student.study_year) }}</td>
                   </tr>
                   <tr>
                     <td>Issue</td>
@@ -242,8 +242,8 @@ const template = ref(null);
 const templateId = ref(null);
 
 const issueDate = ref(new Date().toISOString().split('T')[0]);
-const expiryDate = ref(`${new Date().getFullYear()}-12-12`);
-const year = ref(new Date().getFullYear().toString());
+const expiryDate = ref(`${new Date().getFullYear()}-12-31`);
+const year = ref(null);
 const isExportingPages = ref(false);
 const isExporting = ref(false);
 const isLoading = ref(true);
@@ -273,17 +273,10 @@ const templateImageUrl = computed(() =>
 const getPhotoUrl = (photo) =>
   photo ? `${environment.apiBaseUrl}media/image/${photo}` : '';
 
-function resolveStudyYear() {
-  const fromQuery = route.query?.study_year;
-  if (fromQuery != null && fromQuery !== '') return String(fromQuery);
-
-  const student = students.value.find((s) => s?.study_year != null && s?.study_year !== '');
-  return student ? String(student.study_year) : null;
-}
-
-function applyStudyYearDefault() {
-  const resolved = resolveStudyYear();
-  if (resolved != null) year.value = resolved;
+function formatStudyYear(studyYear) {
+  if (studyYear != null && studyYear !== '') return studyYear;
+  if (year.value != null && year.value !== '') return year.value;
+  return '-';
 }
 
 function parseDateString(value) {
@@ -481,9 +474,6 @@ onMounted(async () => {
 
     const promises = [];
 
-    // Prefer route.query.study_year, then fall back to loaded student data (if any).
-    applyStudyYearDefault();
-
     if (templateId.value) {
       promises.push(getfileByid(templateId.value).then(data => {
         template.value = data;
@@ -493,7 +483,6 @@ onMounted(async () => {
     if (studentIds.length > 0) {
       promises.push(getStudentsByIds(studentIds).then(data => {
         students.value = data;
-        applyStudyYearDefault();
       }).catch(err => console.error('Student fetch error:', err)));
     }
 

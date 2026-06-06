@@ -6,8 +6,8 @@
         :src="Logo"
         alt=""
         class="receipt-watermark pointer-events-none select-none"
-        width="300"
-        height="300"
+        width="350"
+        height="350"
         aria-hidden="true"
       />
 
@@ -81,7 +81,7 @@
             <span class="rc-input">{{ row.amount || '' }}</span>
           </div>
           <span class="rc-label ml-2 shrink-0 whitespace-nowrap">សម្រាប់ :</span>
-          <div class=" rc-dotted--start w-4/6 min-w-[5.5rem]">
+          <div class="rc-dotted--start w-4/6 min-w-[5.5rem]">
             <span class="rc-input">{{ row.purpose || '' }}</span>
           </div>
         </div>
@@ -119,10 +119,10 @@
       </main>
 
       <footer class="receipt-footer relative z-20 mt-auto border-t-2 border-blue-400">
-        <div class="flex justify-center gap-2 text-[0.75rem]  font-medium leading-snug text-[#333]">
+        <div class="flex justify-center gap-2 text-[0.74rem]  font-medium leading-snug text-[#333]">
           <div class="flex min-w-0 flex-1 items-center gap-1  justify-center">
             <span>
-              អាសយដ្ឋាន: ភូមិទ្រា ៣ សង្កាត់ស្ទឹងមានជ័យទី១ ខណ្ឌមានជ័យ រាជធានីភ្នំពេញ, ទូរស័ព្ទលេខ: 068 434398 | 0966 434398 | 089 434398
+              អាសយដ្ឋាន៖ អគារលេខ ៥៨៣Eo ភូមិទ្រា ៣ សង្កាត់ស្ទឹងមានជ័យទី១ ខណ្ឌមានជ័យ រាជធានីភ្នំពេញ, ទូរស័ព្ទលេខ: 068 434398 | 0966 434398 | 089 434398
             </span>
           </div>
         </div>
@@ -135,8 +135,7 @@
 import { computed, onMounted } from 'vue';
 import receiptLogo from '@/assets/receiptlogo.png';
 import Logo from '@/assets/ailogo.png';
-
-const TACTEING_ORNAMENT_SIZE = '1.75rem';
+import { waitForReceiptFonts } from './receiptFonts';
 
 const props = defineProps({
   row: { type: Object, required: true },
@@ -194,10 +193,7 @@ function formatBirthDateKhmer(raw) {
 const birthDateKhmer = computed(() => formatBirthDateKhmer(props.row.birth_date));
 
 onMounted(() => {
-  if (typeof document !== 'undefined' && document.fonts?.load) {
-    document.fonts.load(`${TACTEING_ORNAMENT_SIZE} Tacteing`).catch(() => {});
-    document.fonts.load("1.5rem 'Khmer OS Muol Light'").catch(() => {});
-  }
+  waitForReceiptFonts();
 });
 
 </script>
@@ -271,7 +267,7 @@ onMounted(() => {
   margin: 0 auto 0.1rem;
   padding: 0;
   font-family: 'Khmer OS Muol Light', 'KhmerOSMuolLight', 'Moul', 'Kantumruy Pro', 'Khmer', serif;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   line-height: 1;
   font-weight: 400;
   color: #000000;
@@ -305,6 +301,9 @@ onMounted(() => {
   line-height: 1;
   color: #000000;
   margin-top: -1rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: geometricPrecision;
 }
 
 /* Label + dotted share one line-height so underline meets label text bottom (preview === PDF) */
@@ -312,7 +311,7 @@ onMounted(() => {
   display: inline-block;
   flex-shrink: 0;
   font-size: 14px;
-  line-height: var(--rc-line-h, 1.25rem);
+  line-height: var(--rc-line-h, 1.5rem);
   vertical-align: baseline;
   color: #111;
 }
@@ -325,7 +324,7 @@ onMounted(() => {
   font-family: 'Kantumruy Pro', 'Inter', sans-serif;
   font-size: 14px;
   font-size: 0.95rem;
-  line-height: var(--rc-line-h, 1.9rem);
+  line-height: var(--rc-line-h, 1.5rem);
   vertical-align: baseline;
   color: #000;
 }
@@ -338,12 +337,17 @@ onMounted(() => {
   display: inline-block;
   box-sizing: border-box;
   min-width: 0;
-  padding: 0 0.5rem;
+  min-height: var(--rc-line-h, 1.5rem);
+  padding: 0 0.5rem 0.125rem;
   font-size: 0.85rem;
-  line-height: var(--rc-line-h, 1.25rem);
+  line-height: var(--rc-line-h, 1.5rem);
   vertical-align: baseline;
   border-bottom: 1.5px dotted #000;
   text-align: center;
+}
+
+.rc-dotted .rc-input:empty::before {
+  content: '\00a0';
 }
 
 .rc-dotted--start {
@@ -351,7 +355,7 @@ onMounted(() => {
 }
 
 .rc-field-row--note {
-  --rc-line-h: 1.5rem;
+  --rc-line-h: 2rem;
 }
 
 .rc-dotted-spacer {
@@ -360,12 +364,13 @@ onMounted(() => {
 
 /* One vertical rhythm for form rows (avoids Tailwind space-y + pb fighting each other) */
 .rc-field-row {
+  --rc-line-h: 1.75rem;
   display: flex;
-  align-items: baseline;
+  align-items: flex-end;
   gap: 0.5rem;
   padding-bottom: 0.45rem;
   margin: 0;
-  line-height: var(--rc-line-h, 1.25rem);
+  line-height: var(--rc-line-h, 1.5rem);
 }
 
 .rc-field-row--wrap {

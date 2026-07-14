@@ -7,3 +7,5 @@ export const ROLE_RECEPT = '_RECEPT';
 export function getCurrentRole() {
   return localStorage.getItem('role');
 }
+
+

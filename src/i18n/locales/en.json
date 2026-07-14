@@ -23,6 +23,7 @@
     "forgotPassword": "Forgot password?",
     "signIn": "Sign In",
     "loginFailed": "Failed to login. Please check your credentials.",
+    "invalidRole": "Your account role is not recognized. Please contact an administrator.",
     "signOut": "Sign Out"
   },
   "common": {

@@ -4,7 +4,7 @@ import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { Button, Input, Alert, ConfigProvider } from 'ant-design-vue';
 import { login } from '../../service/auth.service';
-import { getCurrentRole, ROLE_RECEPT } from '@/utils/role';
+import { getCurrentRole, ROLE_RECEPT, INVALID_ROLE_CODE } from '@/utils/role';
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 
 const router = useRouter();
@@ -31,7 +31,8 @@ const handleLogin = async () => {
     const role = getCurrentRole();
     router.push(role === ROLE_RECEPT ? '/receipt' : '/');
   } catch (e) {
-    error.value = t('auth.loginFailed');
+    error.value =
+      e?.code === INVALID_ROLE_CODE ? t('auth.invalidRole') : t('auth.loginFailed');
     console.error(e);
   } finally {
     loading.value = false;

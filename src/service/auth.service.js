@@ -1,4 +1,20 @@
 import { apiFetch } from './api';
+import { getCurrentRole, isKnownRole, INVALID_ROLE_CODE } from '@/utils/role';
+
+function clearAuthStorage() {
+  localStorage.removeItem('auth_token');
+  localStorage.removeItem('role');
+}
+
+function assertKnownRole() {
+  const role = getCurrentRole();
+  if (!isKnownRole(role)) {
+    clearAuthStorage();
+    const error = new Error('Invalid role');
+    error.code = INVALID_ROLE_CODE;
+    throw error;
+  }
+}
 
 /**
  * Loads the current user from the backend and updates localStorage `role`
@@ -37,9 +53,13 @@ export async function login(email, password) {
     }
     try {
       await syncCurrentUserFromServer();
-    } catch {
+    } catch (e) {
+      if (e?.code === INVALID_ROLE_CODE) {
+        throw e;
+      }
       // Role already set from login; /auth/me is best-effort sync
     }
+    assertKnownRole();
   }
   return response;
 }

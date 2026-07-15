@@ -49,7 +49,12 @@
         <Table :dataSource="lecturers" :columns="columns" :pagination="pagination" :row-selection="rowSelection"
           :loading="loading" @change="handleTableChange" rowKey="id" :scroll="{ x: 1200 }">
           <template #bodyCell="{ column, record }">
-            <template v-if="column.key === 'actions'">
+            <template v-if="column.key === 'photo'">
+              <img v-if="record.photo" :src="`${environment.apiBaseUrl}media/image/${record.photo}`" alt="photo"
+                class="w-10 h-10 rounded object-cover" />
+              <span v-else class="text-gray-400">{{ t('lecturer.noPhoto') }}</span>
+            </template>
+            <template v-else-if="column.key === 'actions'">
               <div class="flex gap-2">
                 <!-- <Button type="text" shape="circle" @click="generateCard(record)">
                   <template #icon>
@@ -107,6 +112,7 @@ import LectureDetail from './LectureDetail.vue';
 import { getLecturers, createLecturer, updateLecturer, deleteLecturer, uploadExcel } from '../../service/lecture.service';
 import { useCatalogSelectOptions } from '../../composables/useCatalogSelectOptions';
 import { CATALOG_FACULTY } from '../../constants/catalogCategories';
+import { environment } from '../../environments/environment';
 
 const { t } = useI18n();
 const lecturers = ref([]);
@@ -143,6 +149,7 @@ const pagination = ref({
 });
 
 const columns = computed(() => [
+  { title: t('lecturer.fields.photo'), key: 'photo', width: 80 },
   { title: t('lecturer.fields.id'), dataIndex: 'identity_id', key: 'identity_id', sorter: true },
   { title: t('lecturer.fields.nameKhmer'), dataIndex: ['name', 'khmer'], key: 'name_kh', sorter: true },
   { title: t('lecturer.fields.nameEnglish'), dataIndex: ['name', 'english'], key: 'name_en', sorter: true },

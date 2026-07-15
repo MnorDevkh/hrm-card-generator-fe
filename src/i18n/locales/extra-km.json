@@ -98,6 +98,7 @@
     "thisLecturer": "គ្រូបង្រៀននេះ",
     "photoUploaded": "បានផ្ទុករូបថតដោយជោគជ័យ",
     "photoUploadFailed": "ផ្ទុករូបថតមិនបាន",
+    "noPhoto": "គ្មានរូប",
     "fileUploaded": "បានផ្ទុក {filename} ដោយជោគជ័យ។",
     "fileUploadFailed": "ផ្ទុក {filename} មិនបាន។",
     "qrInactive": "អសកម្ម",
@@ -141,7 +142,8 @@
       "currentAddress": "អាសយដ្ឋានបច្ចុប្បន្ន",
       "education": "ការអប់រំ",
       "documentN": "ឯកសារ {n}",
-      "id": "លេខសម្គាល់"
+      "id": "លេខសម្គាល់",
+      "photo": "រូបថត"
     },
     "uploadDocument": "ផ្ទុកឯកសារ",
     "selectQrStatus": "ជ្រើសរើសស្ថានភាព QR",

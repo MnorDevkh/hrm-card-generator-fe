@@ -98,6 +98,7 @@
     "thisLecturer": "this lecturer",
     "photoUploaded": "Photo uploaded successfully",
     "photoUploadFailed": "Failed to upload photo",
+    "noPhoto": "No Photo",
     "fileUploaded": "{filename} uploaded successfully.",
     "fileUploadFailed": "{filename} upload failed.",
     "qrInactive": "Inactive",
@@ -141,7 +142,8 @@
       "currentAddress": "Current Address",
       "education": "Education",
       "documentN": "Document {n}",
-      "id": "ID"
+      "id": "ID",
+      "photo": "Photo"
     },
     "uploadDocument": "Upload Document",
     "selectQrStatus": "Select QR Status",

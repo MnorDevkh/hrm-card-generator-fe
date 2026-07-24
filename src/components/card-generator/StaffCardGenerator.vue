@@ -210,7 +210,7 @@ const loading = ref(false);
 const staffList = ref([]);
 const templateUrl = ref('');
 const issueDate = ref(new Date().toISOString().split('T')[0]);
-const expiryDate = ref(new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0]);
+const expiryDate = ref(`${new Date().getFullYear()}-12-31`);
 const year = ref(new Date().getFullYear().toString());
 
 const isExporting = ref(false);
@@ -228,7 +228,9 @@ const getPhotoUrl = (photo) => photo ? `${environment.apiBaseUrl}media/image/${p
 
 function getTitle(gender) {
     if (!gender) return 'Mr.';
-    return (gender.toLowerCase() === 'female' || gender.toLowerCase() === 'f') ? 'Ms.' : 'Mr.';
+    const g = String(gender).trim().toLowerCase();
+    const isFemale = g === 'female' || g === 'f' || gender === 'ស្រី';
+    return isFemale ? 'Ms.' : 'Mr.';
 }
 
 function getStaffEmailRaw(staff) {

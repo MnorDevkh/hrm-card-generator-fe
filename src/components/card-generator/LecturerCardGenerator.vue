@@ -99,8 +99,10 @@
                         <p class="card-id text-[11px] font-bold text-gray-900 tracking-wider">
                             {{ lecturer.card_id || '-' }}</p>
                         <div class="card-details flex flex-col items-center" style="margin-top: -6px;">
-                            <p class="text-[14px] text-blue-900 tracking-wide mt-1 lecturer-name koh-santepheap-regular" > {{ getTitle(lecturer.gender) }} {{
-                                lecturer.name?.english }} </p>
+                            <p
+                                class="text-blue-900 tracking-wide mt-1 lecturer-name koh-santepheap-regular"
+                                :style="getNameStyle(lecturer)"
+                            >{{ getDisplayName(lecturer) }}</p>
                          
                         </div>
                         <div class="w-[170px] text-gray-900 card-info-table">
@@ -110,9 +112,9 @@
                                         <td class="w-[50px]">DOB</td>
                                         <td>: {{ formatDate(lecturer.birth_date || lecturer.dob) }}</td>
                                     </tr>
-                                    <tr >
-                                        <td class="w-[50px]">Email</td>
-                                        <td >: <span class="card-email-value" :style="getEmailValueStyle(lecturer.email)">{{ lecturer.email || '-' }}</span></td>
+                                    <tr>
+                                        <td class="w-[50px] align-middle">Email</td>
+                                        <td class="align-middle">: <span class="card-email-value" :style="getEmailValueStyle()" :title="lecturer.email || undefined">{{ formatEmailForCard(lecturer.email) }}</span></td>
                                     </tr>
                                     <tr>
                                         <td>Phone</td>
@@ -169,8 +171,10 @@
 
                         <!-- Names -->
                         <div class="card-details flex flex-col items-center " style="margin-top: -6px;">
-                            <p class="text-[14px] text-blue-900 tracking-wide mt-1 lecturer-name koh-santepheap-bold"> {{ getTitle(lecturer.gender) }} {{
-                                lecturer.name?.english }} </p>
+                            <p
+                                class="text-blue-900 tracking-wide mt-1 lecturer-name koh-santepheap-bold"
+                                :style="getNameStyle(lecturer)"
+                            >{{ getDisplayName(lecturer) }}</p>
                             
                         </div>
 
@@ -179,12 +183,12 @@
                             <table class="w-full text-[10px] text-left card-info-table-inner">
                                 <tbody>
                                     <tr>
-                                        <td class="w-[50px]">DOB</td>
+                                        <td class="w-[45px]">DOB</td>
                                         <td>: {{ formatDate(lecturer.birth_date || lecturer.dob) }}</td>
                                     </tr>
-                                    <tr >
-                                        <td class="w-[50px] ">Email</td>
-                                        <td >: <span :style="getEmailValueStyle(lecturer.email)">{{ lecturer.email || '-' }}</span></td>
+                                    <tr>
+                                        <td class="w-[45px] align-middle">Email</td>
+                                        <td class="align-middle">: <span class="card-email-value" :style="getEmailValueStyle()" :title="lecturer.email || undefined">{{ formatEmailForCard(lecturer.email) }}</span></td>
                                     </tr>
                                     <tr>
                                         <td>Phone</td>
@@ -240,7 +244,7 @@ const loading = ref(false);
 const lecturers = ref([]);
 const templateUrl = ref('');
 const issueDate = ref(new Date().toISOString().split('T')[0]);
-const expiryDate = ref(new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0]);
+const expiryDate = ref(`${new Date().getFullYear()}-12-31`);
 const year = ref(new Date().getFullYear().toString());
 
 const isExporting = ref(false);
@@ -258,7 +262,35 @@ const getPhotoUrl = (photo) => photo ? `${environment.apiBaseUrl}media/image/${p
 
 function getTitle(gender) {
     if (!gender) return 'Mr.';
-    return (gender.toLowerCase() === 'female' || gender.toLowerCase() === 'f') ? 'Ms.' : 'Mr.';
+    const g = String(gender).trim().toLowerCase();
+    const isFemale = g === 'female' || g === 'f' || gender === 'ស្រី';
+    return isFemale ? 'Ms.' : 'Mr.';
+}
+
+function getDisplayName(lecturer) {
+    const title = getTitle(lecturer?.gender);
+    const name = String(lecturer?.name?.english || '').trim();
+    return name ? `${title} ${name}` : title;
+}
+
+function getNameFontSize(fullName) {
+    const len = String(fullName || '').length;
+    if (len <= 18) return '14px';
+    if (len <= 22) return '11px';
+    if (len <= 26) return '10px';
+    return '9px';
+}
+
+function getNameStyle(lecturer) {
+    const fullName = getDisplayName(lecturer);
+    return {
+        fontSize: getNameFontSize(fullName),
+        maxWidth: '190px',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'clip',
+        marginTop: '4px',
+    };
 }
 
 function parseDateString(value) {
@@ -297,23 +329,37 @@ function formatDate(dateStr) {
     return `${day}-${month}-${year}`;
 }
 
-function getEmailFontSize(email) {
-    if (!email) return '10px';
-    const len = email.length;
-    if (len <= 22) return '9px';
-    if (len <= 25) return '8px';
-    return '6px';
+/** Long emails: keep local part; shorten domain to g.com then g. if still too long. */
+function formatEmailForCard(email) {
+    const s = String(email || '').trim();
+    if (!s) return '-';
+
+    const MAX = 26;
+    if (s.length <= MAX) return s;
+
+    const at = s.indexOf('@');
+    if (at <= 0) return s.slice(0, MAX);
+
+    const local = s.slice(0, at);
+    const domain = s.slice(at + 1);
+    const first = domain.charAt(0) || '';
+    const tld = domain.includes('.') ? domain.slice(domain.lastIndexOf('.') + 1) : '';
+
+    const shortWithTld = tld ? `${local}@${first}.${tld}` : `${local}@${first}.`;
+    if (shortWithTld.length <= MAX) return shortWithTld;
+
+    return `${local}@${first}.`;
 }
 
 /** Styles on inner span only — overflow on <td> causes html2canvas white blocks over text. */
-function getEmailValueStyle(email) {
+function getEmailValueStyle() {
     return {
-        fontSize: getEmailFontSize(email),
+        fontSize: '8px',
+        lineHeight: '10px',
         color: '#111827',
         backgroundColor: 'transparent',
-        display: 'inline-block',
-        maxWidth: '115px',
-        verticalAlign: 'top',
+        display: 'inline',
+        verticalAlign: 'middle',
         whiteSpace: 'nowrap',
     };
 }
@@ -442,7 +488,7 @@ function applyExportLayout(el) {
 
     el.querySelectorAll('.card-info-table td, .card-info-table th').forEach((cell) => {
         cell.style.backgroundColor = 'transparent';
-        cell.style.verticalAlign = 'top';
+        cell.style.verticalAlign = 'middle';
         cell.style.overflow = 'visible';
     });
 
@@ -452,6 +498,9 @@ function applyExportLayout(el) {
         span.style.overflow = 'visible';
         span.style.textOverflow = 'clip';
         span.style.color = '#111827';
+        span.style.verticalAlign = 'middle';
+        span.style.display = 'inline';
+        span.style.lineHeight = '10px';
     });
 }
 

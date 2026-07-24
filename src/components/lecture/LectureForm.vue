@@ -162,6 +162,7 @@ import { Input, Textarea, Select, SelectOption, DatePicker, Button, ConfigProvid
 import { CheckOutlined, CloseOutlined, UploadOutlined, EditOutlined } from '@ant-design/icons-vue';
 import { environment } from '../../environments/environment';
 import { uploadImage } from '../../service/image.service';
+import { getNextCardId } from '../../service/lecture.service';
 
 const { t } = useI18n();
 
@@ -177,7 +178,7 @@ const emit = defineEmits(['save', 'cancel']);
 const fileList = ref([]);
 const isAdmin = ref(localStorage.getItem('role') === 'admin_hrm');
 
-const form = ref({
+const emptyForm = () => ({
   id: '',
   card_id: '',
   identity_id: '',
@@ -198,6 +199,8 @@ const form = ref({
   qr_status: 'active',
   qr_expired_at: null
 });
+
+const form = ref(emptyForm());
 
 const getPhotoUrl = (path) => {
   if (!path) return '';
@@ -220,8 +223,22 @@ const uploadPhoto = async ({ file, onSuccess, onError }) => {
   }
 };
 
-const initForm = () => {
-  if (props.lecture && Object.keys(props.lecture).length > 0) {
+const prefillNextCardId = async () => {
+  // Only for new insert (no existing id)
+  if (form.value.id || form.value.card_id) return;
+  try {
+    const data = await getNextCardId();
+    if (data?.card_id && !form.value.card_id) {
+      form.value.card_id = data.card_id;
+    }
+  } catch (error) {
+    console.error('Failed to load next card id', error);
+  }
+};
+
+const initForm = async () => {
+  const isEdit = props.lecture && props.lecture.id;
+  if (isEdit) {
     form.value = JSON.parse(JSON.stringify(props.lecture));
     
     // Initialize fileList from docs
@@ -244,6 +261,10 @@ const initForm = () => {
     if (!Object.prototype.hasOwnProperty.call(form.value, 'qr_expired_at')) {
       form.value.qr_expired_at = null;
     }
+  } else {
+    form.value = emptyForm();
+    fileList.value = [];
+    await prefillNextCardId();
   }
 };
 

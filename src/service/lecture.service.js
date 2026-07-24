@@ -15,6 +15,10 @@ export async function getLecturers(page, size, sortBy, search, faculty) {
   return apiFetch(`/lecturer/?${params.toString()}`);
 }
 
+export async function getNextCardId() {
+  return apiFetch('/lecturer/next-card-id');
+}
+
 export async function createLecturer(data) {
   return apiFetch('/lecturer/', {
     method: 'POST',

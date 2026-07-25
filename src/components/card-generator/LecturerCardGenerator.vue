@@ -477,7 +477,7 @@ function applyExportLayout(el) {
 
     const lecturerName = el.querySelector('.lecturer-name');
     if (lecturerName) {
-        lecturerName.style.lineHeight = '24px';
+        lecturerName.style.lineHeight = '26px';
     }
 
     const infoTable = el.querySelector('.card-info-table');

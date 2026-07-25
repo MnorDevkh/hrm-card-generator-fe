@@ -96,9 +96,10 @@
                                 class="w-full h-full object-cover" />
                             <UserOutlined v-else class="text-3xl text-gray-300" />
                         </div>
-                        <p class="card-id text-[11px] font-bold text-gray-900 tracking-wider">
-                            {{ lecturer.card_id || '-' }}</p>
-                        <div class="card-details flex flex-col items-center" style="margin-top: -6px;">
+                        <p class="card-id text-[11px] font-bold text-gray-900 tracking-wider" >
+                            {{ lecturer.card_id || '-' }}
+                        </p>
+                        <div class="card-details flex flex-col items-center">
                             <p
                                 class="text-blue-900 tracking-wide mt-1 lecturer-name koh-santepheap-regular"
                                 :style="getNameStyle(lecturer)"
@@ -109,11 +110,11 @@
                             <table class="w-full text-[10px] text-left card-info-table-inner">
                                 <tbody>
                                     <tr>
-                                        <td class="w-[50px]">DOB</td>
+                                        <td class="w-[45px]">DOB</td>
                                         <td>: {{ formatDate(lecturer.birth_date || lecturer.dob) }}</td>
                                     </tr>
                                     <tr>
-                                        <td class="w-[50px] align-middle">Email</td>
+                                        <td class="w-[45px] align-middle">Email</td>
                                         <td class="align-middle">: <span class="card-email-value" :style="getEmailValueStyle()" :title="lecturer.email || undefined">{{ formatEmailForCard(lecturer.email) }}</span></td>
                                     </tr>
                                     <tr>
@@ -137,7 +138,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="absolute bottom-[10px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
+                    <div class="absolute bottom-[20px] right-5 w-[1.5cm] h-[1.5cm] flex items-center justify-center bg-white p-[2px] rounded">
                         <QrcodeVue :value="`${environment.url}lecturer-identity-verification/${lecturer.id}`" :size="52"
                             level="M" render-as="svg" class="w-14 h-14" />
                     </div>
@@ -165,14 +166,14 @@
                         </div>
 
                         <!-- ID -->
-                        <p class="card-id text-[11px] font-bold text-gray-900 tracking-wider ">
+                        <p class="card-id text-[11px] font-bold text-gray-900 tracking-wider" >
                             {{ lecturer.card_id  || '-' }}
                         </p>
 
                         <!-- Names -->
-                        <div class="card-details flex flex-col items-center " style="margin-top: -6px;">
+                        <div class="card-details flex flex-col items-center ">
                             <p
-                                class="text-blue-900 tracking-wide mt-1 lecturer-name koh-santepheap-bold"
+                                class="text-blue-900 tracking-wide lecturer-name koh-santepheap-bold"
                                 :style="getNameStyle(lecturer)"
                             >{{ getDisplayName(lecturer) }}</p>
                             
@@ -285,6 +286,7 @@ function getNameStyle(lecturer) {
     const fullName = getDisplayName(lecturer);
     return {
         fontSize: getNameFontSize(fullName),
+        lineHeight: '16px',
         maxWidth: '190px',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
@@ -468,13 +470,15 @@ function applyExportLayout(el) {
     if (photo) photo.style.marginTop = '105px';
 
     const cardId = el.querySelector('.card-id');
-    if (cardId) cardId.style.marginTop = '0';
+    if (cardId) cardId.style.marginTop = '-6px';
 
     const cardDetails = el.querySelector('.card-details');
     if (cardDetails) cardDetails.style.marginTop = '-6px';
 
     const lecturerName = el.querySelector('.lecturer-name');
-    if (lecturerName) lecturerName.style.marginTop = '4px';
+    if (lecturerName) {
+        lecturerName.style.lineHeight = '24px';
+    }
 
     const infoTable = el.querySelector('.card-info-table');
     if (infoTable) infoTable.style.marginTop = '0';

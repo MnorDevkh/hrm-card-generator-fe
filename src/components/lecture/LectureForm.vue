@@ -116,12 +116,17 @@
         </Select>
       </div>
       <div v-if="isAdmin" class="flex flex-col gap-2">
-        <label>{{ t('lecturer.fields.qrExpiryDate') }}</label>
+        <label>
+          {{ t('lecturer.fields.qrExpiryDate') }}
+          <span v-if="form.qr_status === 'active'" class="text-red-500">*</span>
+        </label>
         <DatePicker
           v-model:value="form.qr_expired_at"
           valueFormat="YYYY-MM-DD"
           class="w-full"
+          :status="qrExpiryInvalid ? 'error' : undefined"
         />
+        <span v-if="qrExpiryInvalid" class="text-red-500 text-sm">{{ t('lecturer.qrExpiryRequired') }}</span>
       </div>
 
       <!-- Documents -->
@@ -156,7 +161,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Input, Textarea, Select, SelectOption, DatePicker, Button, ConfigProvider, Upload, message } from 'ant-design-vue';
 import { CheckOutlined, CloseOutlined, UploadOutlined, EditOutlined } from '@ant-design/icons-vue';
@@ -177,6 +182,7 @@ const emit = defineEmits(['save', 'cancel']);
 
 const fileList = ref([]);
 const isAdmin = ref(localStorage.getItem('role') === 'admin_hrm');
+const showQrExpiryError = ref(false);
 
 const emptyForm = () => ({
   id: '',
@@ -201,6 +207,21 @@ const emptyForm = () => ({
 });
 
 const form = ref(emptyForm());
+
+const qrExpiryInvalid = computed(() =>
+  showQrExpiryError.value &&
+  form.value.qr_status === 'active' &&
+  !form.value.qr_expired_at
+);
+
+watch(
+  () => [form.value.qr_status, form.value.qr_expired_at],
+  () => {
+    if (form.value.qr_status !== 'active' || form.value.qr_expired_at) {
+      showQrExpiryError.value = false;
+    }
+  }
+);
 
 const getPhotoUrl = (path) => {
   if (!path) return '';
@@ -307,6 +328,12 @@ const handleRemove = (file) => {
 };
 
 const save = () => {
+  if (isAdmin.value && form.value.qr_status === 'active' && !form.value.qr_expired_at) {
+    showQrExpiryError.value = true;
+    message.error(t('lecturer.qrExpiryRequired'));
+    return;
+  }
+  showQrExpiryError.value = false;
   emit('save', form.value);
 };
 </script>

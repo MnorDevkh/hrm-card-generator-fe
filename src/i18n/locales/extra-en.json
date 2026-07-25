@@ -102,10 +102,12 @@
     "fileUploaded": "{filename} uploaded successfully.",
     "fileUploadFailed": "{filename} upload failed.",
     "qrInactive": "Inactive",
-    "qrActiveExpired": "Active (Expired)",
+    "qrExpired": "Expired",
+    "qrActiveExpired": "Expired",
     "qrActive": "Active",
     "qrStatus": "QR Status",
     "qrExpiry": "QR Expiry",
+    "qrExpiryRequired": "Please select QR expiry date when status is Active",
     "idMissing": "Lecturer ID or Verification ID is missing.",
     "fetchFailed": "Failed to fetch lecturer details.",
     "sections": {

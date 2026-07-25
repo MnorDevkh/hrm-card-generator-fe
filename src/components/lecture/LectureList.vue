@@ -163,7 +163,8 @@ const columns = computed(() => [
     dataIndex: 'qr_status',
     key: 'qr_status',
     customRender: ({ text, record }) => {
-      const status = (text || 'active').toLowerCase();
+      if (text == null || text === '') return '-';
+      const status = String(text).toLowerCase();
       const expired = record.qr_expired_at
         ? (typeof record.qr_expired_at === 'string' && record.qr_expired_at.includes(' ')
             ? new Date(record.qr_expired_at.split(' ')[0])
@@ -172,7 +173,7 @@ const columns = computed(() => [
       if (status !== 'active') {
         return t('lecturer.qrInactive');
       }
-      return expired ? t('lecturer.qrActiveExpired') : t('lecturer.qrActive');
+      return expired ? t('lecturer.qrExpired') : t('lecturer.qrActive');
     },
   },
   {

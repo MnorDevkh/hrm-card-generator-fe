@@ -102,10 +102,12 @@
     "fileUploaded": "បានផ្ទុក {filename} ដោយជោគជ័យ។",
     "fileUploadFailed": "ផ្ទុក {filename} មិនបាន។",
     "qrInactive": "អសកម្ម",
-    "qrActiveExpired": "សកម្ម (ផុតកំណត់)",
+    "qrExpired": "ផុតកំណត់",
+    "qrActiveExpired": "ផុតកំណត់",
     "qrActive": "សកម្ម",
     "qrStatus": "ស្ថានភាព QR",
     "qrExpiry": "ផុតកំណត់ QR",
+    "qrExpiryRequired": "សូមជ្រើសរើសថ្ងៃផុតកំណត់ QR នៅពេលស្ថានភាពជាសកម្ម",
     "idMissing": "លេខសម្គាល់គ្រូ ឬលេខផ្ទៀងផ្ទាត់ មិនមាន។",
     "fetchFailed": "ទាញយកព័ត៌មានគ្រូបង្រៀនមិនបាន។",
     "sections": {

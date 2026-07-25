@@ -237,6 +237,7 @@ import { Button, DatePicker, Input, Divider, Skeleton, message, Modal, Progress 
 import { ArrowLeftOutlined, FilePdfOutlined, CopyOutlined, UserOutlined } from '@ant-design/icons-vue';
 import QrcodeVue from 'qrcode.vue';
 import { getImagesByType } from '../../service/image.service';
+import { activateLecturerCards } from '../../service/lecture.service';
 import { environment } from '../../environments/environment';
 
 const route = useRoute();
@@ -514,6 +515,20 @@ async function showExportCanvas() {
     await new Promise((r) => setTimeout(r, 120));
 }
 
+async function syncLecturerQrOnGenerate() {
+    const ids = lecturers.value.map((l) => l.id).filter(Boolean);
+    if (!ids.length || !expiryDate.value) return;
+
+    await activateLecturerCards(ids, expiryDate.value);
+
+    // Keep in-memory list in sync with what was written
+    lecturers.value = lecturers.value.map((l) => ({
+        ...l,
+        qr_status: 'active',
+        qr_expired_at: expiryDate.value,
+    }));
+}
+
 async function exportCardsAsPages() {
     isExportingPages.value = true;
     exportProgress.value = 0;
@@ -560,7 +575,14 @@ async function exportCardsAsPages() {
         }
 
         pdf.save("LecturerCards_Pages.pdf");
-        message.success("Exported All Pages");
+
+        try {
+            await syncLecturerQrOnGenerate();
+            message.success("Exported All Pages — QR activated");
+        } catch (syncErr) {
+            console.error("QR activate error:", syncErr);
+            message.warning("Exported, but failed to update lecturer QR status/expiry");
+        }
     } catch (error) {
         console.error("Export error:", error);
         message.error("Export failed: " + error.message);
@@ -593,7 +615,14 @@ async function exportCards() {
         const imgHeight = (canvas.height * imgWidth) / canvas.width;
         pdf.addImage(imgData, 'JPEG', 0, 0, imgWidth, imgHeight);
         pdf.save('LecturerCards_Grid.pdf');
-        message.success('Grid Exported');
+
+        try {
+            await syncLecturerQrOnGenerate();
+            message.success('Grid Exported — QR activated');
+        } catch (syncErr) {
+            console.error('QR activate error:', syncErr);
+            message.warning('Exported, but failed to update lecturer QR status/expiry');
+        }
     } catch (err) {
         console.error('Grid export error:', err);
         message.error("Export failed: " + err.message);

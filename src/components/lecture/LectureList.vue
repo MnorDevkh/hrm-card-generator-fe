@@ -165,11 +165,24 @@ const columns = computed(() => [
     customRender: ({ text, record }) => {
       if (text == null || text === '') return '-';
       const status = String(text).toLowerCase();
-      const expired = record.qr_expired_at
-        ? (typeof record.qr_expired_at === 'string' && record.qr_expired_at.includes(' ')
-            ? new Date(record.qr_expired_at.split(' ')[0])
-            : new Date(record.qr_expired_at)) < new Date()
-        : false;
+      let expired = false;
+      if (record.qr_expired_at) {
+        const raw = record.qr_expired_at;
+        const datePart =
+          typeof raw === 'string'
+            ? raw.includes('T')
+              ? raw.split('T')[0]
+              : raw.includes(' ')
+                ? raw.split(' ')[0]
+                : raw
+            : null;
+        const expiry = datePart
+          ? new Date(`${datePart}T00:00:00`)
+          : new Date(raw);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        expired = !isNaN(expiry) && expiry < today;
+      }
       if (status !== 'active') {
         return t('lecturer.qrInactive');
       }
@@ -180,7 +193,14 @@ const columns = computed(() => [
     title: t('lecturer.qrExpiry'),
     dataIndex: 'qr_expired_at',
     key: 'qr_expired_at',
-    customRender: ({ text }) => text ? (typeof text === 'string' && text.includes(' ') ? text.split(' ')[0] : text) : '-',
+    customRender: ({ text }) => {
+      if (!text) return '-';
+      if (typeof text === 'string') {
+        if (text.includes('T')) return text.split('T')[0];
+        if (text.includes(' ')) return text.split(' ')[0];
+      }
+      return text;
+    },
   },
   { title: t('common.actions'), key: 'actions', width: 200, fixed: 'right' },
 ]);

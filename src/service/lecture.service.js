@@ -45,3 +45,13 @@ export async function uploadExcel(formData) {
     body: formData,
   });
 }
+
+export async function activateLecturerCards(lecturerIds, qrExpiredAt) {
+  return apiFetch('/lecturer/activate-cards', {
+    method: 'POST',
+    body: JSON.stringify({
+      lecturer_ids: lecturerIds,
+      qr_expired_at: qrExpiredAt,
+    }),
+  });
+}
